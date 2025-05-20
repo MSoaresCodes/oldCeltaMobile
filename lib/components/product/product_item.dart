@@ -33,6 +33,8 @@ class ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final balanceStock = _balanceStock(product, enterpriseCode);
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
@@ -98,6 +100,12 @@ class ProductItem extends StatelessWidget {
                   subtitleColor:
                       _getStockSubtitleColor(context, product, enterpriseCode),
                 ),
+                if (balanceStock != null)
+                  TitleAndSubtitle.titleAndSubtitle(
+                    title: "Saldo",
+                    subtitle: balanceStock.toString().toBrazilianNumber(3),
+                    subtitleColor: Colors.green,
+                  ),
                 if (showWholeInformations == true)
                   Column(
                     children: [
@@ -196,4 +204,17 @@ Color _getStockSubtitleColor(
   } else {
     return Colors.red;
   }
+}
+
+double? _balanceStock(GetProductJsonModel product, int? enterpriseCode) {
+  final balanceStock = product.stocks?.where((element) =>
+      element.stockName?.toLowerCase().contains("saldo") == true &&
+      element.enterpriseCode == enterpriseCode);
+
+  if (balanceStock?.isNotEmpty == true &&
+      balanceStock?.first.stockQuantity != null &&
+      (balanceStock?.first.stockQuantity ?? 0) > 0) {
+    return balanceStock!.first.stockQuantity;
+  }
+  return null;
 }
