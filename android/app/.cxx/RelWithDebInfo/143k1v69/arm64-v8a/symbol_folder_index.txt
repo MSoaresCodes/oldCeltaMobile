@@ -1,0 +1,1 @@
+C:\Development\Projects\celta_mobile\build\app\intermediates\cxx\RelWithDebInfo\143k1v69\obj\arm64-v8a
