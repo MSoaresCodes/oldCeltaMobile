@@ -30,6 +30,14 @@ class ModulesItems extends StatelessWidget {
       shrinkWrap: true,
       children: [
         ImageComponent.image(
+          imagePath: 'lib/assets/Images/reports_bg.png',
+          routine: 'Relatórios'.toUpperCase(),
+          context: context,
+          isNew: true,
+          onlyForValidateModule: true,
+          nextRoute: APPROUTES.REPORTS,
+        ),
+        ImageComponent.image(
           imagePath: 'lib/assets/Images/adjustPrice.png',
           routine: 'Alteração de preços'.toUpperCase(),
           nextRoute: APPROUTES.ADJUST_SALE_PRICE_PRODUCTS,

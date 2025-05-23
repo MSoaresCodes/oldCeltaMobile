@@ -15,6 +15,7 @@ import '../Pages/Inicial_pages/inicial_pages.dart';
 import '../Pages/Inventory/inventory.dart';
 import '../Pages/price_conference/price_conference.dart';
 import '../Pages/receipt/receipt.dart';
+import '../Pages/reports/reports_page.dart';
 import '../Pages/research_prices/research_prices.dart';
 import '../Pages/notifications/notifications_page.dart';
 import '../Pages/transfer_between_stocks/transfer_between_stocks.dart';
@@ -55,6 +56,7 @@ Map<String, Widget Function(BuildContext)> routes() => {
           const ReceiptInsertProductWithoutCadasterPage(),
       APPROUTES.RECEIPT_PRODUCTS_WITHOUT_CADASTER: (ctx) =>
           const ReceiptProductsWithoutCadasterPage(),
+      APPROUTES.REPORTS: (ctx) => const ReportsPage(),
       APPROUTES.RESEARCH_PRICES: (ctx) => const ResearchPricesPage(),
       APPROUTES.RESEARCH_PRICES_CONCURRENTS: (ctx) =>
           const ResearchPricesConcurrentsPage(),
