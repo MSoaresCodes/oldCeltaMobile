@@ -30,7 +30,7 @@ class ModulesItems extends StatelessWidget {
       shrinkWrap: true,
       children: [
         ImageComponent.image(
-          imagePath: 'lib/assets/Images/reports_bg.png',
+          imagePath: 'lib/assets/Images/reports.png',
           routine: 'Relatórios'.toUpperCase(),
           context: context,
           isNew: true,
