@@ -8,6 +8,7 @@ enum Modules {
   priceConference,
   productsConference,
   receipt,
+  reports,
   researchPrices,
   saleRequest,
   transferBetweenStocks,
