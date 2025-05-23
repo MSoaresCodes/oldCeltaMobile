@@ -11,7 +11,7 @@ ThemeData theme() {
   return ThemeData(
     useMaterial3: true,
     primaryColor: principalColor,
-    dialogTheme: DialogTheme(
+    dialogTheme: DialogThemeData(
       backgroundColor: Colors.white,
     ),
     inputDecorationTheme: const InputDecorationTheme(
@@ -23,7 +23,7 @@ ThemeData theme() {
         ),
       ),
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: Colors.grey[50],
       surfaceTintColor: Colors.amber[100],
       shadowColor: principalColor,
