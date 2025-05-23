@@ -41,127 +41,84 @@ class _AddUpdateSubEnterprisePageState
         _surnameController.text = selectedSubEnterprise.surname.toString();
       }
 
+      bool enabled(String module) =>
+          selectedSubEnterprise?.modules
+              ?.any((e) => e.module == module && e.enabled == true) ??
+          false;
+
       setState(() {
         modules = [
           ModuleModel(
             module: Modules.adjustSalePrice.name,
-            enabled: selectedSubEnterprise?.modules
-                    ?.where((e) => e.module == Modules.adjustSalePrice.name)
-                    .first
-                    .enabled ??
-                false,
+            enabled: enabled(Modules.adjustSalePrice.name),
             name: "Ajuste de preços",
           ),
           ModuleModel(
-            enabled: selectedSubEnterprise?.modules
-                    ?.where((e) => e.module == Modules.adjustStock.name)
-                    .first
-                    .enabled ??
-                false,
+            enabled: enabled(Modules.adjustStock.name),
             module: Modules.adjustStock.name,
             name: "Ajuste de estoques",
           ),
           ModuleModel(
-            enabled: selectedSubEnterprise?.modules
-                    ?.where((e) => e.module == Modules.buyQuotation.name)
-                    .first
-                    .enabled ??
-                false,
-            module: Modules.buyQuotation.name,
-            name: "Cotação de compras",
-          ),
-          ModuleModel(
-            enabled: selectedSubEnterprise?.modules
-                    ?.where((e) => e.module == Modules.buyRequest.name)
-                    .first
-                    .enabled ??
-                false,
-            module: Modules.buyRequest.name,
-            name: "Pedido de compra",
-          ),
-          ModuleModel(
-            enabled: selectedSubEnterprise?.modules
-                    ?.where((e) => e.module == Modules.customerRegister.name)
-                    .first
-                    .enabled ??
-                false,
+            enabled: enabled(Modules.customerRegister.name),
             module: Modules.customerRegister.name,
             name: "Cadastro de cliente",
           ),
           ModuleModel(
-            enabled: selectedSubEnterprise?.modules
-                    ?.where((e) => e.module == Modules.inventory.name)
-                    .first
-                    .enabled ??
-                false,
-            module: Modules.inventory.name,
-            name: "Inventário",
-          ),
-          ModuleModel(
-            enabled: selectedSubEnterprise?.modules
-                    ?.where((e) => e.module == Modules.priceConference.name)
-                    .first
-                    .enabled ??
-                false,
+            enabled: enabled(Modules.priceConference.name),
             module: Modules.priceConference.name,
             name: "Consulta de preços",
           ),
           ModuleModel(
-            enabled: selectedSubEnterprise?.modules
-                    ?.where((e) => e.module == Modules.productsConference.name)
-                    .first
-                    .enabled ??
-                false,
+            enabled: enabled(Modules.productsConference.name),
             module: Modules.productsConference.name,
             name: "Conferência de produtos (expedição)",
           ),
           ModuleModel(
-            enabled: selectedSubEnterprise?.modules
-                    ?.where((e) => e.module == Modules.receipt.name)
-                    .first
-                    .enabled ??
-                false,
-            module: Modules.receipt.name,
-            name: "Recebimento",
-          ),
-          ModuleModel(
-            enabled: selectedSubEnterprise?.modules
-                    ?.where((e) => e.module == Modules.researchPrices.name)
-                    .first
-                    .enabled ??
-                false,
+            enabled: enabled(Modules.researchPrices.name),
             module: Modules.researchPrices.name,
             name: "Consulta de preços concorrentes",
           ),
           ModuleModel(
-            enabled: selectedSubEnterprise?.modules
-                    ?.where((e) => e.module == Modules.saleRequest.name)
-                    .first
-                    .enabled ??
-                false,
+            enabled: enabled(Modules.buyQuotation.name),
+            module: Modules.buyQuotation.name,
+            name: "Cotação de compras",
+          ),
+          ModuleModel(
+            enabled: enabled(Modules.inventory.name),
+            module: Modules.inventory.name,
+            name: "Inventário",
+          ),
+          ModuleModel(
+            enabled: enabled(Modules.buyRequest.name),
+            module: Modules.buyRequest.name,
+            name: "Pedido de compra",
+          ),
+          ModuleModel(
+            enabled: enabled(Modules.receipt.name),
+            module: Modules.receipt.name,
+            name: "Recebimento",
+          ),
+          ModuleModel(
+            enabled: enabled(Modules.transferRequest.name),
+            module: Modules.transferRequest.name,
+            name: "Pedido de transferência",
+          ),
+          ModuleModel(
+            enabled: enabled(Modules.saleRequest.name),
             module: Modules.saleRequest.name,
             name: "Pedido de vendas",
           ),
           ModuleModel(
-            enabled: selectedSubEnterprise?.modules
-                    ?.where(
-                        (e) => e.module == Modules.transferBetweenStocks.name)
-                    .first
-                    .enabled ??
-                false,
+            enabled: enabled(Modules.transferBetweenStocks.name),
             module: Modules.transferBetweenStocks.name,
             name: "Transferência entre estoques",
           ),
           ModuleModel(
-            enabled: selectedSubEnterprise?.modules
-                    ?.where((e) => e.module == Modules.transferRequest.name)
-                    .first
-                    .enabled ??
-                false,
-            module: Modules.transferRequest.name,
-            name: "Pedido de transferência",
+            enabled: enabled(Modules.reports.name),
+            module: Modules.reports.name,
+            name: "Relatórios",
           ),
-        ];
+        ]..sort((e1, e2) => e1.name.compareTo(e2.name));
       });
     });
   }

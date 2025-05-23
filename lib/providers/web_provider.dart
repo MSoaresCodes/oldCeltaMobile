@@ -13,7 +13,8 @@ enum Months {
 }
 
 class WebProvider with ChangeNotifier {
-  bool get isGeneratingVersionToAdministration => false;
+  bool get isGeneratingVersionToAdministration =>
+      true; //TODO always treat this when is generating version to web
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;

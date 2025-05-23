@@ -20,6 +20,7 @@ class _EnableOrDisableModuleState extends State<EnableOrDisableModule> {
   Widget build(BuildContext context) {
     return ListView.builder(
       shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
       itemCount: widget.modules.length,
       itemBuilder: (context, index) {
         final module = widget.modules[index];
