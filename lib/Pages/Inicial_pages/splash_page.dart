@@ -52,7 +52,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     bool logged = await loginProvider.verifyIsLogged();
 
     Future.delayed(const Duration(seconds: 3), () async {
-      if (kIsWeb || 1 == 1 /* TODO remove this */) {
+      if (kIsWeb) {
         Navigator.of(context)
             .pushNamedAndRemoveUntil(APPROUTES.WEB_LOGIN, (route) => false);
       } else if (logged) {
