@@ -15,6 +15,43 @@ enum Modules {
   transferRequest,
 }
 
+extension ModuleExtension on Modules {
+  String get description {
+    switch (this) {
+      case Modules.adjustSalePrice:
+        return "Ajuste de preço";
+      case Modules.adjustStock:
+        return "Ajuste de estoque";
+      case Modules.buyRequest:
+        return "Pedido de compra";
+      case Modules.buyQuotation:
+        return "Cotação de compra";
+      case Modules.customerRegister:
+        return "Cadastro de clientes";
+      case Modules.inventory:
+        return "Estoque";
+      case Modules.priceConference:
+        return "Conferencia de preços";
+      case Modules.productsConference:
+        return "Conferencia de produtos";
+      case Modules.receipt:
+        return "Recebimento";
+      case Modules.reports:
+        return "Relatórios";
+      case Modules.researchPrices:
+        return "Pesquisa de preços";
+      case Modules.saleRequest:
+        return "Pedido de venda";
+      case Modules.transferBetweenStocks:
+        return "Transferência entre estoques";
+      case Modules.transferRequest:
+        return "Transferência de produtos";
+      default:
+        return "";
+    }
+  }
+}
+
 class ModuleModel {
   final String name;
   final bool enabled;

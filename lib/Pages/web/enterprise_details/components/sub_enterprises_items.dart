@@ -78,38 +78,27 @@ class SubEnterprisesItems extends StatelessWidget {
                             children: [
                               Text("Apelido: ${item?.surname}"),
                               Text("Cnpj: ${item?.cnpj}"),
-                              if (item?.modules != null)
-                                Builder(builder: (context) {
-                                  final disabledModules = item?.modules!
-                                      .where((e) => !e.enabled)
-                                      .toList();
-                                  if (disabledModules?.isEmpty == true) {
+                              Wrap(
+                                children: Modules.values.map(
+                                  (e) {
+                                    final equalModule = item?.modules
+                                        ?.where((itemModule) =>
+                                            itemModule.module == e.name)
+                                        .toList();
+
+                                    final color = equalModule?.isEmpty ==
+                                                true ||
+                                            equalModule?.first.enabled == false
+                                        ? Colors.red
+                                        : Theme.of(context).colorScheme.primary;
+
                                     return Text(
-                                      "Todos módulos estão habilitados",
-                                      style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                      ),
+                                      e.description + "; ",
+                                      style: TextStyle(color: color),
                                     );
-                                  }
-                                  return Wrap(
-                                    children: item!.modules!
-                                        .map(
-                                          (e) => Text(
-                                            e.name + "; ",
-                                            style: TextStyle(
-                                              color: e.enabled
-                                                  ? Theme.of(context)
-                                                      .colorScheme
-                                                      .primary
-                                                  : Colors.red,
-                                            ),
-                                          ),
-                                        )
-                                        .toList(),
-                                  );
-                                }),
+                                  },
+                                ).toList(),
+                              ),
                             ],
                           ),
                         ),
