@@ -4,6 +4,7 @@ class LastBuyEntranceModel {
   String? supplier;
   double? quantity;
   String? fiscalCode;
+  String? Packing;
 
   LastBuyEntranceModel({
     required this.number,
@@ -11,6 +12,7 @@ class LastBuyEntranceModel {
     required this.supplier,
     required this.quantity,
     required this.fiscalCode,
+    required this.Packing,
   });
 
   LastBuyEntranceModel.fromJson(Map<String, dynamic> json) {
@@ -19,6 +21,7 @@ class LastBuyEntranceModel {
     supplier = json['Supplier'];
     quantity = json['Quantity'];
     fiscalCode = json['FiscalCode'];
+    Packing = json['Packing'];
   }
 
   Map<String, dynamic> toJson() {
@@ -28,6 +31,7 @@ class LastBuyEntranceModel {
     data['Supplier'] = this.supplier;
     data['Quantity'] = this.quantity;
     data['FiscalCode'] = this.fiscalCode;
+    data['Packing'] = this.Packing;
     return data;
   }
 }

@@ -68,6 +68,11 @@ class LastBuyEntrance extends StatelessWidget implements MoreInformationWidget {
                         subtitle:
                             entrance.quantity.toString().toBrazilianNumber(),
                       ),
+                      if (entrance.Packing != null)
+                        TitleAndSubtitle.titleAndSubtitle(
+                          title: "Embalagem",
+                          subtitle: entrance.Packing,
+                        ),
                       if (entrance.fiscalCode != null &&
                           entrance.fiscalCode!.isNotEmpty)
                         TitleAndSubtitle.titleAndSubtitle(
