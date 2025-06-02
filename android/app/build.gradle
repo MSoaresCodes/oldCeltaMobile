@@ -72,9 +72,6 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            ndk {
-                debugSymbolLevel 'FULL'
-            }
             signingConfig signingConfigs.release
         }
     }
@@ -100,7 +97,6 @@ flutter {
 }
 
 dependencies {
-    implementation 'com.google.android.material:material:<version>'
     implementation 'com.android.support:multidex:2.0.1'
     implementation platform('com.google.firebase:firebase-bom:33.14.0')
     implementation 'com.google.firebase:firebase-firestore-ktx:25.1.4'
