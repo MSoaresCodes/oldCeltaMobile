@@ -55,7 +55,7 @@ android {
         targetSdkVersion 35
         versionCode 143
         versionName flutterVersionName
-        ndkVersion "26.2.11394342"
+        ndkVersion "29.0.13113456"
         ndk {
             debugSymbolLevel 'FULL'
         }
@@ -105,10 +105,10 @@ flutter {
 dependencies {
     implementation 'com.google.android.material:material:<version>'
     implementation 'com.android.support:multidex:2.0.1'
-    implementation platform('com.google.firebase:firebase-bom:33.3.0')
-    implementation 'com.google.firebase:firebase-firestore-ktx:25.1.0'
-    implementation 'com.google.firebase:firebase-storage-ktx:21.0.0'
-    implementation 'com.google.firebase:firebase-messaging-ktx:24.0.1'
+    implementation platform('com.google.firebase:firebase-bom:33.14.0')
+    implementation 'com.google.firebase:firebase-firestore-ktx:25.1.4'
+    implementation 'com.google.firebase:firebase-storage-ktx:21.0.2'
+    implementation 'com.google.firebase:firebase-messaging-ktx:24.1.1'
     implementation 'com.google.firebase:firebase-crashlytics'
-    implementation 'com.google.firebase:firebase-analytics-ktx:22.1.0'
+    implementation 'com.google.firebase:firebase-analytics-ktx:22.4.0'
 }

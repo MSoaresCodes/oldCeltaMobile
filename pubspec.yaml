@@ -71,7 +71,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   msix: ^3.16.8 #dart run msix:create
-  flutter_lints: ^1.0.0
+  flutter_lints: ^6.0.0
 
 # msix_config:
 #   display_name: Celta Mobile
