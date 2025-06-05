@@ -61,7 +61,8 @@ class _InsertUpdateProductsItemsState extends State<InsertUpdateProductsItems> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const Text("Produtos"),
+        Text("Produtos" +
+            " (${buyQuotationProvider.productsWithNewValues.length})"),
         SearchProducts(
           searchProductController: searchProductController,
           enterprise: widget.enterprise,
