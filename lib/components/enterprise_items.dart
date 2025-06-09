@@ -62,7 +62,6 @@ class EnterpriseItems extends StatelessWidget {
         return moduleIsEnabled(Modules.researchPrices, subEnterprise);
       } else if (nextPageRoute == APPROUTES.RECEIPT) {
         return moduleIsEnabled(Modules.receipt, subEnterprise);
-      } else if (nextPageRoute == APPROUTES.TRANSFER_BETWEEN_STOCK) {
       } else if (nextPageRoute == APPROUTES.REPORTS) {
         return moduleIsEnabled(Modules.reports, subEnterprise);
       } else if (nextPageRoute == APPROUTES.TRANSFER_BETWEEN_STOCK) {
