@@ -201,11 +201,16 @@ class _UpdateQuantityPriceOrDiscountState
                       hintText: "Nova quantidade",
                     ),
                     if (saleRequestProvider.userCanChangePrices)
-                      manualPrice(saleRequestProvider, context),
-                    if (saleRequestProvider.requests
-                        .where((e) => e.Code == code && e.AllowDiscount == true)
-                        .isNotEmpty)
-                      manualDiscount(context)
+                      Column(
+                        children: [
+                          manualPrice(saleRequestProvider, context),
+                          if (saleRequestProvider.requests
+                              .where((e) =>
+                                  e.Code == code && e.AllowDiscount == true)
+                              .isNotEmpty)
+                            manualDiscount(context)
+                        ],
+                      ),
                   ],
                 ),
               ),
