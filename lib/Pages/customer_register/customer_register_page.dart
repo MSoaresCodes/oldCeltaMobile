@@ -118,7 +118,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
     });
   }
 
-  void clearAllData() {
+  void clearAllData(CustomerRegisterProvider customerRegisterProvider) {
     cpfCnpjController.clear();
     nameController.clear();
     reducedNameController.clear();
@@ -128,6 +128,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
     setState(() {
       cpfCnpjIsValid = false;
     });
+    customerRegisterProvider.clearCustomer();
   }
 
   @override
@@ -215,7 +216,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                     children: [
                       CustomerRegisterClearAllData(
                         clearAllData: () {
-                          clearAllData();
+                          clearAllData(customerRegisterProvider);
                           setState(() {
                             _selectedIndex = 0;
                           });
@@ -223,7 +224,9 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                       ),
                       CustomerRegisterFloatingActionButton(
                         passwordController: passwordController,
-                        clearControllersInSuccess: clearAllData,
+                        clearControllersInSuccess: () {
+                          clearAllData(customerRegisterProvider);
+                        },
                         updateSelectedIndex: (index) {
                           setState(() {
                             _selectedIndex = index;

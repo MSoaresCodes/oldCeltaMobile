@@ -48,6 +48,11 @@ class CustomerRegisterBottomNavigationItems extends StatelessWidget {
   Widget build(BuildContext context) {
     CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
 
+    final bool personIsValid =
+        customerRegisterProvider.customer?.Name != null &&
+            customerRegisterProvider.customer?.CpfCnpjNumber != null &&
+            customerRegisterProvider.customer?.PersonType != null;
+
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       unselectedFontSize: 11,
@@ -57,10 +62,7 @@ class CustomerRegisterBottomNavigationItems extends StatelessWidget {
           icon: iconAccordingFormIsValid(
             context: context,
             icon: Icons.person,
-            hasDataAndIsValid:
-                customerRegisterProvider.customer?.Name != null &&
-                    customerRegisterProvider.customer?.CpfCnpjNumber != null &&
-                    customerRegisterProvider.customer?.PersonType != null,
+            hasDataAndIsValid: personIsValid,
           ),
           label: 'Dados',
         ),
@@ -107,8 +109,7 @@ class CustomerRegisterBottomNavigationItems extends StatelessWidget {
           icon: iconAccordingFormIsValid(
             context: context,
             icon: Icons.check,
-            hasDataAndIsValid:
-                (customerRegisterProvider.customer?.Addresses?.length ?? 0) > 0,
+            hasDataAndIsValid: personIsValid,
           ),
           label: 'Salvar',
         ),

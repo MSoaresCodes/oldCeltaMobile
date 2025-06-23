@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
+import '../../../providers/providers.dart';
 
 class CpfOrCnpjField extends StatelessWidget {
   final FocusNode cpfCnpjFocusNode;
@@ -17,6 +19,7 @@ class CpfOrCnpjField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
     return FormFieldWidget(
       autofocus: true,
       focusNode: cpfCnpjFocusNode,
@@ -27,6 +30,7 @@ class CpfOrCnpjField extends StatelessWidget {
         onPressed: () {
           cpfCnpjController.text = "";
           changeCpfCnpj("");
+          customerRegisterProvider.clearCustomer();
           FocusScope.of(context).requestFocus(cpfCnpjFocusNode);
         },
         icon: const Icon(

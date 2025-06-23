@@ -28,9 +28,6 @@ class _CustomerRegisterFloatingActionButtonState
     final cpfCnpj = customerRegisterProvider.customer?.CpfCnpjNumber;
     if (name == null || name.isEmpty || cpfCnpj == null || cpfCnpj.isEmpty) {
       return "Adicione\ndados\npessoais";
-    } else if ((customerRegisterProvider.customer?.Addresses?.length ?? 0) ==
-        0) {
-      return "Adicione\num\nendereço";
     } else {
       return "SALVAR";
     }
@@ -48,12 +45,6 @@ class _CustomerRegisterFloatingActionButtonState
             customer?.CpfCnpjNumber?.isEmpty == true) {
           setState(() {
             widget.updateSelectedIndex(0);
-          });
-        } else if ((customerRegisterProvider.customer?.Addresses?.length ??
-                0) ==
-            0) {
-          setState(() {
-            widget.updateSelectedIndex(1);
           });
         } else {
           ShowAlertDialog.show(
