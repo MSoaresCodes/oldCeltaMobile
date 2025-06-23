@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../api/api.dart';
@@ -29,14 +30,15 @@ class ModulesItems extends StatelessWidget {
       crossAxisSpacing: 0.0,
       shrinkWrap: true,
       children: [
-        // ImageComponent.image(
-        //   imagePath: 'lib/assets/Images/reports.png',
-        //   routine: 'Relatórios'.toUpperCase(),
-        //   context: context,
-        //   isNew: true,
-        //   onlyForValidateModule: true,
-        //   nextRoute: APPROUTES.REPORTS,
-        // ),
+        if (kDebugMode) //TODO remove when finish
+          ImageComponent.image(
+            imagePath: 'lib/assets/Images/reports.png',
+            routine: 'Relatórios'.toUpperCase(),
+            context: context,
+            isNew: true,
+            onlyForValidateModule: true,
+            nextRoute: APPROUTES.REPORTS,
+          ),
         ImageComponent.image(
           imagePath: 'lib/assets/Images/adjustPrice.png',
           routine: 'Alteração de preços'.toUpperCase(),
