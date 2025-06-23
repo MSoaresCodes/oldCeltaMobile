@@ -37,7 +37,7 @@ class _InsertQuantityState extends State<InsertQuantity> {
         widget.insertQuantityFormKey.currentState!.validate();
   }
 
-  confirmAdjustStock({
+  Future<void> _confirmAdjustStock({
     required TransferBetweenStocksProvider transferBetweenStocksProvider,
     required ConfigurationsProvider configurationsProvider,
   }) async {
@@ -69,132 +69,106 @@ class _InsertQuantityState extends State<InsertQuantity> {
     TransferBetweenStocksProvider transferBetweenStocksProvider =
         Provider.of(context);
     ConfigurationsProvider configurationsProvider = Provider.of(context);
-    return Padding(
-      padding: const EdgeInsets.only(top: 10),
-      child: Column(
-        children: [
-          Form(
-            key: widget.insertQuantityFormKey,
-            child: Row(
-              children: [
-                Flexible(
-                  flex: 10,
-                  child: TextFormField(
-                    // autofocus: true,
-                    focusNode:
-                        transferBetweenStocksProvider.consultedProductFocusNode,
-                    enabled: transferBetweenStocksProvider.isLoadingProducts ||
-                            transferBetweenStocksProvider
-                                .isLoadingTypeStockAndJustifications ||
-                            transferBetweenStocksProvider.isLoadingAdjustStock
-                        ? false
-                        : true,
-                    controller: widget.consultedProductController,
-                    inputFormatters: [LengthLimitingTextInputFormatter(10)],
-                    onFieldSubmitted: (_) async {
-                      if (_isValid()) {
-                        ShowAlertDialog.show(
-                          context: context,
-                          title: "Confirmar transferência",
-                          function: () async {
-                            await confirmAdjustStock(
-                              transferBetweenStocksProvider:
-                                  transferBetweenStocksProvider,
-                              configurationsProvider: configurationsProvider,
-                            );
-                          },
-                        );
-                      }
-                    },
-                    onChanged: (value) {
-                      if (value.isEmpty || value == '-') {
-                        value = '0';
-                      }
-                      if (value.startsWith(",") || value.startsWith(".")) {
-                        widget.consultedProductController.text =
-                            "0" + widget.consultedProductController.text;
-                        widget.consultedProductController.selection =
-                            TextSelection.fromPosition(
-                          TextPosition(
-                            offset:
-                                widget.consultedProductController.text.length,
-                          ),
-                        );
-                      }
-                    },
-                    validator: FormFieldValidations.number,
-                    decoration: FormFieldDecoration.decoration(
-                      context: context,
-                      labelText: "Quantidade",
+    return Column(
+      children: [
+        Form(
+          key: widget.insertQuantityFormKey,
+          child: Row(
+            children: [
+              Flexible(
+                flex: 10,
+                child: TextFormField(
+                  // autofocus: true,
+                  focusNode:
+                      transferBetweenStocksProvider.consultedProductFocusNode,
+                  enabled: transferBetweenStocksProvider.isLoadingProducts ||
+                          transferBetweenStocksProvider
+                              .isLoadingTypeStockAndJustifications ||
+                          transferBetweenStocksProvider.isLoadingAdjustStock
+                      ? false
+                      : true,
+                  controller: widget.consultedProductController,
+                  inputFormatters: [LengthLimitingTextInputFormatter(10)],
+                  onFieldSubmitted: (_) async {
+                    if (_isValid()) {
+                      ShowAlertDialog.show(
+                        context: context,
+                        title: "Confirmar transferência",
+                        function: () async {
+                          await _confirmAdjustStock(
+                            transferBetweenStocksProvider:
+                                transferBetweenStocksProvider,
+                            configurationsProvider: configurationsProvider,
+                          );
+                        },
+                      );
+                    }
+                  },
+                  onChanged: (value) {
+                    if (value.isEmpty || value == '-') {
+                      value = '0';
+                    }
+                    if (value.startsWith(",") || value.startsWith(".")) {
+                      widget.consultedProductController.text =
+                          "0" + widget.consultedProductController.text;
+                      widget.consultedProductController.selection =
+                          TextSelection.fromPosition(
+                        TextPosition(
+                          offset:
+                              widget.consultedProductController.text.length,
+                        ),
+                      );
+                    }
+                  },
+                  validator: FormFieldValidations.number,
+                  decoration: FormFieldDecoration.decoration(
+                    context: context,
+                    labelText: "Quantidade",
+                  ),
+                  style: FormFieldStyle.style(),
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                ),
+              ),
+              const SizedBox(width: 5),
+              Flexible(
+                flex: 9,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(double.infinity, 35),
+                    maximumSize: const Size(double.infinity, 35),
+                  ),
+                  onPressed:
+                      transferBetweenStocksProvider.isLoadingAdjustStock
+                          ? null
+                          : () async {
+                              if (_isValid()) {
+                                ShowAlertDialog.show(
+                                  context: context,
+                                  title: "Confirmar transferência",
+                                  function: () async {
+                                    await _confirmAdjustStock(
+                                      transferBetweenStocksProvider:
+                                          transferBetweenStocksProvider,
+                                      configurationsProvider:
+                                          configurationsProvider,
+                                    );
+                                  },
+                                );
+                              }
+                            },
+                  child: const FittedBox(
+                    child: Text(
+                      "CONFIRMAR",
+                      style: const TextStyle(),
                     ),
-                    style: FormFieldStyle.style(),
-                    keyboardType:
-                        const TextInputType.numberWithOptions(decimal: true),
                   ),
                 ),
-                const SizedBox(width: 5),
-                Flexible(
-                  flex: 9,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(double.infinity, 60),
-                      maximumSize: const Size(double.infinity, 60),
-                    ),
-                    onPressed:
-                        transferBetweenStocksProvider.isLoadingAdjustStock
-                            ? null
-                            : () async {
-                                if (_isValid()) {
-                                  ShowAlertDialog.show(
-                                    context: context,
-                                    title: "Confirmar transferência",
-                                    function: () async {
-                                      await confirmAdjustStock(
-                                        transferBetweenStocksProvider:
-                                            transferBetweenStocksProvider,
-                                        configurationsProvider:
-                                            configurationsProvider,
-                                      );
-                                    },
-                                  );
-                                }
-                              },
-                    child: transferBetweenStocksProvider.isLoadingAdjustStock
-                        ? FittedBox(
-                            child: Row(
-                              children: [
-                                const Text(
-                                  "AGUARDE",
-                                  style: const TextStyle(
-                                    fontSize: 50,
-                                  ),
-                                ),
-                                const SizedBox(width: 30),
-                                Container(
-                                  width: 60,
-                                  height: 60,
-                                  child: const CircularProgressIndicator(
-                                    strokeWidth: 10,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        : const FittedBox(
-                            child: Text(
-                              "CONFIRMAR",
-                              style: const TextStyle(
-                                fontSize: 50,
-                              ),
-                            ),
-                          ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

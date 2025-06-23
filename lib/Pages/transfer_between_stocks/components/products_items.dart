@@ -145,6 +145,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                 showPrice: false,
                 showWholeInformations: false,
                 componentAfterProductInformations: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Align(
                       alignment: Alignment.centerRight,
@@ -152,6 +153,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                         _selectedIndex == index
                             ? Icons.arrow_drop_up
                             : Icons.arrow_drop_down,
+                        size: 20,
                         color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
@@ -161,19 +163,16 @@ class _ProductsItemsState extends State<ProductsItems> {
                                 .indexOfLastProductChangedStockQuantity ==
                             index)
                       FittedBox(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Text(
-                            "Última quantidade confirmada: ${transferBetweenStocksProvider.lastUpdatedQuantity}",
-                            style: TextStyle(
-                              fontSize: 100,
-                              color: Theme.of(context).colorScheme.primary,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'BebasNeue',
-                              fontStyle: FontStyle.italic,
-                              letterSpacing: 1,
-                              wordSpacing: 4,
-                            ),
+                        child: Text(
+                          "Última quantidade confirmada: ${transferBetweenStocksProvider.lastUpdatedQuantity}",
+                          textAlign: TextAlign.end,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'BebasNeue',
+                            fontStyle: FontStyle.italic,
+                            letterSpacing: 1,
+                            wordSpacing: 5,
                           ),
                         ),
                       ),
