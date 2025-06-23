@@ -3,8 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/providers.dart';
 
-class JustificationsAndStocksDropwdownWidget
-    extends StatefulWidget {
+class JustificationsAndStocksDropwdownWidget extends StatefulWidget {
   final GlobalKey<FormFieldState> keyJustifications;
   final GlobalKey<FormFieldState> keyOriginStockType;
   final GlobalKey<FormFieldState> keyDestinyStockType;
@@ -19,9 +18,8 @@ class JustificationsAndStocksDropwdownWidget
   }) : super(key: key);
 
   @override
-  State<JustificationsAndStocksDropwdownWidget>
-      createState() =>
-          _JustificationsAndStocksDropwdownWidgetState();
+  State<JustificationsAndStocksDropwdownWidget> createState() =>
+      _JustificationsAndStocksDropwdownWidgetState();
 }
 
 class _JustificationsAndStocksDropwdownWidgetState
@@ -122,20 +120,15 @@ class _JustificationsAndStocksDropwdownWidgetState
                     (value) => DropdownMenuItem(
                       alignment: Alignment.center,
                       onTap: () {
-                        transferBetweenStocksProvider
-                                .jsonAdjustStock["JustificationCode"] =
-                            value.CodigoInterno_JustMov;
+                        transferBetweenStocksProvider.updateBody(
+                          justification: value,
+                        );
 
                         if (value.CodigoInterno_TipoEstoque
                                 .CodigoInterno_TipoEstoque !=
                             -1) {
                           transferBetweenStocksProvider
                               .justificationHasStockType = true;
-
-                          transferBetweenStocksProvider
-                                  .jsonAdjustStock["StockTypeCode"] =
-                              value.CodigoInterno_TipoEstoque
-                                  .CodigoInterno_TipoEstoque;
 
                           setState(() {
                             transferBetweenStocksProvider
@@ -147,9 +140,6 @@ class _JustificationsAndStocksDropwdownWidgetState
                           transferBetweenStocksProvider
                               .justificationHasStockType = false;
                         }
-
-                        transferBetweenStocksProvider.typeOperator = value
-                            .TypeOperator; //usado pra aplicação saber se precisa somar ou subtrair o valor do estoque atual
                       },
                       value: value.Descricao_JustMov,
                       child: FittedBox(
@@ -238,9 +228,9 @@ class _JustificationsAndStocksDropwdownWidgetState
                     (value) => DropdownMenuItem(
                       alignment: Alignment.center,
                       onTap: () {
-                        transferBetweenStocksProvider
-                                .jsonAdjustStock["StockTypeCode"] =
-                            value.CodigoInterno_TipoEstoque;
+                        transferBetweenStocksProvider.updateBody(
+                          originStock: value,
+                        );
                       },
                       value: value.Nome_TipoEstoque,
                       child: FittedBox(
@@ -314,9 +304,9 @@ class _JustificationsAndStocksDropwdownWidgetState
                 if (value == null) {
                   return 'Selecione um tipo de estoque!';
                 } else if (transferBetweenStocksProvider
-                        .jsonAdjustStock["StockTypeCode"] ==
+                        .jsonAdjustStock?.StockTypeCode ==
                     transferBetweenStocksProvider
-                        .jsonAdjustStock["StockTypeRecipientCode"]) {
+                        .jsonAdjustStock?.StockTypeRecipientCode) {
                   return "Os estoques devem ser diferentes!";
                 }
                 return null;
@@ -335,9 +325,9 @@ class _JustificationsAndStocksDropwdownWidgetState
                     (value) => DropdownMenuItem(
                       alignment: Alignment.center,
                       onTap: () {
-                        transferBetweenStocksProvider
-                                .jsonAdjustStock["StockTypeRecipientCode"] =
-                            value.CodigoInterno_TipoEstoque;
+                        transferBetweenStocksProvider.updateBody(
+                          destinyStock: value,
+                        );
                       },
                       value: value.Nome_TipoEstoque,
                       child: FittedBox(

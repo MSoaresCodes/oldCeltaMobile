@@ -129,11 +129,10 @@ class _ProductsItemsState extends State<ProductsItems> {
                       transferBetweenStocksProvider.isLoadingAdjustStock
                   ? null
                   : () {
-                      transferBetweenStocksProvider
-                              .jsonAdjustStock["ProductPackingCode"] =
-                          product.productPackingCode;
-                      transferBetweenStocksProvider
-                          .jsonAdjustStock["ProductCode"] = product.productCode;
+                      transferBetweenStocksProvider.updateBody(
+                        product: product,
+                      );
+
                       selectIndexAndFocus(
                         transferBetweenStocksProvider:
                             transferBetweenStocksProvider,

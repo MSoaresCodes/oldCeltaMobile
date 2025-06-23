@@ -19,6 +19,9 @@ class TransferBetweenStocksProvider with ChangeNotifier {
   List<GetJustificationsModel> _justifications = [];
   List<GetJustificationsModel> get justifications => _justifications;
 
+  TransferBetweenStockBodyModel? _jsonAdjustStock;
+  TransferBetweenStockBodyModel? get jsonAdjustStock => _jsonAdjustStock;
+
   int get productsCount => _products.length;
   int get justificationsCount => _justifications.length;
   int get originStockTypesCount => _originStockTypes.length;
@@ -35,24 +38,15 @@ class TransferBetweenStocksProvider with ChangeNotifier {
       _errorMessageTypeStockAndJustifications;
   String _errorMessageAdjustStock = '';
 
-  String _justificationStockTypeName = "";
+  String _justificationStockTypeName = ""; //TODO remove this
   String get justificationStockTypeName => _justificationStockTypeName;
-  updateJustificationStockTypeName(String newValue) {
+  void updateJustificationStockTypeName(String newValue) {
     _justificationStockTypeName = newValue;
     notifyListeners();
   }
 
   String _lastUpdatedQuantity = "";
-  int _indexOfLastProductChangedStockQuantity =
-      -1; //index do último produto alterado. Serve para só exibir a mensagem da última quantidade alterada no produto correto
-
-  // String originSockTypeName =
-  //     ""; //quando clica no tipo de estoque altera o valor da variável. É utilizado pra se for o estoque atual, já atualizar no produto consultado
-  // String destinyStockTypeName =
-  //     ""; //quando clica no tipo de estoque altera o valor da variável. É utilizado pra se for o estoque atual, já atualizar no produto consultado
-  String typeOperator =
-      ""; //quando clica na opção de justificativa, obtém o tipo de operador "-" ou "+". Isso é usado pra atualizar o estoque do produto consultado após confirmar a alteração
-
+  int _indexOfLastProductChangedStockQuantity = -1;
   String get lastUpdatedQuantity => _lastUpdatedQuantity;
   int get indexOfLastProductChangedStockQuantity =>
       _indexOfLastProductChangedStockQuantity;
@@ -68,68 +62,19 @@ class TransferBetweenStocksProvider with ChangeNotifier {
   var consultProductFocusNode = FocusNode();
   var consultedProductFocusNode = FocusNode();
 
-  bool _justificationHasStockType = false;
+  bool _justificationHasStockType = false; //TODO remove this
   bool get justificationHasStockType => _justificationHasStockType;
   set justificationHasStockType(bool value) {
     _justificationHasStockType = value;
     notifyListeners();
   }
 
-  Map<String, dynamic> jsonAdjustStock = {
-    "EnterpriseCode": -1, //esse parâmetro vem da tela de empresas
-    "ProductCode": -1, //quando clica no produto, altera o código
-    "ProductPackingCode": -1, //quando clica no produto, altera o código
-    "JustificationCode":
-        -1, //sempre que seleciona a opção do dropdown altera o valor aqui
-    "StockTypeCode":
-        -1, //sempre que seleciona a opção do dropdown altera o valor aqui
-    "StockTypeRecipientCode": -1,
-    "Quantity":
-        -0.1 //quando clica em "alterar", valida se a quantidade é válida e se os dropdowns do estoque e justificativa estão selecionados. Caso esteja tudo certo, altera a quantidade do json de acordo com o que o usuário digitou
-  };
-
-  // _updateCurrentStock({
-  //   required int index,
-  //   required String consultedProductControllerText,
-  // }) {
-  //   _products[index].Stocks[]
-  //   _products[index].CurrentStock =
-  //       _products[index].CurrentStock.replaceAll(RegExp(r'\,'), '');
-  //   _products[index].SaldoEstoqueVenda =
-  //       _products[index].SaldoEstoqueVenda.replaceAll(RegExp(r'\,'), '');
-
-  //   double currentStockInDouble =
-  //       double.tryParse(_products[index].CurrentStock)!;
-  //   double saldoEstoqueVendaInDouble =
-  //       double.tryParse(_products[index].SaldoEstoqueVenda)!;
-  //   double consultedProductControllerInDouble =
-  //       double.tryParse(consultedProductControllerText)!;
-
-  //   if (typeOperator.contains("+")) {
-  //     _products[index].CurrentStock =
-  //         (currentStockInDouble + consultedProductControllerInDouble)
-  //             .toString();
-
-  //     _products[index].SaldoEstoqueVenda =
-  //         (saldoEstoqueVendaInDouble + consultedProductControllerInDouble)
-  //             .toString();
-  //   } else {
-  //     _products[index].CurrentStock =
-  //         (currentStockInDouble - consultedProductControllerInDouble)
-  //             .toString();
-
-  //     _products[index].SaldoEstoqueVenda =
-  //         (currentStockInDouble - consultedProductControllerInDouble)
-  //             .toString();
-  //   }
-  // }
-
-  clearProductsJustificationsStockTypesAndJsonAdjustStock() {
+  void clearProductsJustificationsStockTypesAndJsonAdjustStock() {
     _justifications.clear();
     _originStockTypes.clear();
     _destinyStockTypes.clear();
     _products.clear();
-    jsonAdjustStock.clear();
+    _jsonAdjustStock = null;
     _lastUpdatedQuantity = "";
     _indexOfLastProductChangedStockQuantity = -1;
     _justificationHasStockType = false;
@@ -267,16 +212,12 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  _updateProductCodeAndProductPackingCode(int indexOfProduct) {
-    jsonAdjustStock["ProductPackingCode"] =
-        _products[indexOfProduct].productPackingCode;
-    jsonAdjustStock["ProductCode"] = _products[indexOfProduct].productCode;
-  }
-
-  confirmAdjustStock({
+  Future<void> confirmAdjustStock({
     required BuildContext context,
     required int indexOfProduct,
     required String consultedProductControllerText,
+    required double quantity,
+    required int enterpriseCode,
   }) async {
     _isLoadingAdjustStock = true;
     _errorMessageAdjustStock = "";
@@ -286,19 +227,18 @@ class TransferBetweenStocksProvider with ChangeNotifier {
       FirebaseCallEnum.transferBetweenStocksConfirmAdjust,
     );
 
-    _updateProductCodeAndProductPackingCode(indexOfProduct);
-
     try {
-      await SoapHelper.confirmAdjustStock(jsonAdjustStock);
+      updateBody(
+        enterpriseCode: enterpriseCode,
+        quantity: quantity,
+      );
+      await SoapHelper.confirmAdjustStock(jsonAdjustStock!.toJson());
 
       _errorMessageAdjustStock = SoapRequestResponse.errorMessage;
 
       if (_errorMessageAdjustStock == "") {
-        typeOperator = typeOperator
-            .replaceAll(RegExp(r'\('), '')
-            .replaceAll(RegExp(r'\)'), '');
         _lastUpdatedQuantity = ConvertString.convertToBrazilianNumber(
-            jsonAdjustStock["Quantity"]!.toString());
+            jsonAdjustStock?.Quantity?.toString());
         _indexOfLastProductChangedStockQuantity = indexOfProduct;
       }
 
@@ -319,5 +259,43 @@ class TransferBetweenStocksProvider with ChangeNotifier {
 
     _isLoadingAdjustStock = false;
     notifyListeners();
+  }
+
+  void updateBody({
+    GetStockTypesModel? originStock,
+    GetStockTypesModel? destinyStock,
+    GetJustificationsModel? justification,
+    GetProductJsonModel? product,
+    int? enterpriseCode,
+    double? quantity,
+  }) {
+    final oldBody = _jsonAdjustStock;
+    final hasFixedDestinyStock =
+        justification?.CodigoInterno_TipoEstoque.CodigoInterno_TipoEstoque !=
+            -1;
+
+    if (hasFixedDestinyStock) {
+      _justificationStockTypeName =
+          justification?.CodigoInterno_TipoEstoque.Nome_TipoEstoque ??
+              _justificationStockTypeName;
+    }
+
+    _jsonAdjustStock = TransferBetweenStockBodyModel(
+      EnterpriseCode: enterpriseCode ?? oldBody?.EnterpriseCode,
+      StockTypeCode: hasFixedDestinyStock &&
+              justification
+                      ?.CodigoInterno_TipoEstoque.CodigoInterno_TipoEstoque !=
+                  null
+          ? justification?.CodigoInterno_TipoEstoque.CodigoInterno_TipoEstoque
+          : (originStock?.CodigoInterno_TipoEstoque ?? oldBody?.StockTypeCode),
+      ProductCode: product?.productCode ?? oldBody?.ProductCode,
+      ProductPackingCode:
+          product?.productPackingCode ?? oldBody?.ProductPackingCode,
+      JustificationCode:
+          justification?.CodigoInterno_JustMov ?? oldBody?.JustificationCode,
+      StockTypeRecipientCode: destinyStock?.CodigoInterno_TipoEstoque ??
+          oldBody?.StockTypeRecipientCode,
+      Quantity: quantity ?? oldBody?.Quantity,
+    );
   }
 }

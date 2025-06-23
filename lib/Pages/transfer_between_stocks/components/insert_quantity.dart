@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import '../../../providers/providers.dart';
 import '../../../components/components.dart';
+import '../../../providers/providers.dart';
+import '../../../utils/utils.dart';
 
 class InsertQuantity extends StatefulWidget {
   final TextEditingController consultedProductController;
@@ -44,16 +45,13 @@ class _InsertQuantityState extends State<InsertQuantity> {
       widget.consultedProductController.text =
           widget.consultedProductController.text.replaceAll(RegExp(r'\,'), '.');
     }
-    transferBetweenStocksProvider.jsonAdjustStock["Quantity"] =
-        double.parse(widget.consultedProductController.text);
-
-    transferBetweenStocksProvider.jsonAdjustStock["EnterpriseCode"] =
-        widget.internalEnterpriseCode;
 
     await transferBetweenStocksProvider.confirmAdjustStock(
       context: context,
       indexOfProduct: widget.index,
       consultedProductControllerText: widget.consultedProductController.text,
+      enterpriseCode: widget.internalEnterpriseCode,
+      quantity: widget.consultedProductController.text.toDouble(),
     );
 
     if (transferBetweenStocksProvider.errorMessageAdjustStock == "") {

@@ -21,4 +21,5 @@ export './sale_request/sale_request.dart';
 export './stocks/stocks.dart';
 export './supplier/supplier.dart';
 export './transfer_between_package/transfer_between_package.dart';
+export './transfer_between_stocks/transfer_between_stocks.dart';
 export './transfer_request/transfer_request.dart';

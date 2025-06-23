@@ -185,7 +185,8 @@ class SoapHelper {
   }
 
   static Future<void> confirmAdjustStock(
-    Map<String, dynamic> jsonAdjustStock,
+    Map<String, dynamic> jsonAdjustStock, //TODO remove this
+    // TransferBetweenStockBodyModel jsonAdjustStock,
   ) async {
     try {
       await SoapRequest.soapPost(
@@ -446,7 +447,7 @@ class SoapHelper {
     }
   }
 
-  static Future<DateTime?> getBsDateVersion() async {
+  static Future<DateTime?> bsAlreadyInLatestVersion() async {
     try {
       await SoapRequest.soapPost(
         parameters: {},
