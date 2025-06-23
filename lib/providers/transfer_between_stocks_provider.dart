@@ -218,6 +218,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     required String consultedProductControllerText,
     required double quantity,
     required int enterpriseCode,
+    required bool? isPendingAdjust,
   }) async {
     _isLoadingAdjustStock = true;
     _errorMessageAdjustStock = "";
@@ -231,6 +232,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
       updateBody(
         enterpriseCode: enterpriseCode,
         quantity: quantity,
+        isPendingAdjust: isPendingAdjust,
       );
       await SoapHelper.confirmAdjustStock(jsonAdjustStock!.toJson());
 
@@ -268,6 +270,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     GetProductJsonModel? product,
     int? enterpriseCode,
     double? quantity,
+    bool? isPendingAdjust,
   }) {
     final oldBody = _jsonAdjustStock;
     final hasFixedDestinyStock =
@@ -281,6 +284,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     }
 
     _jsonAdjustStock = TransferBetweenStockBodyModel(
+      IsPendingAdjust: isPendingAdjust ?? oldBody?.IsPendingAdjust,
       EnterpriseCode: enterpriseCode ?? oldBody?.EnterpriseCode,
       StockTypeCode: hasFixedDestinyStock &&
               justification

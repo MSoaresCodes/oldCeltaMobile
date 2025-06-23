@@ -5,6 +5,7 @@ class TransferBetweenStockBodyModel {
   final int? JustificationCode;
   final int? StockTypeCode;
   final int? StockTypeRecipientCode;
+  final bool? IsPendingAdjust;
   final double? Quantity;
 
   TransferBetweenStockBodyModel({
@@ -14,6 +15,7 @@ class TransferBetweenStockBodyModel {
     required this.JustificationCode,
     required this.StockTypeCode,
     required this.StockTypeRecipientCode,
+    required this.IsPendingAdjust,
     required this.Quantity,
   });
 
@@ -24,6 +26,7 @@ class TransferBetweenStockBodyModel {
         "JustificationCode": JustificationCode,
         "StockTypeCode": StockTypeCode,
         "StockTypeRecipientCode": StockTypeRecipientCode,
+        "IsPendingAdjust": IsPendingAdjust,
         "Quantity": Quantity,
       };
 }
