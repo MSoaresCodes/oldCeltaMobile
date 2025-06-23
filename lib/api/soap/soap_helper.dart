@@ -446,7 +446,7 @@ class SoapHelper {
     }
   }
 
-  static Future<DateTime?> bsAlreadyInLatestVersion() async {
+  static Future<DateTime?> getBsDateVersion() async {
     try {
       await SoapRequest.soapPost(
         parameters: {},

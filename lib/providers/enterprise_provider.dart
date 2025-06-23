@@ -72,7 +72,7 @@ class EnterpriseProvider with ChangeNotifier {
 
       _errorMessage = SoapRequestResponse.errorMessage;
 
-      _bsDate = await SoapHelper.bsAlreadyInLatestVersion();
+      _bsDate = await SoapHelper.getBsDateVersion();
     } catch (e) {
       _errorMessage = DefaultErrorMessage.ERROR;
     } finally {
