@@ -19,8 +19,8 @@ class TransferBetweenStocksProvider with ChangeNotifier {
   List<GetJustificationsModel> _justifications = [];
   List<GetJustificationsModel> get justifications => _justifications;
 
-  TransferBetweenStockBodyModel? _jsonAdjustStock;
-  TransferBetweenStockBodyModel? get jsonAdjustStock => _jsonAdjustStock;
+  TransferBetweenStockBodyModel? _transferBodyModel;
+  TransferBetweenStockBodyModel? get transferBodyModel => _transferBodyModel;
 
   int get productsCount => _products.length;
   int get justificationsCount => _justifications.length;
@@ -38,10 +38,10 @@ class TransferBetweenStocksProvider with ChangeNotifier {
       _errorMessageTypeStockAndJustifications;
   String _errorMessageAdjustStock = '';
 
-  String _justificationStockTypeName = ""; //TODO remove this
-  String get justificationStockTypeName => _justificationStockTypeName;
+  String _fixedJustificationStockName = "";
+  String get fixedJustificationStockName => _fixedJustificationStockName;
   void updateJustificationStockTypeName(String newValue) {
-    _justificationStockTypeName = newValue;
+    _fixedJustificationStockName = newValue;
     notifyListeners();
   }
 
@@ -62,7 +62,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
   var consultProductFocusNode = FocusNode();
   var consultedProductFocusNode = FocusNode();
 
-  bool _justificationHasStockType = false; //TODO remove this
+  bool _justificationHasStockType = false;
   bool get justificationHasStockType => _justificationHasStockType;
   set justificationHasStockType(bool value) {
     _justificationHasStockType = value;
@@ -74,7 +74,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     _originStockTypes.clear();
     _destinyStockTypes.clear();
     _products.clear();
-    _jsonAdjustStock = null;
+    _transferBodyModel = null;
     _lastUpdatedQuantity = "";
     _indexOfLastProductChangedStockQuantity = -1;
     _justificationHasStockType = false;
@@ -234,13 +234,13 @@ class TransferBetweenStocksProvider with ChangeNotifier {
         quantity: quantity,
         isPendingAdjust: isPendingAdjust,
       );
-      await SoapHelper.confirmAdjustStock(jsonAdjustStock!.toJson());
+      await SoapHelper.confirmAdjustStock(transferBodyModel!.toJson());
 
       _errorMessageAdjustStock = SoapRequestResponse.errorMessage;
 
       if (_errorMessageAdjustStock == "") {
         _lastUpdatedQuantity = ConvertString.convertToBrazilianNumber(
-            jsonAdjustStock?.Quantity?.toString());
+            transferBodyModel?.Quantity?.toString());
         _indexOfLastProductChangedStockQuantity = indexOfProduct;
       }
 
@@ -272,18 +272,18 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     double? quantity,
     bool? isPendingAdjust,
   }) {
-    final oldBody = _jsonAdjustStock;
+    final oldBody = _transferBodyModel;
     final hasFixedDestinyStock =
         justification?.CodigoInterno_TipoEstoque.CodigoInterno_TipoEstoque !=
             -1;
 
     if (hasFixedDestinyStock) {
-      _justificationStockTypeName =
+      _fixedJustificationStockName =
           justification?.CodigoInterno_TipoEstoque.Nome_TipoEstoque ??
-              _justificationStockTypeName;
+              _fixedJustificationStockName;
     }
 
-    _jsonAdjustStock = TransferBetweenStockBodyModel(
+    _transferBodyModel = TransferBetweenStockBodyModel(
       IsPendingAdjust: isPendingAdjust ?? oldBody?.IsPendingAdjust,
       EnterpriseCode: enterpriseCode ?? oldBody?.EnterpriseCode,
       StockTypeCode: hasFixedDestinyStock &&

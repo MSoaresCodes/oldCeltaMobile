@@ -191,7 +191,7 @@ class _JustificationsAndStocksDropwdownWidgetState
                       child: Text(
                         transferBetweenStocksProvider.justificationHasStockType
                             ? transferBetweenStocksProvider
-                                .justificationStockTypeName
+                                .fixedJustificationStockName
                             : "Estoque de origem",
                       ),
                     ),
@@ -242,7 +242,7 @@ class _JustificationsAndStocksDropwdownWidgetState
                                 transferBetweenStocksProvider
                                         .justificationHasStockType
                                     ? transferBetweenStocksProvider
-                                        .justificationStockTypeName
+                                        .fixedJustificationStockName
                                     : value.Nome_TipoEstoque,
                                 style: const TextStyle(
                                   fontSize: 15,
@@ -304,9 +304,9 @@ class _JustificationsAndStocksDropwdownWidgetState
                 if (value == null) {
                   return 'Selecione um tipo de estoque!';
                 } else if (transferBetweenStocksProvider
-                        .jsonAdjustStock?.StockTypeCode ==
+                        .transferBodyModel?.StockTypeCode ==
                     transferBetweenStocksProvider
-                        .jsonAdjustStock?.StockTypeRecipientCode) {
+                        .transferBodyModel?.StockTypeRecipientCode) {
                   return "Os estoques devem ser diferentes!";
                 }
                 return null;
