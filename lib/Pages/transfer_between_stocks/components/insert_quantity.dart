@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -88,58 +87,18 @@ class _InsertQuantityState extends State<InsertQuantity> {
 
     return Form(
       key: widget.insertQuantityFormKey,
-      child: Row(
+      child: Column(
         children: [
-          Flexible(
-            flex: 10,
-            child: TextFormField(
-              focusNode:
-                  transferBetweenStocksProvider.consultedProductFocusNode,
-              controller: widget.consultedProductController,
-              inputFormatters: [LengthLimitingTextInputFormatter(10)],
-              onFieldSubmitted: (_) async {
-                await _confirmAdjustStock(
-                  transferBetweenStocksProvider: transferBetweenStocksProvider,
-                  configurationsProvider: configurationsProvider,
-                  isPendingAdjust: false,
-                );
-              },
-              onChanged: (value) {
-                if (value.isEmpty || value == '-') {
-                  value = '0';
-                }
-                if (value.startsWith(",") || value.startsWith(".")) {
-                  widget.consultedProductController.text =
-                      "0" + widget.consultedProductController.text;
-                  widget.consultedProductController.selection =
-                      TextSelection.fromPosition(
-                    TextPosition(
-                      offset: widget.consultedProductController.text.length,
-                    ),
-                  );
-                }
-              },
-              validator: FormFieldValidations.number,
-              decoration: FormFieldDecoration.decoration(
-                context: context,
-                labelText: "Quantidade",
-              ),
-              style: FormFieldStyle.style(),
-              keyboardType:
-                  const TextInputType.numberWithOptions(decimal: true),
-            ),
-          ),
-          const SizedBox(width: 5),
-          Flexible(
-            flex: 9,
-            child: Column(
-              children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 35),
-                    maximumSize: const Size(double.infinity, 35),
-                  ),
-                  onPressed: () async {
+          Row(
+            children: [
+              Flexible(
+                flex: 10,
+                child: TextFormField(
+                  focusNode:
+                      transferBetweenStocksProvider.consultedProductFocusNode,
+                  controller: widget.consultedProductController,
+                  inputFormatters: [LengthLimitingTextInputFormatter(10)],
+                  onFieldSubmitted: (_) async {
                     await _confirmAdjustStock(
                       transferBetweenStocksProvider:
                           transferBetweenStocksProvider,
@@ -147,47 +106,86 @@ class _InsertQuantityState extends State<InsertQuantity> {
                       isPendingAdjust: false,
                     );
                   },
-                  child: const FittedBox(
-                    child: Text("CONFIRMAR"),
+                  onChanged: (value) {
+                    if (value.isEmpty || value == '-') {
+                      value = '0';
+                    }
+                    if (value.startsWith(",") || value.startsWith(".")) {
+                      widget.consultedProductController.text =
+                          "0" + widget.consultedProductController.text;
+                      widget.consultedProductController.selection =
+                          TextSelection.fromPosition(
+                        TextPosition(
+                          offset: widget.consultedProductController.text.length,
+                        ),
+                      );
+                    }
+                  },
+                  validator: FormFieldValidations.number,
+                  decoration: FormFieldDecoration.decoration(
+                    context: context,
+                    labelText: "Quantidade",
+                  ),
+                  style: FormFieldStyle.style(),
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                ),
+              ),
+              const SizedBox(width: 5),
+              Flexible(
+                flex: 9,
+                child: Column(
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(double.infinity, 35),
+                        maximumSize: const Size(double.infinity, 35),
+                      ),
+                      onPressed: () async {
+                        await _confirmAdjustStock(
+                          transferBetweenStocksProvider:
+                              transferBetweenStocksProvider,
+                          configurationsProvider: configurationsProvider,
+                          isPendingAdjust: false,
+                        );
+                      },
+                      child: const FittedBox(
+                        child: Text("CONFIRMAR"),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          if (enterpriseProvider.bsDate?.isAfter(DateTime(2025, 6, 23)) == true)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Flexible(
+                  child: TextButton(
+                    onPressed: () async {
+                      await _confirmAdjustStock(
+                        transferBetweenStocksProvider:
+                            transferBetweenStocksProvider,
+                        configurationsProvider: configurationsProvider,
+                        isPendingAdjust: true,
+                      );
+                    },
+                    child: Text("Solicitar"),
                   ),
                 ),
-                if (enterpriseProvider.bsDate?.isAfter(DateTime(2025, 6, 23)) ==
-                        true ||
-                    kDebugMode) //TODO remove this validation
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Flexible(
-                          child: TextButton(
-                            onPressed: () async {
-                              await _confirmAdjustStock(
-                                transferBetweenStocksProvider:
-                                    transferBetweenStocksProvider,
-                                configurationsProvider: configurationsProvider,
-                                isPendingAdjust: true,
-                              );
-                            },
-                            child: Text("Solicitar"),
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.info,
-                            size: 15,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                          tooltip:
-                              "Será criada uma solicitação para efetuar a transferência",
-                        ),
-                      ],
-                    ),
+                Tooltip(
+                  triggerMode: TooltipTriggerMode.tap,
+                  message: "Será criada uma solicitação no CeltaBS",
+                  child: Icon(
+                    Icons.warning,
+                    size: 15,
+                    color: Theme.of(context).primaryColor,
                   ),
+                ),
               ],
             ),
-          ),
         ],
       ),
     );
