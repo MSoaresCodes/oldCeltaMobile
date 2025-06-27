@@ -41,9 +41,9 @@ class InventoryModel {
           codigoInternoInventario:
               int.parse(element['CodigoInterno_Inventario']),
           dataCriacaoInventario:
-              DateTime.parse(element['DataCriacao_Inventario']),
+              DateTime.parse(element['DataCriacao_Inventario']).toLocal(),
           dataCongelamentoInventario:
-              DateTime.parse(element['DataCongelamento_Inventario']),
+              DateTime.parse(element['DataCongelamento_Inventario']).toLocal(),
           nomeTipoEstoque: element['Nome_TipoEstoque'],
           obsInventario: element['Obs_Inventario'] ?? '',
           nomefuncionario: element['Nome_Funcionario'],

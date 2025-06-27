@@ -1,4 +1,4 @@
-import 'package:date_format/date_format.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter/material.dart';
@@ -59,11 +59,9 @@ class InventoryItems extends StatelessWidget {
                         ),
                         TitleAndSubtitle.titleAndSubtitle(
                           title: "Congelado em",
-                          subtitle: formatDate(
-                            inventoryProvider
-                                .inventorys[index].dataCongelamentoInventario,
-                            [dd, '/', mm, '/', yyyy, ' ', HH, ':', mm, ':', ss],
-                          ),
+                          subtitle: DateFormat('dd/MM/yyyy HH:mm').format(
+                              inventoryProvider.inventorys[index]
+                                  .dataCongelamentoInventario),
                         ),
                         TitleAndSubtitle.titleAndSubtitle(
                           title: "Observações",
