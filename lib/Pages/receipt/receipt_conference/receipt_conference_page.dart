@@ -138,6 +138,7 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                     child: Row(
                       children: [
                         Expanded(
+                          flex: 6,
                           child: ConsultProductWithoutEanButton(
                             docCode: docCode,
                             enterprise: enterprise,
@@ -145,6 +146,7 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                         ),
                         const SizedBox(width: 5),
                         Expanded(
+                          flex: 4,
                           child: ProductsWithoutCadasterButton(
                             docCode: docCode,
                           ),

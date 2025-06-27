@@ -41,7 +41,7 @@ class _ConsultProductWithoutEanButtonState
                 enterprise: widget.enterprise,
               );
             },
-      child: const FittedBox(child: Text("Consultar todos")),
+      child: const FittedBox(child: Text("Consultar todos sem EAN")),
     );
   }
 }
