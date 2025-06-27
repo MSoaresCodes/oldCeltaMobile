@@ -153,7 +153,7 @@ class CustomerRegisterProvider with ChangeNotifier {
       "Password": password,
       "SexType": customer?.SexType == "Masculino" ? "M" : "F",
       "PersonType": customer?.CpfCnpjNumber?.length == 11 ? "F" : "J",
-      "RegistrationNumber": "",
+      "RegistrationNumber": "", //TODO in UI this parameter
       "Emails": customer?.Emails,
       "Telephones": customer?.Telephones?.map((e) => e.toJson()).toList(),
       "Addresses": customer?.Addresses?.map((e) => e.toJson()).toList(),
