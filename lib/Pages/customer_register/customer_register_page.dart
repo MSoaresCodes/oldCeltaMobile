@@ -21,6 +21,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
   final reducedNameController = TextEditingController();
   final cpfCnpjController = TextEditingController();
   final dateOfBirthController = TextEditingController();
+  final registrationNumberController = TextEditingController();
   final passwordConfirmationController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -50,6 +51,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
     reducedNameController.dispose();
     cpfCnpjController.dispose();
     dateOfBirthController.dispose();
+    registrationNumberController.dispose();
     passwordConfirmationController.dispose();
     passwordController.dispose();
 
@@ -79,6 +81,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
           ? DateFormat("dd/MM/yyyy")
               .format(DateTime.parse(customer!.DateOfBirth!))
           : customer?.DateOfBirth ?? "";
+      registrationNumberController.text = customer?.RegistrationNumber ?? "";
       setState(() {
         cpfCnpjIsValid = true;
       });
@@ -110,6 +113,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
             : DateFormat("dd/MM/yyyy").parse(dateOfBirthController.text),
         password: passwordController.text,
         reducedName: reducedNameController.text,
+        registrationNumber: registrationNumberController.text,
       );
     }
 
@@ -125,6 +129,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
     dateOfBirthController.clear();
     passwordController.clear();
     passwordConfirmationController.clear();
+    registrationNumberController.clear();
     setState(() {
       cpfCnpjIsValid = false;
     });
@@ -154,6 +159,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
         passwordController: passwordController,
         reducedNameController: reducedNameController,
         dateOfBirthController: dateOfBirthController,
+        registrationNumberController: registrationNumberController,
       ),
       AddressComponent(
         canInsertMoreThanOneAddress: true,

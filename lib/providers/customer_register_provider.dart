@@ -153,7 +153,7 @@ class CustomerRegisterProvider with ChangeNotifier {
       "Password": password,
       "SexType": customer?.SexType == "Masculino" ? "M" : "F",
       "PersonType": customer?.CpfCnpjNumber?.length == 11 ? "F" : "J",
-      "RegistrationNumber": "", //TODO in UI this parameter
+      "RegistrationNumber": customer?.RegistrationNumber,
       "Emails": customer?.Emails,
       "Telephones": customer?.Telephones?.map((e) => e.toJson()).toList(),
       "Addresses": customer?.Addresses?.map((e) => e.toJson()).toList(),
@@ -414,9 +414,10 @@ class CustomerRegisterProvider with ChangeNotifier {
     required String? cpfCnpj,
     required String? name,
     required String? sexType,
-    String? reducedName,
-    DateTime? birthDate,
-    String? password,
+    required String? reducedName,
+    required DateTime? birthDate,
+    required String? password,
+    required String? registrationNumber,
   }) {
     final oldCustomer = _customer;
     _customer = CustomerModel(
@@ -429,7 +430,7 @@ class CustomerRegisterProvider with ChangeNotifier {
       Addresses: oldCustomer?.Addresses,
       Code: oldCustomer?.Code,
       PersonalizedCode: oldCustomer?.PersonalizedCode,
-      RegistrationNumber: oldCustomer?.RegistrationNumber,
+      RegistrationNumber: registrationNumber,
       PersonType: oldCustomer?.PersonType ?? "F",
       Emails: oldCustomer?.Emails,
       Telephones: oldCustomer?.Telephones,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../../providers/providers.dart';
 import 'customer_register_personal_data.dart';
 
 class CustomerRegisterPersonalDataPage extends StatefulWidget {
@@ -9,6 +11,7 @@ class CustomerRegisterPersonalDataPage extends StatefulWidget {
   final TextEditingController passwordController;
   final TextEditingController reducedNameController;
   final TextEditingController dateOfBirthController;
+  final TextEditingController registrationNumberController;
   final void Function(String) changeCpfCnpj;
   final bool cpfCnpjIsValid;
   final FocusNode cpfCnpjFocusNode;
@@ -22,6 +25,7 @@ class CustomerRegisterPersonalDataPage extends StatefulWidget {
     required this.passwordController,
     required this.reducedNameController,
     required this.dateOfBirthController,
+    required this.registrationNumberController,
     required this.changeCpfCnpj,
     required this.cpfCnpjIsValid,
     required this.cpfCnpjFocusNode,
@@ -38,12 +42,13 @@ class CustomerRegisterPersonalDataPage extends StatefulWidget {
 
 class _CustomerRegisterPersonalDataPageState
     extends State<CustomerRegisterPersonalDataPage> {
-  final FocusNode nameFocusNode = FocusNode();
-  final FocusNode reducedNameFocusNode = FocusNode();
-  final FocusNode sexTypeFocusNode = FocusNode();
-  final FocusNode dateOfBirthFocusNode = FocusNode();
-  final FocusNode passwordFocusNode = FocusNode();
-  final FocusNode passwordConfirmationFocusNode = FocusNode();
+  final nameFocusNode = FocusNode();
+  final reducedNameFocusNode = FocusNode();
+  final sexTypeFocusNode = FocusNode();
+  final dateOfBirthFocusNode = FocusNode();
+  final passwordFocusNode = FocusNode();
+  final passwordConfirmationFocusNode = FocusNode();
+  final registrationNumberFocusNode = FocusNode();
 
   @override
   void dispose() {
@@ -54,10 +59,13 @@ class _CustomerRegisterPersonalDataPageState
     dateOfBirthFocusNode.dispose();
     passwordFocusNode.dispose();
     passwordConfirmationFocusNode.dispose();
+    registrationNumberFocusNode.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    EnterpriseProvider enterpriseProvider = Provider.of(context, listen: false);
+
     return SingleChildScrollView(
       primary: false,
       child: Form(
@@ -75,8 +83,19 @@ class _CustomerRegisterPersonalDataPageState
               visible: widget.cpfCnpjIsValid,
               child: Column(
                 children: [
+                  if (widget.cpfCnpjController.text.length == 14 &&
+                      enterpriseProvider.bsDate
+                              ?.isAfter(DateTime(2025, 06, 27)) ==
+                          true)
+                    RegistrationNumberField(
+                      nameFocusNode: nameFocusNode,
+                      registrationNumberFocusNode: registrationNumberFocusNode,
+                      validateFormKey:
+                          widget.personFormKey.currentState?.validate,
+                      registrationNumberController:
+                          widget.registrationNumberController,
+                    ),
                   NameField(
-                    cpfCnpjIsValid: widget.cpfCnpjIsValid,
                     nameFocusNode: nameFocusNode,
                     reducedNameFocusNode: reducedNameFocusNode,
                     validateFormKey:
@@ -129,6 +148,7 @@ class _CustomerRegisterPersonalDataPageState
                             widget.dateOfBirthController.clear();
                             widget.passwordController.clear();
                             widget.passwordConfirmationController.clear();
+                            widget.registrationNumberController.clear();
                           }
                         : null,
                   ),

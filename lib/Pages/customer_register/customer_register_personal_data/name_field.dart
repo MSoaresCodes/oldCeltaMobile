@@ -7,20 +7,18 @@ class NameField extends StatelessWidget {
   final FocusNode reducedNameFocusNode;
   final void Function()? validateFormKey;
   final TextEditingController nameController;
-  final bool cpfCnpjIsValid;
   const NameField({
     required this.nameFocusNode,
     required this.reducedNameFocusNode,
     required this.validateFormKey,
     required this.nameController,
-    required this.cpfCnpjIsValid,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     return FormFieldWidget(
-      enabled: cpfCnpjIsValid,
+      enabled: true,
       focusNode: nameFocusNode,
       onFieldSubmitted: (String? value) {
         FocusScope.of(context).requestFocus(reducedNameFocusNode);

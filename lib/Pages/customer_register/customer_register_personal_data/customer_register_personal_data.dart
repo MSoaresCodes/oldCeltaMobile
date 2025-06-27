@@ -5,4 +5,5 @@ export './customer_register_personal_data_page.dart';
 export './name_field.dart';
 export './password.dart';
 export './reduced_name_field.dart';
+export './registration_number_field.dart';
 export './sex_type.dart';
