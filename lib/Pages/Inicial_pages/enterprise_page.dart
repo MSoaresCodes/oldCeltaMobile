@@ -71,7 +71,7 @@ class EnterprisePageState extends State<EnterprisePage> {
               title: FittedBox(
                 child: Text(
                   onlyForValidateModule == true
-                      ? 'VALIDANOD SE O MÓDULO ESTÁ HABILITADO'
+                      ? 'VALIDANDO SE O MÓDULO ESTÁ HABILITADO'
                       : 'EMPRESAS',
                 ),
               ),
