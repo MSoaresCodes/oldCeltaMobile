@@ -233,6 +233,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
         enterpriseCode: enterpriseCode,
         quantity: quantity,
         isPendingAdjust: isPendingAdjust,
+        product: _products[indexOfProduct],
       );
       await SoapHelper.confirmAdjustStock(transferBodyModel!.toJson());
 
