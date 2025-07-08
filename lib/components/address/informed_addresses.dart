@@ -94,11 +94,11 @@ class InformedsAddresses extends StatelessWidget {
                         subtitle: addressModel.Reference,
                       ),
                     ElevatedButton(
-                      style: ButtonStyle(
+                      style: const ButtonStyle(
                         backgroundColor: WidgetStatePropertyAll(Colors.red),
                         minimumSize:
-                            const WidgetStatePropertyAll(Size(100, 30)),
-                        maximumSize: const WidgetStatePropertyAll(
+                            WidgetStatePropertyAll(Size(100, 30)),
+                        maximumSize: WidgetStatePropertyAll(
                             Size(double.infinity, 30)),
                       ),
                       onPressed: () {

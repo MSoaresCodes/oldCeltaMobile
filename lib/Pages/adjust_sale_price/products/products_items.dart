@@ -49,7 +49,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                   onPressed: () {
                     onTapProduct(context, enterprise, product);
                   },
-                  child: Text("Alterar preços"),
+                  child: const Text("Alterar preços"),
                 ),
               ],
             ),

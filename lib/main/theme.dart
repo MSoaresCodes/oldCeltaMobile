@@ -11,7 +11,7 @@ ThemeData theme() {
   return ThemeData(
     useMaterial3: true,
     primaryColor: principalColor,
-    dialogTheme: DialogThemeData(
+    dialogTheme: const DialogThemeData(
       backgroundColor: Colors.white,
     ),
     inputDecorationTheme: const InputDecorationTheme(

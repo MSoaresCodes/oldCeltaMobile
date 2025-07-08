@@ -75,7 +75,7 @@ class _CustomerRegisterTelephonesInformedsState
                         },
                       );
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.delete,
                       size: 30,
                       color: Colors.red,

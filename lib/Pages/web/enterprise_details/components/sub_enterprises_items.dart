@@ -31,12 +31,12 @@ class SubEnterprisesItems extends StatelessWidget {
     return Column(
       children: [
         const Divider(),
-        Row(
+        const Row(
           children: [
             Expanded(
-              child: const Text(
+              child: Text(
                 "Sub empresas",
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: "BebasNeue",
                   fontSize: 30,
                 ),
@@ -111,12 +111,12 @@ class SubEnterprisesItems extends StatelessWidget {
                                   await webProvider.removeSubEnterprise(index);
                                 });
                           },
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.delete,
                             color: Colors.red,
                           ),
                         ),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         IconButton(
                           onPressed: () {
                             goToAddOrEditSubEnterprisePage(
@@ -156,7 +156,7 @@ class SubEnterprisesItems extends StatelessWidget {
                   updatingAllSubenterprises: true,
                 );
               },
-              child: Text("Deixar módulos iguais em todas sub empresas"),
+              child: const Text("Deixar módulos iguais em todas sub empresas"),
             ),
           ),
       ],

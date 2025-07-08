@@ -9,7 +9,7 @@ class AddOrSubtractButton extends StatefulWidget {
   final String subtractButtonText;
   final String addButtonText;
 
-  AddOrSubtractButton({
+  const AddOrSubtractButton({
     required this.isLoading,
     required this.function,
     required this.isSubtract,

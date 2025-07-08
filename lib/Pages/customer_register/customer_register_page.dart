@@ -189,7 +189,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
           ShowAlertDialog.show(
               context: context,
               title: "Sair",
-              content: Text(
+              content: const Text(
                 "Deseja realmente sair? Todas alterações realizadas serão perdidas",
               ),
               function: () {

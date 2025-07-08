@@ -97,7 +97,7 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
                         observationController: observationController,
                       ),
                       const SizedBox(height: 15),
-                      ChangeAddress(),
+                      const ChangeAddress(),
                       const SizedBox(height: 8),
                       ConfirmOrUpdateButton(
                         formKey: _formKey,

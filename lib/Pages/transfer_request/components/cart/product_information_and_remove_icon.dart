@@ -39,7 +39,7 @@ class ProductInformationAndRemoveIcon extends StatelessWidget {
                 padding: const EdgeInsets.all(2),
                 child: Text(
                   (index + 1).toString(),
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                 ),
               ),
             ),
@@ -73,7 +73,7 @@ class ProductInformationAndRemoveIcon extends StatelessWidget {
                   );
                 });
           },
-          icon: Icon(
+          icon: const Icon(
             Icons.delete,
             color: Colors.red,
           ),

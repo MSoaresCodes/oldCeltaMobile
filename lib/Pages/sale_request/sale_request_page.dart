@@ -152,7 +152,7 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
                 ),
               ),
               actions: [
-                if (_selectedIndex == _pages.length - 1) ClearAllDataButton(),
+                if (_selectedIndex == _pages.length - 1) const ClearAllDataButton(),
                 if (_selectedIndex < (_pages.length - 1))
                   CartBadge(changeSelectedIndex: (index) {
                     setState(() {

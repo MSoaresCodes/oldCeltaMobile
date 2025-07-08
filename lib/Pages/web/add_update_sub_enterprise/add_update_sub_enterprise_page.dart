@@ -154,7 +154,7 @@ class _AddUpdateSubEnterprisePageState
       ShowAlertDialog.show(
           context: context,
           title: 'Atualizar todas empresas',
-          content: Text(
+          content: const Text(
               "Deseja realmente igualar todos módulos em todas as sub empresas?"),
           function: () async {
             await webProvider.updateModulesInAllSubEnterprises(modules);

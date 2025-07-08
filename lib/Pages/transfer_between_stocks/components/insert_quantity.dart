@@ -172,7 +172,7 @@ class _InsertQuantityState extends State<InsertQuantity> {
                         isPendingAdjust: true,
                       );
                     },
-                    child: Text("Solicitar"),
+                    child: const Text("Solicitar"),
                   ),
                 ),
                 Tooltip(

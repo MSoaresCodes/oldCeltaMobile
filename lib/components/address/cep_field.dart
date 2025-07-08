@@ -56,7 +56,7 @@ class _CepFieldState extends State<CepField> {
       limitOfCaracters: 8,
       validator: FormFieldValidations.cep,
       suffixWidget: TextButton(
-        child: Text("Pesquisar CEP"),
+        child: const Text("Pesquisar CEP"),
         onPressed: canSearch ? widget.getAdressByCep : null,
       ),
     );

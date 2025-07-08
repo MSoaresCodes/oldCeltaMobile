@@ -13,7 +13,7 @@ class ProductsItems extends StatefulWidget {
   final bool isIndividual;
   final TextEditingController consultedProductController;
   final Function getProducts;
-  ProductsItems({
+  const ProductsItems({
     Key? key,
     required this.inventoryCountingCode,
     required this.getProducts,

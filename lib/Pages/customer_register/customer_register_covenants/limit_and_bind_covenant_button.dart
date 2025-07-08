@@ -39,7 +39,7 @@ class LimitAndBindCovenantButton extends StatelessWidget {
     return Form(
       key: formKey,
       child: Container(
-        padding: EdgeInsets.fromLTRB(3, 5, 3, 3),
+        padding: const EdgeInsets.fromLTRB(3, 5, 3, 3),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.primary.withAlpha(50),
         ),

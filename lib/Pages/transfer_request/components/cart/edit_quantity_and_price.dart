@@ -152,7 +152,7 @@ class _EditQuantityAndPriceState extends State<EditQuantityAndPrice> {
               children: [
                 Text(
                   "Novo preço \n ${(newPrice < 0.01 ? 0 : newPrice).toString().toBrazilianNumber().addBrazilianCoin()}",
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
                 ElevatedButton(
@@ -161,7 +161,7 @@ class _EditQuantityAndPriceState extends State<EditQuantityAndPrice> {
                       : () async {
                           await updateInCart(transferRequestProvider);
                         },
-                  child: FittedBox(child: Text("Alterar")),
+                  child: const FittedBox(child: Text("Alterar")),
                 ),
               ],
             ),

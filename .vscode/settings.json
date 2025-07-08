@@ -1,0 +1,8 @@
+{
+  "java.configuration.updateBuildConfiguration": "interactive",
+  // "dart.flutterSdkPath": ".fvm/versions/3.24.2"
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "always"
+  },
+  "editor.formatOnSave": true,
+}

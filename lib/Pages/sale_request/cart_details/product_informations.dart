@@ -107,7 +107,7 @@ class ProductInformations extends StatelessWidget {
                                   },
                                 );
                               },
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.delete,
                           color: Colors.red,
                         ),

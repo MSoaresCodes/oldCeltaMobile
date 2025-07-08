@@ -275,7 +275,7 @@ class _UpdateQuantityPriceOrDiscountState
               controller: manualDiscountController,
               enabled: manualPriceController.text.isEmpty,
               inputFormatters: [LengthLimitingTextInputFormatter(8)],
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
               style: FormFieldStyle.style(),
               onChanged: (_) {
                 widget.callSetState();
@@ -305,14 +305,14 @@ class _UpdateQuantityPriceOrDiscountState
                 onTap: () {
                   discountType = "R\$";
                 },
-                child: Text("R\$"),
+                child: const Text("R\$"),
               ),
               DropdownMenuItem(
                 value: "%",
                 onTap: () {
                   discountType = "%";
                 },
-                child: Text("%"),
+                child: const Text("%"),
               ),
             ],
             onChanged: (value) {},
@@ -342,7 +342,7 @@ class _UpdateQuantityPriceOrDiscountState
           Expanded(
             child: TextFormField(
               controller: manualPriceController,
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
               style: FormFieldStyle.style(),
               enabled: manualDiscountController.text.isEmpty,
               onFieldSubmitted: (_) {

@@ -105,7 +105,7 @@ class ModulesItems extends StatelessWidget {
               ShowAlertDialog.show(
                 context: context,
                 title: "Navegar para site com manuais",
-                content: Text(
+                content: const Text(
                     "Você será levado para o site que contém os manuais do CeltaBS. Deseja continuar?"),
                 function: () async {
                   await UrlLauncher.searchAndLaunchUrl(
