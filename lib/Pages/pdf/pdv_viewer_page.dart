@@ -19,16 +19,12 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (mounted) {
-        final pdfViewerProvider =
-            Provider.of<PdfViewerProvider>(context, listen: false);
+    final pdfViewerProvider =
+        Provider.of<PdfViewerProvider>(context, listen: false);
 
-        _pdfController = PdfController(
-          document: PdfDocument.openData(pdfViewerProvider.pdfBytes!),
-        );
-      }
-    });
+    _pdfController = PdfController(
+      document: PdfDocument.openData(pdfViewerProvider.pdfBytes!),
+    );
   }
 
   @override
@@ -51,6 +47,7 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
         ShowSnackbarMessage.show(
           message: '${pdfViewerProvider.fileName} salvo com sucesso!',
           context: context,
+          backgroundColor: Colors.green,
         );
       }
     } catch (e) {

@@ -1,6 +1,9 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 class AttachmentsModel {
   final String FileExtension;
-  final String AttachmentBase64;
+  final Uint8List AttachmentBase64;
 
   AttachmentsModel({
     required this.FileExtension,
@@ -10,7 +13,7 @@ class AttachmentsModel {
   factory AttachmentsModel.fromJson(Map<String, dynamic> json) {
     return AttachmentsModel(
       FileExtension: json['FileExtension'] as String,
-      AttachmentBase64: json['AttachmentBase64'] as String,
+      AttachmentBase64: base64Decode(json['AttachmentBase64']),
     );
   }
 

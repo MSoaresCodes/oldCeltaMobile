@@ -16,10 +16,20 @@ class PdfButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ReportsProvider reportsProvider = Provider.of(context, listen: false);
+    PdfViewerProvider pdfViewerProvider = Provider.of(context, listen: false);
 
     return TextButton(
       onPressed: () async {
         if (alreadyDownloadedPdf) {
+          final pdf = reportsProvider.executions
+              .firstWhere(
+                (e) => e.ReportScheduleCode == reportSchedule.Code,
+              )
+              .Executions
+              .firstWhere(
+                  (e) => e.Attachments.any((a) => a.FileExtension == "pdf"));
+          pdfViewerProvider.openPdfViewerPage(
+              pdf.Attachments.first.AttachmentBase64, reportSchedule.Name!);
         } else {
           await reportsProvider.executeOrDownload(
             reportScheduleCode: reportSchedule.Code!,
