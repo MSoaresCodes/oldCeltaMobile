@@ -9,6 +9,7 @@ export './evaluation_and_suggestions_provider.dart';
 export './inventory_provider.dart';
 export './login_provider.dart';
 export './notifications_provider.dart';
+export './pdf_viewer_provider.dart';
 export './price_conference_provider.dart';
 export 'expedition_conference_provider.dart';
 export './reports_provider.dart';

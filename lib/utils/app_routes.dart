@@ -17,6 +17,7 @@ class APPROUTES {
   static const LOGIN_PAGE = '/LOGINPAGE';
   static const MANUALS = '/MANUALS';
   static const NOTIFICATIONS = '/NOTIFICATIONS';
+  static const PDF_VIEWER = '/PDF_VIEWER';
   static const PRICE_CONFERENCE = '/PRICE_CONFERENCE';
   static const EXPEDITION_CONFERENCE_PRODUCTS =
       '/EXPEDITION_CONFERENCE_PRODUCTS';

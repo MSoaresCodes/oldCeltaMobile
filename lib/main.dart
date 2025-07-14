@@ -5,12 +5,10 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:platform_plus/platform_plus.dart';
 import 'package:provider/provider.dart';
 
-
 import '../api/api.dart';
-import '../main/routes.dart';
-import '../main/theme.dart';
-import '../providers/providers.dart';
 import '../utils/utils.dart';
+import 'main/main.dart';
+import 'providers/providers.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,6 +43,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => InventoryProvider()),
         ChangeNotifierProvider(create: (_) => LoginProvider()),
         ChangeNotifierProvider(create: (_) => NotificationsProvider()),
+        ChangeNotifierProvider(create: (_) => PdfViewerProvider()),
         ChangeNotifierProvider(create: (_) => ReceiptProvider()),
         ChangeNotifierProvider(create: (_) => ReportsProvider()),
         ChangeNotifierProvider(create: (_) => ResearchPricesProvider()),
@@ -68,7 +67,7 @@ class MyApp extends StatelessWidget {
           theme: theme(),
           debugShowCheckedModeBanner: false,
           initialRoute: APPROUTES.SPLASHPAGE,
-          routes: routes(),
+          routes: routes,
         ),
       ),
     );
