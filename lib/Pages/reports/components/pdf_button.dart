@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../Models/models.dart';
@@ -13,34 +14,64 @@ class PdfButton extends StatelessWidget {
     required this.alreadyDownloadedPdf,
   });
 
+  Future<void> download(ReportsProvider reportsProvider) async {
+    await reportsProvider.executeOrDownload(
+      reportScheduleCode: reportSchedule.Code!,
+      execute: false,
+      sendEmailOnExecution: false,
+      downloadPdf: true,
+      downloadXlsx: false,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     ReportsProvider reportsProvider = Provider.of(context, listen: false);
     PdfViewerProvider pdfViewerProvider = Provider.of(context, listen: false);
 
-    return TextButton(
-      onPressed: () async {
-        if (alreadyDownloadedPdf) {
-          final pdf = reportsProvider.executions
-              .firstWhere(
-                (e) => e.ReportScheduleCode == reportSchedule.Code,
-              )
-              .Executions
-              .firstWhere(
-                  (e) => e.Attachments.any((a) => a.FileExtension == "pdf"));
-          pdfViewerProvider.openPdfViewerPage(
-              pdf.Attachments.first.AttachmentBase64, reportSchedule.Name!);
-        } else {
-          await reportsProvider.executeOrDownload(
-            reportScheduleCode: reportSchedule.Code!,
-            execute: false,
-            sendEmailOnExecution: false,
-            downloadPdf: true,
-            downloadXlsx: true,
-          );
-        }
-      },
-      child: Text(alreadyDownloadedPdf ? "Visualizar PDF" : "Baixar PDF"),
+    ExecutionsModel? pdf = alreadyDownloadedPdf
+        ? reportsProvider.executions
+            .firstWhere(
+              (e) => e.ReportScheduleCode == reportSchedule.Code,
+            )
+            .Executions
+            .firstWhere(
+                (e) => e.Attachments.any((a) => a.FileExtension == "pdf"))
+        : null;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        TextButton(
+          onPressed: () async {
+            if (alreadyDownloadedPdf) {
+              pdfViewerProvider.openPdfViewerPage(
+                  pdf!.Attachments.first.AttachmentBase64,
+                  reportSchedule.Name!);
+            } else {
+              await download(reportsProvider);
+            }
+          },
+          child: FittedBox(
+            child: Text(
+              alreadyDownloadedPdf ? "Visualizar PDF" : "Baixar PDF",
+            ),
+          ),
+        ),
+        if (pdf != null)
+          TextButton.icon(
+            onPressed: () async {
+              await download(reportsProvider);
+            },
+            label:
+                Text(DateFormat("dd/MM/yyyy HH:mm").format(pdf.ExecutionDate!)),
+            iconAlignment: IconAlignment.end,
+            icon: Icon(
+              Icons.refresh,
+              color: Theme.of(context).primaryColor,
+            ),
+          ),
+      ],
     );
   }
 }

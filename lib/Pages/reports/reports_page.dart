@@ -86,30 +86,21 @@ class _ReportsPageState extends State<ReportsPage> {
                           subtitle: reportSchedule.LastExecutionStartDateTime!
                               .toString(),
                         ),
-                      Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child:
-                                  ExecuteButton(reportSchedule: reportSchedule),
-                            ),
-                            const Divider(),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                PdfButton(
-                                  reportSchedule: reportSchedule,
-                                  alreadyDownloadedPdf: alreadyDownloadedPdf,
-                                ),
-                                TextButton(
-                                  onPressed: () {},
-                                  child: alreadyDownloadedXlsx
-                                      ? const Text("Visualizar XLSX")
-                                      : const Text("Baixar XLSX"),
-                                )
-                              ],
-                            ),
-                          ])
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          PdfButton(
+                            reportSchedule: reportSchedule,
+                            alreadyDownloadedPdf: alreadyDownloadedPdf,
+                          ),
+                          TextButton(
+                            onPressed: () {},
+                            child: alreadyDownloadedXlsx
+                                ? const Text("Visualizar XLSX")
+                                : const Text("Baixar XLSX"),
+                          )
+                        ],
+                      ),
                     ],
                   ),
                 ),

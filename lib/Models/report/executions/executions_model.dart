@@ -1,7 +1,7 @@
 import 'executions.dart';
 
 class ExecutionsModel {
-  final String ExecutionDate;
+  final DateTime? ExecutionDate;
   final List<AttachmentsModel> Attachments;
 
   ExecutionsModel({
@@ -11,7 +11,9 @@ class ExecutionsModel {
 
   factory ExecutionsModel.fromJson(Map<String, dynamic> json) {
     return ExecutionsModel(
-      ExecutionDate: json['ExecutionDate'] as String,
+      ExecutionDate: json['ExecutionDate'] == null
+          ? null
+          : DateTime.parse(json['ExecutionDate']),
       Attachments: (json['Attachments'] as List)
           .map((e) => AttachmentsModel.fromJson(e))
           .toList(),
