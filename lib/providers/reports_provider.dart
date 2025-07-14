@@ -11,23 +11,21 @@ class ReportsProvider with ChangeNotifier {
   List<ReportScheduleModel> _reportSchedules = [];
   List<ReportScheduleModel> get reportSchedules => [..._reportSchedules];
 
-  List<ReportScheduleExecutionsModel> _executions = [];
-  List<ReportScheduleExecutionsModel> get executions => [..._executions];
+  List<ReportScheduleExecutionsModel> _downloadedExecutions = [];
+  List<ReportScheduleExecutionsModel> get downloadedExecutions =>
+      [..._downloadedExecutions];
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
   Future<void> getReportSchedules() async {
     _isLoading = true;
-    _reportSchedules.clear();
     notifyListeners();
 
     try {
       await SoapRequest.soapPost(
         parameters: {
-          "json": json.encode(
-            {"CrossIdentity": UserData.crossIdentity},
-          )
+          "json": json.encode({"CrossIdentity": UserData.crossIdentity})
         },
         typeOfResponse: "GetReportSchedulesJsonResponse",
         SOAPAction: "GetReportSchedulesJson",
@@ -70,10 +68,28 @@ class ReportsProvider with ChangeNotifier {
     required bool downloadPdf,
     required bool downloadXlsx,
   }) async {
-    _isLoading = true;
-    notifyListeners();
-
     try {
+      _isLoading = true;
+      notifyListeners();
+
+      await getReportSchedules();
+
+      final bool alreadyDownloadedLastExecution =
+          _alreadyDownloadedLastExecution(
+        reportScheduleCode: reportScheduleCode,
+        downloadPdf: downloadPdf,
+      );
+
+      if (alreadyDownloadedLastExecution) {
+        ShowSnackbarMessage.show(
+          message: "Você já carregou a última execução deste relatório",
+          context: NavigatorKey.key.currentState!.context,
+          backgroundColor: Colors.red,
+        );
+
+        return;
+      }
+
       await SoapRequest.soapPost(
         parameters: {
           "json": json.encode({
@@ -111,13 +127,13 @@ class ReportsProvider with ChangeNotifier {
               (e) => ReportScheduleExecutionsModel.fromJson(e))
           .toList();
 
-      final index = _executions.indexWhere(
+      final index = _downloadedExecutions.indexWhere(
           (element) => element.ReportScheduleCode == reportScheduleCode);
       if (index == -1) {
-        _executions.addAll(remote);
+        _downloadedExecutions.addAll(remote);
       } else {
-        _executions.removeAt(index);
-        _executions.addAll(remote);
+        _downloadedExecutions.removeAt(index);
+        _downloadedExecutions.addAll(remote);
       }
     } catch (e) {
       ShowSnackbarMessage.show(
@@ -127,6 +143,37 @@ class ReportsProvider with ChangeNotifier {
     } finally {
       _isLoading = false;
       notifyListeners();
+    }
+  }
+
+  bool _alreadyDownloadedLastExecution({
+    required int reportScheduleCode,
+    required bool downloadPdf,
+  }) {
+    try {
+      final executionsBySameScheduleCode = _downloadedExecutions
+          .where((e) => e.ReportScheduleCode == reportScheduleCode)
+          .expand((e) => e.Executions.where((e) => e.Attachments.any(
+              (e) => e.FileExtension == (downloadPdf ? "pdf" : "xlsx"))))
+          .toList();
+
+      if (executionsBySameScheduleCode.isNotEmpty) {
+        final lastDownloadedExecutionDate =
+            executionsBySameScheduleCode.first.ExecutionDate!;
+        final lastReportExecutionDate = _reportSchedules
+            .where((e) => e.Code == reportScheduleCode)
+            .first
+            .LastExecutionDate!;
+
+        if (lastDownloadedExecutionDate == lastReportExecutionDate ||
+            lastDownloadedExecutionDate.isAfter(lastReportExecutionDate)) {
+          return true;
+        }
+      }
+
+      return false;
+    } catch (e) {
+      return false;
     }
   }
 }

@@ -30,7 +30,7 @@ class PdfButton extends StatelessWidget {
     PdfViewerProvider pdfViewerProvider = Provider.of(context, listen: false);
 
     ExecutionsModel? pdf = alreadyDownloadedPdf
-        ? reportsProvider.executions
+        ? reportsProvider.downloadedExecutions
             .firstWhere(
               (e) => e.ReportScheduleCode == reportSchedule.Code,
             )
@@ -42,33 +42,38 @@ class PdfButton extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        TextButton(
-          onPressed: () async {
-            if (alreadyDownloadedPdf) {
-              pdfViewerProvider.openPdfViewerPage(
-                  pdf!.Attachments.first.AttachmentBase64,
-                  reportSchedule.Name!);
-            } else {
-              await download(reportsProvider);
-            }
-          },
-          child: FittedBox(
-            child: Text(
-              alreadyDownloadedPdf ? "Visualizar PDF" : "Baixar PDF",
+        Flexible(
+          child: TextButton(
+            onPressed: () async {
+              if (alreadyDownloadedPdf) {
+                pdfViewerProvider.openPdfViewerPage(
+                    pdf!.Attachments.first.AttachmentBase64,
+                    reportSchedule.Name!);
+              } else {
+                await download(reportsProvider);
+              }
+            },
+            child: FittedBox(
+              child: Text(
+                alreadyDownloadedPdf ? "Visualizar PDF" : "Baixar PDF",
+              ),
             ),
           ),
         ),
         if (pdf != null)
-          TextButton.icon(
-            onPressed: () async {
-              await download(reportsProvider);
-            },
-            label:
-                Text(DateFormat("dd/MM/yyyy HH:mm").format(pdf.ExecutionDate!)),
-            iconAlignment: IconAlignment.end,
-            icon: Icon(
-              Icons.refresh,
-              color: Theme.of(context).primaryColor,
+          Flexible(
+            child: TextButton.icon(
+              onPressed: () async {
+                await download(reportsProvider);
+              },
+              label: FittedBox(
+                  child: Text(DateFormat("dd/MM/yyyy HH:mm")
+                      .format(pdf.ExecutionDate!))),
+              iconAlignment: IconAlignment.end,
+              icon: Icon(
+                Icons.refresh,
+                color: Theme.of(context).primaryColor,
+              ),
             ),
           ),
       ],

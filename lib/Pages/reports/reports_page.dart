@@ -45,14 +45,16 @@ class _ReportsPageState extends State<ReportsPage> {
             itemBuilder: (context, index) {
               final reportSchedule = reportsProvider.reportSchedules[index];
 
-              final alreadyDownloadedPdf = reportsProvider.executions.any(
+              final alreadyDownloadedPdf =
+                  reportsProvider.downloadedExecutions.any(
                 (e) =>
                     e.ReportScheduleCode == reportSchedule.Code &&
                     e.Executions.any((x) =>
                         x.Attachments.any((y) => y.FileExtension == "pdf")),
               );
 
-              final alreadyDownloadedXlsx = reportsProvider.executions.any(
+              final alreadyDownloadedXlsx =
+                  reportsProvider.downloadedExecutions.any(
                 (e) =>
                     e.ReportScheduleCode == reportSchedule.Code &&
                     e.Executions.any((x) =>
