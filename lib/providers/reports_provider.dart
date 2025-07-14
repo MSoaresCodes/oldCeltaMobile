@@ -8,14 +8,15 @@ import '../components/components.dart';
 import '../utils/utils.dart';
 
 class ReportsProvider with ChangeNotifier {
-  List<ReceiptModel> _receipts = [];
-  List<ReceiptModel> get receipts => [..._receipts];
-  int get receiptCount => _receipts.length;
+  List<ReportScheduleModel> _reportSchedules = [];
+  List<ReportScheduleModel> get reportSchedules => [..._reportSchedules];
+
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
   Future<void> getReportSchedules() async {
     _isLoading = true;
+    _reportSchedules.clear();
     notifyListeners();
 
     try {
@@ -39,7 +40,14 @@ class ReportsProvider with ChangeNotifier {
           message: SoapRequestResponse.errorMessage,
           context: NavigatorKey.key.currentState!.context,
         );
+        return;
       }
+
+      _reportSchedules =
+          (json.decode(SoapRequestResponse.responseAsString) as List)
+              .map<ReportScheduleModel>((e) => ReportScheduleModel.fromJson(e))
+              .toList();
+
       debugPrint("stop");
     } catch (e) {
       ShowSnackbarMessage.show(
