@@ -67,9 +67,41 @@ class _ReportsPageState extends State<ReportsPage> {
                                 .format(reportSchedule.LastExecutionDate!)),
                       if (reportSchedule.LastExecutionStartDateTime != null)
                         TitleAndSubtitle.titleAndSubtitle(
-                            title: "Último horário de início da execução",
-                            subtitle: reportSchedule.LastExecutionStartDateTime!
-                                .toString()),
+                          title: "Último horário de início da execução",
+                          subtitle: reportSchedule.LastExecutionStartDateTime!
+                              .toString(),
+                        ),
+                      Row(children: [
+                        Expanded(
+                          child: TextButton(
+                            onPressed: () async {
+                              await reportsProvider.executeOrDownload(
+                                reportScheduleCode: reportSchedule.Code!,
+                                execute: true,
+                                sendEmailOnExecution: true,
+                                downloadPdf: false,
+                                downloadXlsx: false,
+                              );
+                            },
+                            child: const Text("Executar"),
+                          ),
+                        ),
+                        const Divider(),
+                        Expanded(
+                          child: TextButton(
+                            onPressed: () async {
+                              await reportsProvider.executeOrDownload(
+                                reportScheduleCode: reportSchedule.Code!,
+                                execute: false,
+                                sendEmailOnExecution: false,
+                                downloadPdf: true,
+                                downloadXlsx: true,
+                              );
+                            },
+                            child: const Text("Visualizar"),
+                          ),
+                        ),
+                      ])
                     ],
                   ),
                 ),

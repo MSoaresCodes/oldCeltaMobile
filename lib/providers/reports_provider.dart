@@ -59,4 +59,59 @@ class ReportsProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> executeOrDownload({
+    required int reportScheduleCode,
+    required bool execute,
+    required bool sendEmailOnExecution,
+    required bool downloadPdf,
+    required bool downloadXlsx,
+  }) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      await SoapRequest.soapPost(
+        parameters: {
+          "json": json.encode({
+            "CrossIdentity": UserData.crossIdentity,
+            "ReportScheduleCode": [reportScheduleCode],
+            "Execute": execute,
+            "SendEmailOnExecution": sendEmailOnExecution,
+            "Download": {
+              "DownloadLastExecution":
+                  downloadPdf || downloadPdf == true && execute == false,
+              "Pdf": downloadPdf,
+              "Xlsx": downloadXlsx
+            }
+          })
+        },
+        typeOfResponse: "GetReportScheduleExecutionsResponse",
+        SOAPAction: "GetReportScheduleExecutions",
+        serviceASMX: "CeltaReportService.asmx",
+        typeOfResult: "GetReportScheduleExecutionsResult",
+      );
+
+      SoapRequestResponse.responseAsString;
+      SoapRequestResponse.responseAsMap;
+
+      if (SoapRequestResponse.errorMessage != "") {
+        ShowSnackbarMessage.show(
+          message: SoapRequestResponse.errorMessage,
+          context: NavigatorKey.key.currentState!.context,
+        );
+        return;
+      }
+
+      debugPrint("stop");
+    } catch (e) {
+      ShowSnackbarMessage.show(
+        message: DefaultErrorMessage.ERROR,
+        context: NavigatorKey.key.currentState!.context,
+      );
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
 }
