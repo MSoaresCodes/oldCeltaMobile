@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
 import '../../providers/providers.dart';
+import 'components/components.dart';
 
 class ReportsPage extends StatefulWidget {
   const ReportsPage({super.key});
@@ -44,6 +45,20 @@ class _ReportsPageState extends State<ReportsPage> {
             itemBuilder: (context, index) {
               final reportSchedule = reportsProvider.reportSchedules[index];
 
+              final alreadyDownloadedPdf = reportsProvider.executions.any(
+                (e) =>
+                    e.ReportScheduleCode == reportSchedule.Code &&
+                    e.Executions.any((x) =>
+                        x.Attachments.any((y) => y.FileExtension == "pdf")),
+              );
+
+              final alreadyDownloadedXlsx = reportsProvider.executions.any(
+                (e) =>
+                    e.ReportScheduleCode == reportSchedule.Code &&
+                    e.Executions.any((x) =>
+                        x.Attachments.any((y) => y.FileExtension == "xlsx")),
+              );
+
               return Card(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -71,37 +86,30 @@ class _ReportsPageState extends State<ReportsPage> {
                           subtitle: reportSchedule.LastExecutionStartDateTime!
                               .toString(),
                         ),
-                      Row(children: [
-                        Expanded(
-                          child: TextButton(
-                            onPressed: () async {
-                              await reportsProvider.executeOrDownload(
-                                reportScheduleCode: reportSchedule.Code!,
-                                execute: true,
-                                sendEmailOnExecution: true,
-                                downloadPdf: false,
-                                downloadXlsx: false,
-                              );
-                            },
-                            child: const Text("Executar"),
-                          ),
-                        ),
-                        const Divider(),
-                        Expanded(
-                          child: TextButton(
-                            onPressed: () async {
-                              await reportsProvider.executeOrDownload(
-                                reportScheduleCode: reportSchedule.Code!,
-                                execute: false,
-                                sendEmailOnExecution: false,
-                                downloadPdf: true,
-                                downloadXlsx: true,
-                              );
-                            },
-                            child: const Text("Baixar"),
-                          ),
-                        ),
-                      ])
+                      Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child:
+                                  ExecuteButton(reportSchedule: reportSchedule),
+                            ),
+                            const Divider(),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                PdfButton(
+                                  reportSchedule: reportSchedule,
+                                  alreadyDownloadedPdf: alreadyDownloadedPdf,
+                                ),
+                                TextButton(
+                                  onPressed: () {},
+                                  child: alreadyDownloadedXlsx
+                                      ? const Text("Visualizar XLSX")
+                                      : const Text("Baixar XLSX"),
+                                )
+                              ],
+                            ),
+                          ])
                     ],
                   ),
                 ),
