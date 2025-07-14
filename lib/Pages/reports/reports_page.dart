@@ -98,7 +98,7 @@ class _ReportsPageState extends State<ReportsPage> {
                                 downloadXlsx: true,
                               );
                             },
-                            child: const Text("Visualizar"),
+                            child: const Text("Baixar"),
                           ),
                         ),
                       ])

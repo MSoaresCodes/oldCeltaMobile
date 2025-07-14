@@ -11,6 +11,9 @@ class ReportsProvider with ChangeNotifier {
   List<ReportScheduleModel> _reportSchedules = [];
   List<ReportScheduleModel> get reportSchedules => [..._reportSchedules];
 
+  List<ReportScheduleExecutionsModel> _executions = [];
+  List<ReportScheduleExecutionsModel> get executions => [..._executions];
+
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
@@ -103,7 +106,19 @@ class ReportsProvider with ChangeNotifier {
         return;
       }
 
-      debugPrint("stop");
+      final remote = (json.decode(SoapRequestResponse.responseAsString) as List)
+          .map<ReportScheduleExecutionsModel>(
+              (e) => ReportScheduleExecutionsModel.fromJson(e))
+          .toList();
+
+      final index = _executions.indexWhere(
+          (element) => element.ReportScheduleCode == reportScheduleCode);
+      if (index == -1) {
+        _executions.addAll(remote);
+      } else {
+        _executions.removeAt(index);
+        _executions.addAll(remote);
+      }
     } catch (e) {
       ShowSnackbarMessage.show(
         message: DefaultErrorMessage.ERROR,
