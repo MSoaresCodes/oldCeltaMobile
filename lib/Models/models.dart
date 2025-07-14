@@ -16,6 +16,7 @@ export './notifications/notifications.dart';
 export './price_conference/price_conference.dart';
 export './products/products.dart';
 export './receipt/receipt.dart';
+export './report/report.dart';
 export './research_prices/research_prices.dart';
 export './sale_request/sale_request.dart';
 export './stocks/stocks.dart';
