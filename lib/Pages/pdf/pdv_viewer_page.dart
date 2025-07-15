@@ -36,18 +36,20 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
   /// Saves the PDF to the device using file_saver
   Future<void> _savePdf(PdfViewerProvider pdfViewerProvider) async {
     try {
-      await FileSaver.instance.saveFile(
+      String? path = await FileSaver.instance.saveAs(
         name: pdfViewerProvider.fileName!,
         bytes: pdfViewerProvider.pdfBytes,
         fileExtension: 'pdf',
         mimeType: MimeType.pdf,
       );
+
       // Show a confirmation message
-      if (mounted) {
+      if (context.mounted) {
         ShowSnackbarMessage.show(
-          message: '${pdfViewerProvider.fileName} salvo com sucesso!',
           context: context,
-          backgroundColor: Colors.green,
+          message:
+              path == null ? "Operação cancelada" : "Arquivo salvo com sucesso",
+          backgroundColor: path == null ? Colors.red : Colors.green,
         );
       }
     } catch (e) {
@@ -66,7 +68,7 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(pdfViewerProvider.fileName!),
+        title: FittedBox(child: Text(pdfViewerProvider.fileName!)),
         actions: [
           // Add a save button to the AppBar
           IconButton(
