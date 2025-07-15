@@ -65,78 +65,89 @@ class _ReportsPageState extends State<ReportsPage> {
                   icon: const Icon(Icons.refresh)),
             ],
           ),
-          body: ListView.builder(
-            itemCount: reportsProvider.reportSchedules.length,
-            itemBuilder: (context, index) {
-              final reportSchedule = reportsProvider.reportSchedules[index];
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (reportsProvider.reportSchedules.isEmpty)
+                const Text("Nenhum agendamento encontrado"),
+              ListView.builder(
+                shrinkWrap: true,
+                itemCount: reportsProvider.reportSchedules.length,
+                itemBuilder: (context, index) {
+                  final reportSchedule = reportsProvider.reportSchedules[index];
 
-              final alreadyDownloadedPdf =
-                  reportsProvider.downloadedExecutions.any(
-                (e) =>
-                    e.ReportScheduleCode == reportSchedule.Code &&
-                    e.Executions.any((x) =>
-                        x.Attachments.any((y) => y.FileExtension == "pdf")),
-              );
+                  final alreadyDownloadedPdf =
+                      reportsProvider.downloadedExecutions.any(
+                    (e) =>
+                        e.ReportScheduleCode == reportSchedule.Code &&
+                        e.Executions.any((x) =>
+                            x.Attachments.any((y) => y.FileExtension == "pdf")),
+                  );
 
-              final alreadyDownloadedXlsx =
-                  reportsProvider.downloadedExecutions.any(
-                (e) =>
-                    e.ReportScheduleCode == reportSchedule.Code &&
-                    e.Executions.any((x) =>
-                        x.Attachments.any((y) => y.FileExtension == "xlsx")),
-              );
+                  final alreadyDownloadedXlsx =
+                      reportsProvider.downloadedExecutions.any(
+                    (e) =>
+                        e.ReportScheduleCode == reportSchedule.Code &&
+                        e.Executions.any((x) => x.Attachments.any(
+                            (y) => y.FileExtension == "xlsx")),
+                  );
 
-              return Card(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          TitleAndSubtitle.titleAndSubtitle(
-                              title: "Nome", subtitle: reportSchedule.Name!),
-                          TitleAndSubtitle.titleAndSubtitle(
-                              title: "Categoria",
-                              subtitle: reportSchedule.CategoryName!),
-                          TitleAndSubtitle.titleAndSubtitle(
-                              title: "Sub categoria",
-                              subtitle: reportSchedule.SubCategoryName!),
-                          TitleAndSubtitle.titleAndSubtitle(
-                              title: "Relatório",
-                              subtitle: reportSchedule.ReportModelName!),
-                          if (reportSchedule.LastExecutionDate != null)
-                            TitleAndSubtitle.titleAndSubtitle(
-                                title: "Últ. execução",
-                                subtitle: DateFormat('dd/MM/yyyy HH:mm')
-                                    .format(reportSchedule.LastExecutionDate!)),
-                          if (reportSchedule.LastExecutionStartDateTime != null)
-                            TitleAndSubtitle.titleAndSubtitle(
-                              title: "Último horário de início da execução",
-                              subtitle: reportSchedule
-                                  .LastExecutionStartDateTime!
-                                  .toString(),
-                            ),
-                        ],
-                      ),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                  return Card(
+                    child: Column(
                       children: [
-                        PdfButton(
-                          reportSchedule: reportSchedule,
-                          alreadyDownloadedPdf: alreadyDownloadedPdf,
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              TitleAndSubtitle.titleAndSubtitle(
+                                  title: "Nome",
+                                  subtitle: reportSchedule.Name!),
+                              TitleAndSubtitle.titleAndSubtitle(
+                                  title: "Categoria",
+                                  subtitle: reportSchedule.CategoryName!),
+                              TitleAndSubtitle.titleAndSubtitle(
+                                  title: "Sub categoria",
+                                  subtitle: reportSchedule.SubCategoryName!),
+                              TitleAndSubtitle.titleAndSubtitle(
+                                  title: "Relatório",
+                                  subtitle: reportSchedule.ReportModelName!),
+                              if (reportSchedule.LastExecutionDate != null)
+                                TitleAndSubtitle.titleAndSubtitle(
+                                    title: "Últ. execução",
+                                    subtitle: DateFormat('dd/MM/yyyy HH:mm')
+                                        .format(
+                                            reportSchedule.LastExecutionDate!)),
+                              if (reportSchedule.LastExecutionStartDateTime !=
+                                  null)
+                                TitleAndSubtitle.titleAndSubtitle(
+                                  title: "Último horário de início da execução",
+                                  subtitle: reportSchedule
+                                      .LastExecutionStartDateTime!
+                                      .toString(),
+                                ),
+                            ],
+                          ),
                         ),
-                        ExcelButton(
-                          reportSchedule: reportSchedule,
-                          alreadyDownloadedXlsx: alreadyDownloadedXlsx,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            PdfButton(
+                              reportSchedule: reportSchedule,
+                              alreadyDownloadedPdf: alreadyDownloadedPdf,
+                            ),
+                            ExcelButton(
+                              reportSchedule: reportSchedule,
+                              alreadyDownloadedXlsx: alreadyDownloadedXlsx,
+                            ),
+                            ExecuteButton(reportSchedule: reportSchedule),
+                          ],
                         ),
-                        ExecuteButton(reportSchedule: reportSchedule),
                       ],
                     ),
-                  ],
-                ),
-              );
-            },
+                  );
+                },
+              ),
+            ],
           ),
         ),
         loadingWidget(reportsProvider.isLoading),
