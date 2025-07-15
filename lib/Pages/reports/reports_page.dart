@@ -62,49 +62,52 @@ class _ReportsPageState extends State<ReportsPage> {
               );
 
               return Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      TitleAndSubtitle.titleAndSubtitle(
-                          title: "Nome", subtitle: reportSchedule.Name!),
-                      TitleAndSubtitle.titleAndSubtitle(
-                          title: "Categoria",
-                          subtitle: reportSchedule.CategoryName!),
-                      TitleAndSubtitle.titleAndSubtitle(
-                          title: "Sub categoria",
-                          subtitle: reportSchedule.SubCategoryName!),
-                      TitleAndSubtitle.titleAndSubtitle(
-                          title: "Nome do relatório",
-                          subtitle: reportSchedule.ReportModelName!),
-                      if (reportSchedule.LastExecutionDate != null)
-                        TitleAndSubtitle.titleAndSubtitle(
-                            title: "Última execução",
-                            subtitle: DateFormat('dd/MM/yyyy HH:mm')
-                                .format(reportSchedule.LastExecutionDate!)),
-                      if (reportSchedule.LastExecutionStartDateTime != null)
-                        TitleAndSubtitle.titleAndSubtitle(
-                          title: "Último horário de início da execução",
-                          subtitle: reportSchedule.LastExecutionStartDateTime!
-                              .toString(),
-                        ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
                         children: [
-                          PdfButton(
-                            reportSchedule: reportSchedule,
-                            alreadyDownloadedPdf: alreadyDownloadedPdf,
-                          ),
-                          TextButton(
-                            onPressed: () {},
-                            child: alreadyDownloadedXlsx
-                                ? const Text("Visualizar XLSX")
-                                : const Text("Baixar XLSX"),
-                          )
+                          TitleAndSubtitle.titleAndSubtitle(
+                              title: "Nome", subtitle: reportSchedule.Name!),
+                          TitleAndSubtitle.titleAndSubtitle(
+                              title: "Categoria",
+                              subtitle: reportSchedule.CategoryName!),
+                          TitleAndSubtitle.titleAndSubtitle(
+                              title: "Sub categoria",
+                              subtitle: reportSchedule.SubCategoryName!),
+                          TitleAndSubtitle.titleAndSubtitle(
+                              title: "Nome do relatório",
+                              subtitle: reportSchedule.ReportModelName!),
+                          if (reportSchedule.LastExecutionDate != null)
+                            TitleAndSubtitle.titleAndSubtitle(
+                                title: "Última execução",
+                                subtitle: DateFormat('dd/MM/yyyy HH:mm')
+                                    .format(reportSchedule.LastExecutionDate!)),
+                          if (reportSchedule.LastExecutionStartDateTime != null)
+                            TitleAndSubtitle.titleAndSubtitle(
+                              title: "Último horário de início da execução",
+                              subtitle: reportSchedule
+                                  .LastExecutionStartDateTime!
+                                  .toString(),
+                            ),
                         ],
                       ),
-                    ],
-                  ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        PdfButton(
+                          reportSchedule: reportSchedule,
+                          alreadyDownloadedPdf: alreadyDownloadedPdf,
+                        ),
+                        ExcelButton(
+                          reportSchedule: reportSchedule,
+                          alreadyDownloadedXlsx: alreadyDownloadedXlsx,
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               );
             },
