@@ -55,7 +55,7 @@ class PdfButton extends StatelessWidget {
             },
             child: FittedBox(
               child: Text(
-                alreadyDownloadedPdf ? "Visualizar PDF" : "Baixar PDF",
+                alreadyDownloadedPdf ? "Visualizar PDF" : "Carregar PDF",
               ),
             ),
           ),
