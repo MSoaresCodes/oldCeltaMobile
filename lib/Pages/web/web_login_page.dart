@@ -61,8 +61,8 @@ class _WebLoginPageState extends State<WebLoginPage> {
             WidgetsBinding.instance.addPostFrameCallback((_) async {
               Future.delayed(Duration.zero, () {
                 if (mounted) {
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      APPROUTES.WEB_HOME, (route) => false);
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pushNamed(APPROUTES.WEB_HOME);
                 }
               });
             });
@@ -87,7 +87,6 @@ class _WebLoginPageState extends State<WebLoginPage> {
                         TextFormField(
                           controller: emailController,
                           decoration: FormFieldDecoration.decoration(
-                            
                             context: context,
                           ),
                           validator: (value) {
@@ -109,7 +108,6 @@ class _WebLoginPageState extends State<WebLoginPage> {
                             await login();
                           },
                           decoration: FormFieldDecoration.decoration(
-                            
                             context: context,
                           ),
                           validator: (value) {

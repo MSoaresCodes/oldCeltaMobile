@@ -15,12 +15,12 @@ class EnterprisesPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        leading: const Text(""),
+        // leading: const Text(""),
         title: webProvider.enterprises.isEmpty
             ? null
             : FittedBox(
                 child: Text(
-                  "${webProvider.enterprises.length} empresas cadastradas",
+                  "${webProvider.enterprises.length} empresas",
                   style: const TextStyle(
                     color: Colors.white,
                   ),

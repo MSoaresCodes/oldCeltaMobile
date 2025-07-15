@@ -45,10 +45,16 @@ class MyDrawer extends StatelessWidget {
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-            DrawerHeader(
-              child: Image.asset(
-                "lib/assets/Images/LogoCeltaTransparente.png",
-                fit: BoxFit.cover,
+            GestureDetector(
+              onLongPress: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pushNamed(APPROUTES.WEB_LOGIN);
+              },
+              child: DrawerHeader(
+                child: Image.asset(
+                  "lib/assets/Images/LogoCeltaTransparente.png",
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             drawerItem(
