@@ -82,7 +82,7 @@ class ReportsProvider with ChangeNotifier {
 
       if (alreadyDownloadedLastExecution) {
         ShowSnackbarMessage.show(
-          message: "Você já carregou a última execução deste relatório",
+          message: "Você já carregou a última execução",
           context: NavigatorKey.key.currentState!.context,
           backgroundColor: Colors.red,
         );
@@ -122,18 +122,36 @@ class ReportsProvider with ChangeNotifier {
         return;
       }
 
-      final remote = (json.decode(SoapRequestResponse.responseAsString) as List)
-          .map<ReportScheduleExecutionsModel>(
-              (e) => ReportScheduleExecutionsModel.fromJson(e))
-          .toList();
+      final remoteData =
+          (json.decode(SoapRequestResponse.responseAsString) as List)
+              .map<ReportScheduleExecutionsModel>(
+                  (e) => ReportScheduleExecutionsModel.fromJson(e))
+              .toList();
+
+      if (remoteData.isEmpty) {
+        _isLoading = false;
+        notifyListeners();
+        return;
+      }
 
       final index = _downloadedExecutions.indexWhere(
           (element) => element.ReportScheduleCode == reportScheduleCode);
       if (index == -1) {
-        _downloadedExecutions.addAll(remote);
+        _downloadedExecutions.addAll(remoteData);
       } else {
-        _downloadedExecutions.removeAt(index);
-        _downloadedExecutions.addAll(remote);
+        final existingReport = _downloadedExecutions[index];
+        final newReportData = remoteData.first;
+
+        // Ensure both the existing and new reports have at least one execution.
+        if (existingReport.Executions.isNotEmpty &&
+            newReportData.Executions.isNotEmpty) {
+          // Get the new attachments from the server response.
+          final newAttachments = newReportData.Executions.first.Attachments;
+
+          // Add the new attachments to the existing report's latest execution.
+          // This merges the PDF/XLSX without deleting what was already there.
+          existingReport.Executions.first.Attachments.addAll(newAttachments);
+        }
       }
     } catch (e) {
       ShowSnackbarMessage.show(
