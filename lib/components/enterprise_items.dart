@@ -20,7 +20,7 @@ class EnterpriseItems extends StatelessWidget {
         subEnterprise.modules![indexOfModule!].enabled;
   }
 
-  bool enterpriseIsEnabled(
+  bool _enterpriseIsEnabled(
     EnterpriseProvider enterpriseProvider,
     EnterpriseModel enterprise,
   ) {
@@ -72,6 +72,15 @@ class EnterpriseItems extends StatelessWidget {
     return false;
   }
 
+  bool _hasMinimumVersion(EnterpriseProvider enterpriseProvider) {
+    if (nextPageRoute == APPROUTES.REPORTS) {
+      //TODO fix this date after the Júnior fix the problem to get schedules
+      return enterpriseProvider.bsDate?.isAfter(DateTime(2025, 07, 17)) == true;
+    }
+
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     EnterpriseProvider enterpriseProvider = Provider.of(context);
@@ -107,16 +116,22 @@ class EnterpriseItems extends StatelessWidget {
               ),
             ),
             onTap: () {
-              if (enterpriseIsEnabled(enterpriseProvider, enterprise)) {
-                Navigator.of(context).pushNamed(
-                  nextPageRoute,
-                  arguments: enterprise,
-                );
-              } else {
+              if (!_enterpriseIsEnabled(enterpriseProvider, enterprise)) {
                 ShowSnackbarMessage.show(
                   message:
                       "Esse módulo não está habilitado para essa empresa. Caso queira habilitar, entre em contato com o setor administrativo da Celta Ware pelo número (11) 3125-6767",
                   context: context,
+                );
+              } else if (!_hasMinimumVersion(enterpriseProvider)) {
+                ShowSnackbarMessage.show(
+                  message:
+                      "Entre em contato com o suporte técnico e solicite a atualização do CeltaBS",
+                  context: context,
+                );
+              } else {
+                Navigator.of(context).pushNamed(
+                  nextPageRoute,
+                  arguments: enterprise,
                 );
               }
             },
