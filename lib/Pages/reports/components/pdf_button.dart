@@ -47,7 +47,9 @@ class PdfButton extends StatelessWidget {
             onPressed: () async {
               if (alreadyDownloadedPdf) {
                 pdfViewerProvider.openPdfViewerPage(
-                    pdf!.Attachments.first.AttachmentBase64,
+                    pdf!.Attachments
+                        .firstWhere((e) => e.FileExtension == "pdf")
+                        .AttachmentBase64,
                     reportSchedule.Name!);
               } else {
                 await download(reportsProvider);
