@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -52,10 +51,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     bool logged = await loginProvider.verifyIsLogged();
 
     Future.delayed(const Duration(seconds: 3), () async {
-      if (kIsWeb) {
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil(APPROUTES.WEB_LOGIN, (route) => false);
-      } else if (logged) {
+      if (logged) {
         Navigator.of(context).pushNamedAndRemoveUntil(
           APPROUTES.HOME_PAGE,
           (route) => false,
