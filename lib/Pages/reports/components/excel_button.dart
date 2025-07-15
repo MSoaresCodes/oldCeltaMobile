@@ -1,7 +1,7 @@
-import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../Models/models.dart';
 import '../../../components/components.dart';
@@ -26,41 +26,44 @@ class ExcelButton extends StatelessWidget {
     );
   }
 
-  Future<void> _saveFileToDevice(
+  Future<void> _sharePdf(
     BuildContext context,
     ReportsProvider reportsProvider,
     ExecutionsModel xlsx,
   ) async {
     try {
-      // 1. Find the specific XLSX attachment data within the provider's state.
-      final fileName =
-          "${reportSchedule.Name}-${DateFormat('yyyy-MM-dd').format(reportSchedule.LastExecutionDate!)}";
-
-      // 3. Use file_saver to open the native "Save As" dialog.
-      // This allows the user to choose the save location and file name.
-      String? path = await FileSaver.instance.saveAs(
-        name: fileName,
-        bytes: xlsx.Attachments.first.AttachmentBase64,
-        fileExtension: 'xlsx',
-        mimeType: MimeType.microsoftExcel,
+      // Create an XFile object directly from the byte data in memory.
+      // This is more efficient than saving to a temporary file first.
+      final xlsxFile = XFile.fromData(
+        xlsx.Attachments.first.AttachmentBase64,
+        name: '${reportSchedule.Name ?? "report"}.xlsx',
+        mimeType:
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       );
 
-      // Optional: Show a success message to the user.
-      if (context.mounted) {
-        ShowSnackbarMessage.show(
-          context: context,
-          message:
-              path == null ? "Operação cancelada" : "Arquivo salvo com sucesso",
-          backgroundColor: path == null ? Colors.red : Colors.green,
-        );
+      // Use Share.shareXFiles to open the native share dialog.
+      final result = await SharePlus.instance.share(
+        ShareParams(
+          files: [xlsxFile],
+          text: "Compartilhar planilha: ${reportSchedule.Name}",
+        ),
+      );
+
+      if (result.status == ShareResultStatus.success) {
+        if (context.mounted) {
+          ShowSnackbarMessage.show(
+            message: 'Planilha compartilhado com sucesso!',
+            context: context,
+            backgroundColor: Colors.green,
+          );
+        }
       }
     } catch (e) {
-      // Handle any errors, such as the file not being found or the user cancelling the save.
-      debugPrint("Error saving file: $e");
+      debugPrint("❌ An error occurred while sharing the PDF: $e");
       if (context.mounted) {
         ShowSnackbarMessage.show(
+          message: 'Could not share file: $e',
           context: context,
-          message: "Erro para salvar o arquivo: $e",
         );
       }
     }
@@ -87,7 +90,7 @@ class ExcelButton extends StatelessWidget {
           child: TextButton(
             onPressed: () async {
               if (alreadyDownloadedXlsx) {
-                await _saveFileToDevice(context, reportsProvider, xlsx!);
+                await _sharePdf(context, reportsProvider, xlsx!);
               } else {
                 await download(reportsProvider);
               }
@@ -95,8 +98,8 @@ class ExcelButton extends StatelessWidget {
             child: FittedBox(
               child: Text(
                 alreadyDownloadedXlsx
-                    ? "Salvar XLSX no dispositivo"
-                    : "Carregar XLSX",
+                    ? "Compartilhar planilha"
+                    : "Baixar planilha",
               ),
             ),
           ),
