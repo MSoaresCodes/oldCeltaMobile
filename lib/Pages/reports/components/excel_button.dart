@@ -29,35 +29,27 @@ class ExcelButton extends StatelessWidget {
   Future<void> _sharePdf(
     BuildContext context,
     ReportsProvider reportsProvider,
-    ExecutionsModel xlsx,
+    ExecutionsModel attachments,
   ) async {
     try {
       // Create an XFile object directly from the byte data in memory.
       // This is more efficient than saving to a temporary file first.
       final xlsxFile = XFile.fromData(
-        xlsx.Attachments.first.AttachmentBase64,
-        name: '${reportSchedule.Name ?? "report"}.xlsx',
+        attachments.Attachments.firstWhere((e) => e.FileExtension == "xlsx")
+            .AttachmentBase64,
+        name: reportSchedule.Name,
         mimeType:
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       );
 
       // Use Share.shareXFiles to open the native share dialog.
-      final result = await SharePlus.instance.share(
+      await SharePlus.instance.share(
         ShareParams(
           files: [xlsxFile],
           text: "Compartilhar planilha: ${reportSchedule.Name}",
+          fileNameOverrides: ["${reportSchedule.Name}.xlsx"],
         ),
       );
-
-      if (result.status == ShareResultStatus.success) {
-        if (context.mounted) {
-          ShowSnackbarMessage.show(
-            message: 'Planilha compartilhado com sucesso!',
-            context: context,
-            backgroundColor: Colors.green,
-          );
-        }
-      }
     } catch (e) {
       debugPrint("❌ An error occurred while sharing the PDF: $e");
       if (context.mounted) {

@@ -30,14 +30,13 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
     // Initialize the correct controller for zooming.
     _pdfPinchController = PdfControllerPinch(
       document: PdfDocument.openData(pdfViewerProvider.pdfBytes!),
+      viewportFraction: 1,
     );
     _pdfController = PdfController(
       document: PdfDocument.openData(pdfViewerProvider.pdfBytes!),
     );
 
     SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
@@ -59,6 +58,7 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
     try {
       // Create an XFile object directly from the byte data in memory.
       // This is more efficient than saving to a temporary file first.
+
       final pdfFile = XFile.fromData(
         pdfViewerProvider.pdfBytes!,
         name: pdfViewerProvider.fileName!,
@@ -66,22 +66,17 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
       );
 
       // Use Share.shareXFiles to open the native share dialog.
-      final result = await SharePlus.instance.share(
+      await SharePlus.instance.share(
         ShareParams(
           files: [pdfFile],
           text: "Compartilhar PDF",
+          downloadFallbackEnabled: true,
+          title: pdfViewerProvider.fileName,
+          previewThumbnail: pdfFile,
+          mailToFallbackEnabled: true,
+          fileNameOverrides: ['${pdfViewerProvider.fileName!}.pdf'],
         ),
       );
-
-      if (result.status == ShareResultStatus.success) {
-        if (context.mounted) {
-          ShowSnackbarMessage.show(
-            message: 'PDF compartilhado com sucesso!',
-            context: context,
-            backgroundColor: Colors.green,
-          );
-        }
-      }
     } catch (e) {
       debugPrint("❌ An error occurred while sharing the PDF: $e");
       if (context.mounted) {
@@ -120,7 +115,7 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
 
           // Define the zoom limits.
           const double minZoom = 1;
-          const double maxZoom = 1.75;
+          const double maxZoom = 1.5;
 
           return Stack(
             children: [
@@ -132,7 +127,8 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
                     ? PdfView(controller: _pdfController)
                     : PdfViewPinch(
                         controller: _pdfPinchController,
-                        // backgroundColor: Colors.grey[200],
+                        maxScale: maxZoom,
+                        minScale: minZoom,
                       ),
               ),
               // Positioned widget to place the zoom controls.
