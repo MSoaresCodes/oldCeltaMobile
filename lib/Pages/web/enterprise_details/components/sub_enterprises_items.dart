@@ -35,7 +35,7 @@ class SubEnterprisesItems extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                "Sub empresas",
+                "CNPJs",
                 style: TextStyle(
                   fontFamily: "BebasNeue",
                   fontSize: 30,
@@ -45,6 +45,31 @@ class SubEnterprisesItems extends StatelessWidget {
             AddEnterpriseButton(isAddingNewCnpj: true),
           ],
         ),
+        if (webProvider.isGeneratingVersionToAdministration &&
+            webProvider.enterprises.isNotEmpty &&
+            webProvider.indexOfSelectedEnterprise != -1 &&
+            webProvider.enterprises[webProvider.indexOfSelectedEnterprise]
+                    .subEnterprises?.length !=
+                null &&
+            webProvider.enterprises[webProvider.indexOfSelectedEnterprise]
+                    .subEnterprises!.length >
+                1)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 2),
+            child: TextButton(
+              onPressed: () {
+                goToAddOrEditSubEnterprisePage(
+                  selectedSubEnterprise: null,
+                  context: context,
+                  updatingAllSubenterprises: true,
+                );
+              },
+              child: const Text(
+                "Deixar módulos iguais em todos CNPJs",
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
         if (webProvider.indexOfSelectedEnterprise != -1)
           ListView.builder(
             itemCount: webProvider
@@ -68,67 +93,71 @@ class SubEnterprisesItems extends StatelessWidget {
                   );
                 },
                 child: Card(
+                  margin: const EdgeInsets.only(bottom: 8),
                   child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Row(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
                       children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Apelido: ${item?.surname}"),
-                              Text("Cnpj: ${item?.cnpj}"),
-                              Wrap(
-                                children: Modules.values.map(
-                                  (e) {
-                                    final equalModule = item?.modules
-                                        ?.where((itemModule) =>
-                                            itemModule.module == e.name)
-                                        .toList();
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Apelido: ${item?.surname}"),
+                            Text("Cnpj: ${item?.cnpj}"),
+                            Wrap(
+                              children: Modules.values.map(
+                                (e) {
+                                  final equalModule = item?.modules
+                                      ?.where((itemModule) =>
+                                          itemModule.module == e.name)
+                                      .toList();
 
-                                    final color = equalModule?.isEmpty ==
-                                                true ||
-                                            equalModule?.first.enabled == false
-                                        ? Colors.red
-                                        : Theme.of(context).colorScheme.primary;
+                                  final color = equalModule?.isEmpty == true ||
+                                          equalModule?.first.enabled == false
+                                      ? Colors.red
+                                      : Theme.of(context).colorScheme.primary;
 
-                                    return Text(
-                                      e.description + "; ",
-                                      style: TextStyle(color: color),
-                                    );
-                                  },
-                                ).toList(),
+                                  return Text(
+                                    e.description + "; ",
+                                    style: TextStyle(color: color),
+                                  );
+                                },
+                              ).toList(),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            IconButton(
+                              onPressed: () async {
+                                ShowAlertDialog.show(
+                                    context: context,
+                                    title: "Remover CNPJ?",
+                                    function: () async {
+                                      await webProvider
+                                          .removeSubEnterprise(index);
+                                    });
+                              },
+                              icon: const Icon(
+                                Icons.delete,
+                                color: Colors.red,
                               ),
-                            ],
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () async {
-                            ShowAlertDialog.show(
-                                context: context,
-                                title: "Remover sub empresa?",
-                                function: () async {
-                                  await webProvider.removeSubEnterprise(index);
-                                });
-                          },
-                          icon: const Icon(
-                            Icons.delete,
-                            color: Colors.red,
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        IconButton(
-                          onPressed: () {
-                            goToAddOrEditSubEnterprisePage(
-                              selectedSubEnterprise: item,
-                              context: context,
-                              updatingAllSubenterprises: false,
-                            );
-                          },
-                          icon: Icon(
-                            Icons.edit,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
+                            ),
+                            const SizedBox(width: 10),
+                            IconButton(
+                              onPressed: () {
+                                goToAddOrEditSubEnterprisePage(
+                                  selectedSubEnterprise: item,
+                                  context: context,
+                                  updatingAllSubenterprises: false,
+                                );
+                              },
+                              icon: Icon(
+                                Icons.edit,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -136,28 +165,6 @@ class SubEnterprisesItems extends StatelessWidget {
                 ),
               );
             },
-          ),
-        if (webProvider.isGeneratingVersionToAdministration &&
-            webProvider.enterprises.isNotEmpty &&
-            webProvider.indexOfSelectedEnterprise != -1 &&
-            webProvider.enterprises[webProvider.indexOfSelectedEnterprise]
-                    .subEnterprises?.length !=
-                null &&
-            webProvider.enterprises[webProvider.indexOfSelectedEnterprise]
-                    .subEnterprises!.length >
-                1)
-          Padding(
-            padding: const EdgeInsets.only(top: 15),
-            child: TextButton(
-              onPressed: () {
-                goToAddOrEditSubEnterprisePage(
-                  selectedSubEnterprise: null,
-                  context: context,
-                  updatingAllSubenterprises: true,
-                );
-              },
-              child: const Text("Deixar módulos iguais em todas sub empresas"),
-            ),
           ),
       ],
     );

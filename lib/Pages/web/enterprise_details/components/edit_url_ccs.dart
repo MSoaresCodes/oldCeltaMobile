@@ -60,58 +60,53 @@ class _EditUrlCcsState extends State<EditUrlCcs> {
   Widget build(BuildContext context) {
     WebProvider webProvider = Provider.of(context);
 
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                flex: 8,
-                child: Text("URL CCS\n${widget.client.urlCCS}"),
-              ),
-              Expanded(
-                child: IconButton(
-                  onPressed: () {
-                    urlCcsController.text = widget.client.urlCCS;
-                    setState(() {
-                      showFormField = !showFormField;
-                    });
-                  },
-                  icon: Icon(
-                    Icons.edit,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              flex: 8,
+              child: Text("URL CCS\n${widget.client.urlCCS}"),
+            ),
+            Expanded(
+              child: IconButton(
+                onPressed: () {
+                  urlCcsController.text = widget.client.urlCCS;
+                  setState(() {
+                    showFormField = !showFormField;
+                  });
+                },
+                icon: Icon(
+                  Icons.edit,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
-              )
+              ),
+            )
+          ],
+        ),
+        Visibility(
+          visible: showFormField,
+          child: Column(
+            children: [
+              TextFormField(
+                controller: urlCcsController,
+                decoration: FormFieldDecoration.decoration(
+                  context: context,
+                ),
+                onFieldSubmitted: (_) {
+                  _updateUrlCcs(webProvider);
+                },
+              ),
+              TextButton(
+                onPressed: () async {
+                  _updateUrlCcs(webProvider);
+                },
+                child: const Text("Alterar"),
+              ),
             ],
           ),
-          Visibility(
-            visible: showFormField,
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: urlCcsController,
-                    decoration: FormFieldDecoration.decoration(
-                      context: context,
-                    ),
-                    onFieldSubmitted: (_) {
-                      _updateUrlCcs(webProvider);
-                    },
-                  ),
-                ),
-                TextButton(
-                  onPressed: () async {
-                    _updateUrlCcs(webProvider);
-                  },
-                  child: const Text("Alterar"),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
