@@ -101,6 +101,20 @@ class SoapRequest {
           SoapRequestResponse.errorMessage = parsedJsonResponse["status"];
         }
       } else {
+        String result = response.body;
+
+        final Xml2Json xml2json = Xml2Json();
+        xml2json.parse(result);
+        final parkerJson = xml2json.toParker();
+        final Map<String, dynamic> parsedJson = json.decode(parkerJson);
+        final fault = parsedJson['soap:Envelope']?['soap:Body']?['soap:Fault'];
+        if (fault != null) {
+          final reason = fault['soap:Reason']?['soap:Text'];
+          if (reason != null) {
+            SoapRequestResponse.errorMessage = reason;
+            throw Exception(reason);
+          }
+        }
         throw Exception();
       }
     } catch (e) {
