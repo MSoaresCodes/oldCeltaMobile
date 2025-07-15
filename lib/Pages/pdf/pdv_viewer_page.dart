@@ -17,17 +17,16 @@ class PdfViewerPage extends StatefulWidget {
 }
 
 class _PdfViewerPageState extends State<PdfViewerPage> {
-  // Use PdfControllerPinch to enable zoom controls.
   late final PdfControllerPinch _pdfPinchController;
   late final PdfController _pdfController;
 
   @override
   void initState() {
     super.initState();
+
     final pdfViewerProvider =
         Provider.of<PdfViewerProvider>(context, listen: false);
 
-    // Initialize the correct controller for zooming.
     _pdfPinchController = PdfControllerPinch(
       document: PdfDocument.openData(pdfViewerProvider.pdfBytes!),
       viewportFraction: 1,
@@ -44,12 +43,10 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
 
   @override
   void dispose() {
+    // IMPORTANT! When dispose the page, is enabled landscape mode
     _pdfPinchController.dispose();
     _pdfController.dispose();
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
+
     super.dispose();
   }
 
@@ -95,9 +92,9 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
 
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 30,
         title: FittedBox(child: Text(pdfViewerProvider.fileName!)),
         actions: [
-          // Add a save button to the AppBar
           IconButton(
             icon: const Icon(Icons.share),
             onPressed: () => _sharePdf(pdfViewerProvider),
@@ -105,103 +102,16 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
           ),
         ],
       ),
-      // Use a LayoutBuilder to get the viewport dimensions,
-      // which is necessary for calculating the center point for our zoom transformation.
-      body: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          // Calculate the center of the available space for centered zooming.
-          final Offset center =
-              Offset(constraints.maxWidth / 2, constraints.maxHeight / 2);
-
-          // Define the zoom limits.
-          const double minZoom = 1;
-          const double maxZoom = 1.5;
-
-          return Stack(
-            children: [
-              // Add padding to the bottom of the viewer. This creates a safe area
-              // so the floating buttons don't cover the last page's content.
-              Padding(
-                padding: const EdgeInsets.only(bottom: 30.0),
-                child: Platform.isWindows
-                    ? PdfView(controller: _pdfController)
-                    : PdfViewPinch(
-                        controller: _pdfPinchController,
-                        maxScale: maxZoom,
-                        minScale: minZoom,
-                      ),
-              ),
-              // Positioned widget to place the zoom controls.
-              if (!Platform.isWindows)
-                Positioned(
-                  bottom: 3,
-                  right: 3,
-                  // Use a ValueListenableBuilder to rebuild the buttons whenever the zoom
-                  // level changes, allowing us to disable them at the limits.
-                  child: ValueListenableBuilder<Matrix4>(
-                    valueListenable: _pdfPinchController,
-                    builder: (context, matrix, child) {
-                      // Get the current zoom level from the transformation matrix.
-                      final currentZoom = matrix.row0[0];
-
-                      return Row(
-                        children: [
-                          // FloatingActionButton for zooming in.
-                          FloatingActionButton(
-                            heroTag: 'zoomIn', // Unique hero tag
-                            mini: true,
-                            // The button is disabled if the current zoom is at or above the max.
-                            onPressed: currentZoom >= maxZoom
-                                ? null
-                                : () {
-                                    final Matrix4 zoomMatrix =
-                                        Matrix4.identity()
-                                          ..translate(center.dx, center.dy)
-                                          ..scale(1.25) // Zoom in by 25%
-                                          ..translate(-center.dx, -center.dy);
-                                    _pdfPinchController.value =
-                                        _pdfPinchController.value
-                                            .multiplied(zoomMatrix);
-                                    setState(() {});
-                                  },
-                            child: Icon(
-                              Icons.zoom_in,
-                              color:
-                                  currentZoom >= maxZoom ? Colors.grey : null,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          // FloatingActionButton for zooming out.
-                          FloatingActionButton(
-                            heroTag: 'zoomOut', // Unique hero tag
-                            mini: true,
-                            // The button is disabled if the current zoom is at or below the min.
-                            onPressed: currentZoom <= minZoom
-                                ? null
-                                : () {
-                                    final Matrix4 zoomMatrix =
-                                        Matrix4.identity()
-                                          ..translate(center.dx, center.dy)
-                                          ..scale(0.8) // Zoom out
-                                          ..translate(-center.dx, -center.dy);
-                                    _pdfPinchController.value =
-                                        _pdfPinchController.value
-                                            .multiplied(zoomMatrix);
-                                  },
-                            child: Icon(
-                              Icons.zoom_out,
-                              color:
-                                  currentZoom <= minZoom ? Colors.grey : null,
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
+      body: Stack(
+        children: [
+          Platform.isWindows
+              ? PdfView(controller: _pdfController)
+              : PdfViewPinch(
+                  controller: _pdfPinchController,
+                  maxScale: 1.5,
+                  minScale: 1,
                 ),
-            ],
-          );
-        },
+        ],
       ),
     );
   }
