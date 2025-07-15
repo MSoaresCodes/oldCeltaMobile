@@ -53,7 +53,7 @@ android {
         applicationId "br.com.celtaware.inventario"
         minSdkVersion 23
         targetSdkVersion 35
-        versionCode 151
+        versionCode 152
         versionName flutterVersionName
         ndkVersion "29.0.13113456"
     }
