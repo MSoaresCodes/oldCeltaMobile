@@ -55,7 +55,6 @@ dependencies:
   icons_launcher: ^3.0.0
   flutter_barcode_scanner_plus: ^3.0.8
   pdfx: ^2.9.2
-  file_saver: ^0.3.1
   share_plus: ^11.0.0
 
 icons_launcher:
