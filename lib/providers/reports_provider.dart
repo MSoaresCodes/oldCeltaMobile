@@ -69,26 +69,31 @@ class ReportsProvider with ChangeNotifier {
     required bool downloadXlsx,
   }) async {
     try {
-      await getReportSchedules();
+      if (downloadPdf || downloadXlsx) {
+        await getReportSchedules();
+
+        _isLoading = true;
+        notifyListeners();
+
+        final bool alreadyDownloadedLastExecution =
+            _alreadyDownloadedLastExecution(
+          reportScheduleCode: reportScheduleCode,
+          downloadPdf: downloadPdf,
+        );
+
+        if (alreadyDownloadedLastExecution) {
+          ShowSnackbarMessage.show(
+            message: "Você já carregou a última execução",
+            context: NavigatorKey.key.currentState!.context,
+            backgroundColor: Colors.red,
+          );
+
+          return;
+        }
+      }
 
       _isLoading = true;
       notifyListeners();
-
-      final bool alreadyDownloadedLastExecution =
-          _alreadyDownloadedLastExecution(
-        reportScheduleCode: reportScheduleCode,
-        downloadPdf: downloadPdf,
-      );
-
-      if (alreadyDownloadedLastExecution) {
-        ShowSnackbarMessage.show(
-          message: "Você já carregou a última execução",
-          context: NavigatorKey.key.currentState!.context,
-          backgroundColor: Colors.red,
-        );
-
-        return;
-      }
 
       await SoapRequest.soapPost(
         parameters: {
@@ -111,13 +116,20 @@ class ReportsProvider with ChangeNotifier {
         typeOfResult: "GetReportScheduleExecutionsResult",
       );
 
-      SoapRequestResponse.responseAsString;
-      SoapRequestResponse.responseAsMap;
-
       if (SoapRequestResponse.errorMessage != "") {
         ShowSnackbarMessage.show(
           message: SoapRequestResponse.errorMessage,
           context: NavigatorKey.key.currentState!.context,
+        );
+        return;
+      }
+
+      if (execute) {
+        ShowSnackbarMessage.show(
+          message:
+              "O agendamento está sendo executado com sucesso. Atualize a lista em alguns instantes para confirmar se a datá da última atualização será atualizada.",
+          context: NavigatorKey.key.currentState!.context,
+          backgroundColor: Colors.green,
         );
         return;
       }

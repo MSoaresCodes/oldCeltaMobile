@@ -21,6 +21,14 @@ class _ReportsPageState extends State<ReportsPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (mounted) {
         ReportsProvider reportsProvider = Provider.of(context, listen: false);
+
+        ShowSnackbarMessage.show(
+          message:
+              "Somente relatórios agendados ou salvos serão exibidos. Caso precise de ajuda para configurar, entre em contato com o suporte",
+          context: context,
+          backgroundColor: Colors.green,
+          secondsDuration: 7,
+        );
         await reportsProvider.getReportSchedules();
       }
     });
@@ -50,7 +58,7 @@ class _ReportsPageState extends State<ReportsPage> {
       children: [
         Scaffold(
           appBar: AppBar(
-            title: const Text("Relatórios"),
+            title: const Text("Agendamentos"),
             actions: [
               IconButton(
                   onPressed: reportsProvider.getReportSchedules,
@@ -94,11 +102,11 @@ class _ReportsPageState extends State<ReportsPage> {
                               title: "Sub categoria",
                               subtitle: reportSchedule.SubCategoryName!),
                           TitleAndSubtitle.titleAndSubtitle(
-                              title: "Nome do relatório",
+                              title: "Relatório",
                               subtitle: reportSchedule.ReportModelName!),
                           if (reportSchedule.LastExecutionDate != null)
                             TitleAndSubtitle.titleAndSubtitle(
-                                title: "Última execução",
+                                title: "Últ. execução",
                                 subtitle: DateFormat('dd/MM/yyyy HH:mm')
                                     .format(reportSchedule.LastExecutionDate!)),
                           if (reportSchedule.LastExecutionStartDateTime != null)
@@ -122,6 +130,7 @@ class _ReportsPageState extends State<ReportsPage> {
                           reportSchedule: reportSchedule,
                           alreadyDownloadedXlsx: alreadyDownloadedXlsx,
                         ),
+                        ExecuteButton(reportSchedule: reportSchedule),
                       ],
                     ),
                   ],

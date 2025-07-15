@@ -11,6 +11,7 @@ class ShowAlertDialog {
     double? subtitleSize = 20,
     String? confirmMessage = "SIM",
     String? cancelMessage = "NÃO",
+    String closeMessage = "FECHAR",
     double? confirmMessageSize = 20,
     double? cancelMessageSize = 20,
     bool? showConfirmAndCancelMessage = true,
@@ -101,7 +102,7 @@ class ShowAlertDialog {
                     Navigator.of(context).pop();
                   },
                   child: Text(
-                    "Fechar",
+                    closeMessage,
                     style: TextStyle(fontSize: subtitleSize),
                   ),
                 ),
