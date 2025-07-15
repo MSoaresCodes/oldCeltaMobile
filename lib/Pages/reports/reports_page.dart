@@ -80,7 +80,7 @@ class _ReportsPageState extends State<ReportsPage> {
                       if (reportSchedule.LastExecutionDate != null)
                         TitleAndSubtitle.titleAndSubtitle(
                             title: "Última execução",
-                            subtitle: DateFormat('dd/MM/yyyy HH:mm:ss')
+                            subtitle: DateFormat('dd/MM/yyyy HH:mm')
                                 .format(reportSchedule.LastExecutionDate!)),
                       if (reportSchedule.LastExecutionStartDateTime != null)
                         TitleAndSubtitle.titleAndSubtitle(
