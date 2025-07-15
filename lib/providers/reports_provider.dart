@@ -99,7 +99,7 @@ class ReportsProvider with ChangeNotifier {
             "SendEmailOnExecution": sendEmailOnExecution,
             "Download": {
               "DownloadLastExecution":
-                  downloadPdf || downloadPdf == true && execute == false,
+                  downloadPdf || downloadXlsx == true && execute == false,
               "Pdf": downloadPdf,
               "Xlsx": downloadXlsx
             }
