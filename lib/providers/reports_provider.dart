@@ -69,10 +69,10 @@ class ReportsProvider with ChangeNotifier {
     required bool downloadXlsx,
   }) async {
     try {
+      await getReportSchedules();
+
       _isLoading = true;
       notifyListeners();
-
-      await getReportSchedules();
 
       final bool alreadyDownloadedLastExecution =
           _alreadyDownloadedLastExecution(
