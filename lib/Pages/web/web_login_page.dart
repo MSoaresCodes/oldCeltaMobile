@@ -86,7 +86,6 @@ class _WebLoginPageState extends State<WebLoginPage> {
                 appBar: AppBar(
                   title: const Text("Login"),
                   actions: null,
-                  leading: const Text(""),
                 ),
                 body: Form(
                   key: key,
