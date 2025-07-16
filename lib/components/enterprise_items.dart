@@ -75,7 +75,7 @@ class EnterpriseItems extends StatelessWidget {
   bool _hasMinimumVersion(EnterpriseProvider enterpriseProvider) {
     if (nextPageRoute == APPROUTES.REPORTS) {
       //TODO fix this date after the Júnior fix the problem to get schedules
-      return enterpriseProvider.bsDate?.isAfter(DateTime(2025, 07, 17)) == true;
+      return enterpriseProvider.bsDate?.isAfter(DateTime(2025, 07, 16)) == true;
     }
 
     return true;
