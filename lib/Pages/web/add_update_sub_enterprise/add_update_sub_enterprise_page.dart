@@ -203,13 +203,7 @@ class _AddUpdateSubEnterprisePageState
                           onPressed: () async {
                             await addUpdateEnterprise(webProvider);
                           },
-                          child: Text(
-                            updatingAllSubenterprises
-                                ? "Alterando todas sub empresas"
-                                : selectedSubEnterprise == null
-                                    ? "Adicionando sub empresa"
-                                    : "Alterar",
-                          ),
+                          child: const Text("Alterar"),
                         ),
                       ),
                     ],
