@@ -63,7 +63,10 @@ class _WebEnterpriseItemsState extends State<WebEnterpriseItems> {
             return Card(
               child: ListTile(
                 onTap: () {
-                  webProvider.indexOfSelectedEnterprise = index;
+                  final enterpriseIndex = webProvider.enterprises.indexWhere(
+                    (e) => e.id == client.id,
+                  );
+                  webProvider.indexOfSelectedEnterprise = enterpriseIndex;
                   Navigator.of(context).pushNamed(
                     APPROUTES.WEB_ENTERPRISE_DETAILS,
                   );
