@@ -229,19 +229,18 @@ class _AddUpdateSubEnterprisePageState
                             ),
                           EnableOrDisableModule(
                             modules: modules,
-                            updateEnabled:
-                                webProvider.isGeneratingVersionToAdministration
-                                    ? (index) {
-                                        final oldModule = modules[index];
-                                        setState(() {
-                                          modules[index] = ModuleModel(
-                                            name: oldModule.name,
-                                            enabled: !oldModule.enabled,
-                                            module: oldModule.module,
-                                          );
-                                        });
-                                      }
-                                    : null,
+                            updateEnabled: webProvider.loggedUserIsAdmin
+                                ? (index) {
+                                    final oldModule = modules[index];
+                                    setState(() {
+                                      modules[index] = ModuleModel(
+                                        name: oldModule.name,
+                                        enabled: !oldModule.enabled,
+                                        module: oldModule.module,
+                                      );
+                                    });
+                                  }
+                                : null,
                           ),
                         ],
                       ),

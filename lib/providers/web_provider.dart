@@ -13,8 +13,8 @@ enum Months {
 }
 
 class WebProvider with ChangeNotifier {
-  bool get isGeneratingVersionToAdministration =>
-      true; //TODO always treat this when is generating version to web
+  bool _loggedUserIsAdmin = false;
+  bool get loggedUserIsAdmin => _loggedUserIsAdmin;
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -595,5 +595,9 @@ class WebProvider with ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  void changeLoggedUserIsAdmin(String? email) {
+    _loggedUserIsAdmin = email == "admin@celtaware.com.br";
   }
 }

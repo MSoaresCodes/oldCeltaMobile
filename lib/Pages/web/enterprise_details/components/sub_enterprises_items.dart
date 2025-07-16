@@ -45,7 +45,7 @@ class SubEnterprisesItems extends StatelessWidget {
             AddEnterpriseButton(isAddingNewCnpj: true),
           ],
         ),
-        if (webProvider.isGeneratingVersionToAdministration &&
+        if (webProvider.loggedUserIsAdmin &&
             webProvider.enterprises.isNotEmpty &&
             webProvider.indexOfSelectedEnterprise != -1 &&
             webProvider.enterprises[webProvider.indexOfSelectedEnterprise]

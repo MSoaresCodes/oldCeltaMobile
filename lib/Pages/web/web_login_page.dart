@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../api/api.dart';
 import '../../components/components.dart';
 
+import '../../providers/providers.dart';
 import '../../utils/utils.dart';
 
 class WebLoginPage extends StatefulWidget {
@@ -51,13 +53,23 @@ class _WebLoginPageState extends State<WebLoginPage> {
   }
 
   @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return FutureBuilder<User?>(
-        future: FirebaseAuth.instance.authStateChanges().first,
+    final webProvider = Provider.of<WebProvider>(context);
+
+    return StreamBuilder(
+        stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return loadingWidget(false);
           } else if (snapshot.hasData) {
+            webProvider.changeLoggedUserIsAdmin(snapshot.data?.email);
             WidgetsBinding.instance.addPostFrameCallback((_) async {
               Future.delayed(Duration.zero, () {
                 if (mounted) {
