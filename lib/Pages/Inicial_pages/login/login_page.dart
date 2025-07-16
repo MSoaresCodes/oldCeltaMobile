@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import '../../../utils/utils.dart';
 import 'auth_form.dart';
 
 class LoginPage extends StatefulWidget {
@@ -81,24 +82,30 @@ class _LoginPageState extends State<LoginPage>
                       animation: _animationController!,
                       child: FadeTransition(
                         opacity: _animationOpacity!,
-                        child: Container(
-                          transform: Matrix4.rotationZ(-8 * pi / 180)
-                            ..translate(-10.0),
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 10,
-                            horizontal: 30,
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          child: const FittedBox(
-                            child: Text(
-                              'Celta mobile',
-                              style: TextStyle(
-                                fontSize: 100,
-                                color: Colors.white,
-                                fontFamily: 'BebasNeue',
+                        child: GestureDetector(
+                          onLongPress: () {
+                            Navigator.of(context)
+                                .pushNamed(APPROUTES.WEB_LOGIN);
+                          },
+                          child: Container(
+                            transform: Matrix4.rotationZ(-8 * pi / 180)
+                              ..translate(-10.0),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 10,
+                              horizontal: 30,
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            child: const FittedBox(
+                              child: Text(
+                                'Celta mobile',
+                                style: TextStyle(
+                                  fontSize: 100,
+                                  color: Colors.white,
+                                  fontFamily: 'BebasNeue',
+                                ),
                               ),
                             ),
                           ),

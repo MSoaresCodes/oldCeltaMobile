@@ -26,7 +26,7 @@ class _WebEnterpriseItemsState extends State<WebEnterpriseItems> {
 
   @override
   Widget build(BuildContext context) {
-    WebProvider webProvider = Provider.of(context);
+    WebProvider webProvider = Provider.of(context, listen: false);
 
     final enterprises = webProvider.enterprises
         .where((e) => e.enterpriseName.toLowerCase().contains(
@@ -55,6 +55,7 @@ class _WebEnterpriseItemsState extends State<WebEnterpriseItems> {
           ),
         ListView.builder(
           shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: enterprises.length,
           itemBuilder: (context, index) {
             FirebaseEnterpriseModel client = enterprises[index];

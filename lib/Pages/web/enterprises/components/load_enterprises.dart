@@ -13,22 +13,20 @@ class LoadEnterprises extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Center(
-        child: TextButton(
-          onPressed: () async {
-            await webProvider.getAllClients();
+    return Center(
+      child: TextButton(
+        onPressed: () async {
+          await webProvider.getAllClients();
 
-            if (webProvider.errorMessageClients != "") {
-              ShowSnackbarMessage.show(
-                message: DefaultErrorMessage.ERROR,
-                context: context,
-              );
-            }
-          },
-          child: const Text(
-            "Consultar empresas",
-          ),
+          if (webProvider.errorMessageClients != "") {
+            ShowSnackbarMessage.show(
+              message: DefaultErrorMessage.ERROR,
+              context: context,
+            );
+          }
+        },
+        child: const Text(
+          "Consultar empresas",
         ),
       ),
     );
