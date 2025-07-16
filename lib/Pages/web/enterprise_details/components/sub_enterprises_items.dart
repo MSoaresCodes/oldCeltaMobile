@@ -94,11 +94,12 @@ class SubEnterprisesItems extends StatelessWidget {
                 },
                 child: Card(
                   margin: const EdgeInsets.only(bottom: 8),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        Column(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text("Apelido: ${item?.surname}"),
@@ -125,42 +126,42 @@ class SubEnterprisesItems extends StatelessWidget {
                             ),
                           ],
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            IconButton(
-                              onPressed: () async {
-                                ShowAlertDialog.show(
-                                    context: context,
-                                    title: "Remover CNPJ?",
-                                    function: () async {
-                                      await webProvider
-                                          .removeSubEnterprise(index);
-                                    });
-                              },
-                              icon: const Icon(
-                                Icons.delete,
-                                color: Colors.red,
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            IconButton(
-                              onPressed: () {
-                                goToAddOrEditSubEnterprisePage(
-                                  selectedSubEnterprise: item,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          IconButton(
+                            onPressed: () async {
+                              ShowAlertDialog.show(
                                   context: context,
-                                  updatingAllSubenterprises: false,
-                                );
-                              },
-                              icon: Icon(
-                                Icons.edit,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
+                                  title: "Remover CNPJ?",
+                                  function: () async {
+                                    await webProvider
+                                        .removeSubEnterprise(index);
+                                  });
+                            },
+                            icon: const Icon(
+                              Icons.delete,
+                              color: Colors.red,
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                          const SizedBox(width: 10),
+                          IconButton(
+                            onPressed: () {
+                              goToAddOrEditSubEnterprisePage(
+                                selectedSubEnterprise: item,
+                                context: context,
+                                updatingAllSubenterprises: false,
+                              );
+                            },
+                            icon: Icon(
+                              Icons.edit,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               );
