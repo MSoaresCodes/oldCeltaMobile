@@ -41,84 +41,20 @@ class _AddUpdateSubEnterprisePageState
         _surnameController.text = selectedSubEnterprise.surname.toString();
       }
 
-      bool enabled(String module) =>
-          selectedSubEnterprise?.modules
-              ?.any((e) => e.module == module && e.enabled == true) ??
-          false;
-
       setState(() {
-        modules = [
-          ModuleModel(
-            module: Modules.adjustSalePrice.name,
-            enabled: enabled(Modules.adjustSalePrice.name),
-            name: "Ajuste de preços",
-          ),
-          ModuleModel(
-            enabled: enabled(Modules.adjustStock.name),
-            module: Modules.adjustStock.name,
-            name: "Ajuste de estoques",
-          ),
-          ModuleModel(
-            enabled: enabled(Modules.customerRegister.name),
-            module: Modules.customerRegister.name,
-            name: "Cadastro de cliente",
-          ),
-          ModuleModel(
-            enabled: enabled(Modules.priceConference.name),
-            module: Modules.priceConference.name,
-            name: "Consulta de preços",
-          ),
-          ModuleModel(
-            enabled: enabled(Modules.productsConference.name),
-            module: Modules.productsConference.name,
-            name: "Conferência de produtos (expedição)",
-          ),
-          ModuleModel(
-            enabled: enabled(Modules.researchPrices.name),
-            module: Modules.researchPrices.name,
-            name: "Consulta de preços concorrentes",
-          ),
-          ModuleModel(
-            enabled: enabled(Modules.buyQuotation.name),
-            module: Modules.buyQuotation.name,
-            name: "Cotação de compras",
-          ),
-          ModuleModel(
-            enabled: enabled(Modules.inventory.name),
-            module: Modules.inventory.name,
-            name: "Inventário",
-          ),
-          ModuleModel(
-            enabled: enabled(Modules.buyRequest.name),
-            module: Modules.buyRequest.name,
-            name: "Pedido de compra",
-          ),
-          ModuleModel(
-            enabled: enabled(Modules.receipt.name),
-            module: Modules.receipt.name,
-            name: "Recebimento",
-          ),
-          ModuleModel(
-            enabled: enabled(Modules.transferRequest.name),
-            module: Modules.transferRequest.name,
-            name: "Pedido de transferência",
-          ),
-          ModuleModel(
-            enabled: enabled(Modules.saleRequest.name),
-            module: Modules.saleRequest.name,
-            name: "Pedido de vendas",
-          ),
-          ModuleModel(
-            enabled: enabled(Modules.transferBetweenStocks.name),
-            module: Modules.transferBetweenStocks.name,
-            name: "Transferência entre estoques",
-          ),
-          ModuleModel(
-            enabled: enabled(Modules.reports.name),
-            module: Modules.reports.name,
-            name: "Relatórios",
-          ),
-        ]..sort((e1, e2) => e1.name.compareTo(e2.name));
+        modules = Modules.values
+            .map(
+              (module) => ModuleModel(
+                module: module.name,
+                name: module.description,
+                enabled: selectedSubEnterprise?.modules?.any((e) {
+                      return module.name == e.module && e.enabled == true;
+                    }) ??
+                    false,
+              ),
+            )
+            .toList()
+          ..sort((e1, e2) => e1.name.compareTo(e2.name));
       });
     });
   }
