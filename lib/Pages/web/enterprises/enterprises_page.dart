@@ -37,12 +37,14 @@ class EnterprisesPage extends StatelessWidget {
               )),
         ],
       ),
-      body: Column(
-        children: [
-          if (webProvider.enterprises.isNotEmpty) const WebEnterpriseItems(),
-          if (webProvider.enterprises.isEmpty)
-            LoadEnterprises(webProvider: webProvider),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            if (webProvider.enterprises.isNotEmpty) const WebEnterpriseItems(),
+            if (webProvider.enterprises.isEmpty)
+              LoadEnterprises(webProvider: webProvider),
+          ],
+        ),
       ),
     );
   }
