@@ -54,8 +54,8 @@ dependencies:
   firebase_performance: ^0.10.0+8
   icons_launcher: ^3.0.0
   flutter_barcode_scanner_plus: ^3.0.8
-  pdfx: ^2.9.2
   share_plus: ^11.0.0
+  syncfusion_flutter_pdfviewer: ^30.1.40
 
 icons_launcher:
   image_path: "dev_assets/CeltaMobileLogo.png"
