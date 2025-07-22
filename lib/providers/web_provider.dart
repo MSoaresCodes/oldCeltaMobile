@@ -348,6 +348,7 @@ class WebProvider with ChangeNotifier {
   }) async {
     _isLoading = true;
     _errorMessageClients = "";
+    notifyListeners();
 
     try {
       await FirebaseHelper.deleteEnterprise(enterpriseId);
@@ -426,6 +427,8 @@ class WebProvider with ChangeNotifier {
   }) async {
     _isLoading = true;
     _errorMessageClients = "";
+    notifyListeners();
+
     try {
       bool hasSelectedEnterprise = _indexOfSelectedEnterprise != -1;
       FirebaseEnterpriseModel? newEnterprise;
