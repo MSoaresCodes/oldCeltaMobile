@@ -134,14 +134,16 @@ class _ReportsPageState extends State<ReportsPage> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              PdfButton(
-                                reportSchedule: reportSchedule,
-                                alreadyDownloadedPdf: alreadyDownloadedPdf,
-                              ),
-                              ExcelButton(
-                                reportSchedule: reportSchedule,
-                                alreadyDownloadedXlsx: alreadyDownloadedXlsx,
-                              ),
+                              if (reportSchedule.LastExecutionDate != null) ...[
+                                PdfButton(
+                                  reportSchedule: reportSchedule,
+                                  alreadyDownloadedPdf: alreadyDownloadedPdf,
+                                ),
+                                ExcelButton(
+                                  reportSchedule: reportSchedule,
+                                  alreadyDownloadedXlsx: alreadyDownloadedXlsx,
+                                ),
+                              ],
                               ExecuteButton(reportSchedule: reportSchedule),
                             ],
                           ),
