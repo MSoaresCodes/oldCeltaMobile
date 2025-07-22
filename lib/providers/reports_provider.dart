@@ -127,7 +127,7 @@ class ReportsProvider with ChangeNotifier {
       if (execute) {
         ShowSnackbarMessage.show(
           message:
-              "O agendamento está sendo executado com sucesso. Atualize a lista em alguns instantes para confirmar se a datá da última atualização será atualizada.",
+              "O agendamento está sendo executado com sucesso. Assim que finalizar, você receberá uma notificação.",
           context: NavigatorKey.key.currentState!.context,
           backgroundColor: Colors.green,
         );
