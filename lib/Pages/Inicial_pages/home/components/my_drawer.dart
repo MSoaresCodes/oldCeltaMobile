@@ -1,39 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../api/api.dart';
 import '../../../../providers/providers.dart';
 import '../../../../utils/utils.dart';
 import '../../../../components/components.dart';
+import 'components.dart';
 
-class MyDrawer extends StatelessWidget {
+class MyDrawer extends StatefulWidget {
   const MyDrawer({Key? key}) : super(key: key);
 
-  Widget drawerItem({
-    required BuildContext context,
-    required Function()? onTap,
-    required String text,
-    required Widget leading,
-    Widget? subtitle,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Card(
-        child: ListTile(
-          leading: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5.0),
-            child: leading,
-          ),
-          title: Text(
-            text,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-            ),
-          ),
-        ),
-      ),
-    );
+  @override
+  State<MyDrawer> createState() => _MyDrawerState();
+}
+
+class _MyDrawerState extends State<MyDrawer> {
+  PermissionStatus? permissionStatus;
+
+  @override
+  void initState() {
+    super.initState();
+    updatePermissionStatus();
+  }
+
+  Future<void> updatePermissionStatus() async {
+    permissionStatus = await Permission.notification.status;
   }
 
   @override
@@ -57,8 +49,8 @@ class MyDrawer extends StatelessWidget {
                 ),
               ),
             ),
-            drawerItem(
-              context: context,
+            EnableNotifications(permissionStatus: permissionStatus),
+            DrawerItem(
               onTap: () async {
                 Navigator.of(context).pop();
                 Navigator.of(context).pushNamed(
@@ -72,8 +64,7 @@ class MyDrawer extends StatelessWidget {
                 color: Theme.of(context).colorScheme.primary,
               ),
             ),
-            drawerItem(
-              context: context,
+            DrawerItem(
               onTap: () async {
                 Navigator.of(context).pop();
                 Navigator.of(context).pushNamed(
@@ -87,8 +78,7 @@ class MyDrawer extends StatelessWidget {
                 color: Theme.of(context).colorScheme.primary,
               ),
             ),
-            drawerItem(
-              context: context,
+            DrawerItem(
               onTap: () async {
                 await UrlLauncher.searchAndLaunchUrl(
                   context: context,
@@ -106,8 +96,7 @@ class MyDrawer extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            drawerItem(
-              context: context,
+            DrawerItem(
               onTap: () async {
                 await UrlLauncher.searchAndLaunchUrl(
                   context: context,
@@ -125,8 +114,7 @@ class MyDrawer extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            drawerItem(
-              context: context,
+            DrawerItem(
               onTap: () async {
                 await UrlLauncher.searchAndLaunchUrl(
                   context: context,
@@ -144,8 +132,7 @@ class MyDrawer extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            drawerItem(
-              context: context,
+            DrawerItem(
               onTap: () async {
                 await UrlLauncher.searchAndLaunchUrl(
                   context: context,
@@ -163,8 +150,7 @@ class MyDrawer extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            drawerItem(
-              context: context,
+            DrawerItem(
               onTap: () async {
                 ShowAlertDialog.show(
                   context: context,
