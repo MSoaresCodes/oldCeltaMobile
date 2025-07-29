@@ -24,9 +24,9 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
 
   var _insertQuantityFormKey = GlobalKey<FormState>();
   var _dropDownFormKey = GlobalKey<FormState>();
-  final GlobalKey<FormFieldState> _keyJustifications = GlobalKey();
-  final GlobalKey<FormFieldState> _keyOriginStockType = GlobalKey();
-  final GlobalKey<FormFieldState> _keyDestinyStockType = GlobalKey();
+  final _keyJustifications = GlobalKey<FormState>();
+  final _keyOriginStockType = GlobalKey<FormState>();
+  final _keyDestinyStockType = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -90,9 +90,8 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                             context: context,
                             configurationsProvider: configurationsProvider,
                           );
-    
-                          if (transferBetweenStocksProvider.productsCount >
-                              0) {
+
+                          if (transferBetweenStocksProvider.productsCount > 0) {
                             _consultProductController.clear();
                           }
                         },
@@ -108,50 +107,10 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                               keyDestinyStockType: _keyDestinyStockType,
                             ),
                           ),
-                          IconButton(
-                            icon: Icon(
-                              Icons.refresh,
-                              size: 30,
-                              color: transferBetweenStocksProvider
-                                          .isLoadingTypeStockAndJustifications ||
-                                      transferBetweenStocksProvider
-                                          .isLoadingAdjustStock ||
-                                      transferBetweenStocksProvider
-                                          .isLoadingProducts
-                                  ? Colors.grey
-                                  : Theme.of(context).colorScheme.primary,
-                            ),
-                            tooltip: "Consultar justificativas e estoques",
-                            onPressed: transferBetweenStocksProvider
-                                        .isLoadingTypeStockAndJustifications ||
-                                    transferBetweenStocksProvider
-                                        .isLoadingAdjustStock ||
-                                    transferBetweenStocksProvider
-                                        .isLoadingProducts
-                                ? null
-                                : () async {
-                                    await transferBetweenStocksProvider
-                                        .getStockTypeAndJustifications(
-                                            context);
-    
-                                    Future.delayed(
-                                        const Duration(milliseconds: 500),
-                                        () {
-                                      if (_keyJustifications.currentState !=
-                                              null &&
-                                          _keyOriginStockType.currentState !=
-                                              null &&
-                                          _keyDestinyStockType.currentState !=
-                                              null) {
-                                        _keyJustifications.currentState!
-                                            .reset();
-                                        _keyOriginStockType.currentState!
-                                            .reset();
-                                        _keyDestinyStockType.currentState!
-                                            .reset();
-                                      }
-                                    });
-                                  },
+                          RefreshIconButton(
+                            keyJustifications: _keyJustifications,
+                            keyOriginStockType: _keyOriginStockType,
+                            keyDestinyStockType: _keyDestinyStockType,
                           ),
                         ],
                       ),
@@ -160,8 +119,8 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                   if (transferBetweenStocksProvider.errorMessageGetProducts !=
                       "")
                     ErrorMessage(
-                      errorMessage: transferBetweenStocksProvider
-                          .errorMessageGetProducts,
+                      errorMessage:
+                          transferBetweenStocksProvider.errorMessageGetProducts,
                     ),
                   if (!transferBetweenStocksProvider.isLoadingProducts)
                     ProductsItems(
@@ -172,21 +131,21 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                       getProductsWithCamera: () async {
                         FocusScope.of(context).unfocus();
                         _consultProductController.clear();
-    
+
                         _consultProductController.text =
                             await ScanBarCode.scanBarcode(context);
-    
+
                         if (_consultProductController.text == "") {
                           return;
                         }
-    
+
                         await transferBetweenStocksProvider.getProducts(
                           enterprise: enterprise,
                           controllerText: _consultProductController.text,
                           context: context,
                           configurationsProvider: configurationsProvider,
                         );
-    
+
                         if (transferBetweenStocksProvider.productsCount > 0) {
                           _consultProductController.clear();
                         }

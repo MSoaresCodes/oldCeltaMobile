@@ -4,9 +4,9 @@ import 'package:provider/provider.dart';
 import '../../../providers/providers.dart';
 
 class JustificationsAndStocksDropwdownWidget extends StatefulWidget {
-  final GlobalKey<FormFieldState> keyJustifications;
-  final GlobalKey<FormFieldState> keyOriginStockType;
-  final GlobalKey<FormFieldState> keyDestinyStockType;
+  final GlobalKey<FormState> keyJustifications;
+  final GlobalKey<FormState> keyOriginStockType;
+  final GlobalKey<FormState> keyDestinyStockType;
   final GlobalKey<FormState> dropDownFormKey;
 
   const JustificationsAndStocksDropwdownWidget({
