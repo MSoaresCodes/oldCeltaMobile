@@ -13,12 +13,14 @@ class ProductsItems extends StatefulWidget {
   final GlobalKey<FormState> dropDownFormKey;
   final GlobalKey<FormState> insertQuantityFormKey;
   final Function getProductsWithCamera;
+  final ScrollController scrollController;
   const ProductsItems({
     required this.getProductsWithCamera,
     required this.enterpriseCode,
     required this.consultedProductController,
     required this.dropDownFormKey,
     required this.insertQuantityFormKey,
+    required this.scrollController,
     Key? key,
   }) : super(key: key);
 
@@ -29,7 +31,7 @@ class ProductsItems extends StatefulWidget {
 class _ProductsItemsState extends State<ProductsItems> {
   int _selectedIndex = -1;
 
-  changeFocusToConsultedProductFocusNode({
+  void changeFocusToConsultedProductFocusNode({
     required TransferBetweenStocksProvider transferBetweenStocksProvider,
   }) {
     Future.delayed(const Duration(milliseconds: 300), () {
@@ -41,7 +43,7 @@ class _ProductsItemsState extends State<ProductsItems> {
     });
   }
 
-  selectIndexAndFocus({
+  void selectIndexAndFocus({
     required TransferBetweenStocksProvider transferBetweenStocksProvider,
     required int index,
   }) {
@@ -107,90 +109,82 @@ class _ProductsItemsState extends State<ProductsItems> {
     TransferBetweenStocksProvider transferBetweenStocksProvider =
         Provider.of(context);
 
-    return Column(
-      mainAxisAlignment: transferBetweenStocksProvider.productsCount > 1
-          ? MainAxisAlignment.center
-          : MainAxisAlignment.start,
-      children: [
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: transferBetweenStocksProvider.productsCount,
-          itemBuilder: (context, index) {
-            if (transferBetweenStocksProvider.productsCount == 1) {
-              _selectedIndex = index;
-            }
+    return ListView.builder(
+      // shrinkWrap: true,
+      controller: widget.scrollController,
+      itemCount: transferBetweenStocksProvider.productsCount,
+      itemBuilder: (context, index) {
+        if (transferBetweenStocksProvider.productsCount == 1) {
+          _selectedIndex = index;
+        }
 
-            GetProductJsonModel product =
-                transferBetweenStocksProvider.products[index];
-            return GestureDetector(
-              onTap: transferBetweenStocksProvider
-                          .isLoadingTypeStockAndJustifications ||
-                      transferBetweenStocksProvider.isLoadingAdjustStock
-                  ? null
-                  : () {
-                      transferBetweenStocksProvider.updateBody(
-                        product: product,
-                      );
+        GetProductJsonModel product =
+            transferBetweenStocksProvider.products[index];
+        return GestureDetector(
+          onTap: transferBetweenStocksProvider
+                      .isLoadingTypeStockAndJustifications ||
+                  transferBetweenStocksProvider.isLoadingAdjustStock
+              ? null
+              : () {
+                  transferBetweenStocksProvider.updateBody(
+                    product: product,
+                  );
 
-                      selectIndexAndFocus(
-                        transferBetweenStocksProvider:
-                            transferBetweenStocksProvider,
-                        index: index,
-                      );
-                    },
-              child: ProductItem(
-                enterpriseCode: widget.enterpriseCode,
-                product: product,
-                showPrice: false,
-                showWholeInformations: false,
-                componentAfterProductInformations: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Icon(
-                        _selectedIndex == index
-                            ? Icons.arrow_drop_up
-                            : Icons.arrow_drop_down,
-                        size: 20,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                    if (transferBetweenStocksProvider.lastUpdatedQuantity !=
-                            "" &&
-                        transferBetweenStocksProvider
-                                .indexOfLastProductChangedStockQuantity ==
-                            index)
-                      Text(
-                        "Última quantidade: ${transferBetweenStocksProvider.lastUpdatedQuantity}",
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'BebasNeue',
-                          fontStyle: FontStyle.italic,
-                          letterSpacing: 1,
-                          wordSpacing: 5,
-                        ),
-                      ),
-                    if (_selectedIndex == index)
-                      InsertQuantity(
-                        consultedProductController:
-                            widget.consultedProductController,
-                        dropDownFormKey: widget.dropDownFormKey,
-                        insertQuantityFormKey: widget.insertQuantityFormKey,
-                        internalEnterpriseCode: widget.enterpriseCode,
-                        index: index,
-                        getProductsWithCamera: widget.getProductsWithCamera,
-                      ),
-                  ],
+                  selectIndexAndFocus(
+                    transferBetweenStocksProvider:
+                        transferBetweenStocksProvider,
+                    index: index,
+                  );
+                },
+          child: ProductItem(
+            enterpriseCode: widget.enterpriseCode,
+            product: product,
+            showPrice: false,
+            showWholeInformations: false,
+            componentAfterProductInformations: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Icon(
+                    _selectedIndex == index
+                        ? Icons.arrow_drop_up
+                        : Icons.arrow_drop_down,
+                    size: 20,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                 ),
-              ),
-            );
-          },
-        ),
-      ],
+                if (transferBetweenStocksProvider.lastUpdatedQuantity != "" &&
+                    transferBetweenStocksProvider
+                            .indexOfLastProductChangedStockQuantity ==
+                        index)
+                  Text(
+                    "Última quantidade: ${transferBetweenStocksProvider.lastUpdatedQuantity}",
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'BebasNeue',
+                      fontStyle: FontStyle.italic,
+                      letterSpacing: 1,
+                      wordSpacing: 5,
+                    ),
+                  ),
+                if (_selectedIndex == index)
+                  InsertQuantity(
+                    consultedProductController:
+                        widget.consultedProductController,
+                    dropDownFormKey: widget.dropDownFormKey,
+                    insertQuantityFormKey: widget.insertQuantityFormKey,
+                    internalEnterpriseCode: widget.enterpriseCode,
+                    index: index,
+                    getProductsWithCamera: widget.getProductsWithCamera,
+                  ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
