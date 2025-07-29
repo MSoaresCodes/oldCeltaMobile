@@ -6,8 +6,7 @@ import 'package:provider/provider.dart';
 import '../../Models/models.dart';
 import '../../components/components.dart';
 import '../../providers/providers.dart';
-import '../../utils/utils.dart';
-import 'components/components.dart';
+import 'transfer_between_stocks.dart';
 
 class TransferBetweenStockPage extends StatefulWidget {
   const TransferBetweenStockPage({super.key});
@@ -21,12 +20,7 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
   final _scrollController = ScrollController();
   final _consultProductController = TextEditingController();
   final _consultedProductController = TextEditingController();
-
-  final _insertQuantityFormKey = GlobalKey<FormState>();
-  final _dropDownFormKey = GlobalKey<FormState>();
-  final _keyJustifications = GlobalKey<FormState>();
-  final _keyOriginStockType = GlobalKey<FormState>();
-  final _keyDestinyStockType = GlobalKey<FormState>();
+  int pageIndex = 0;
 
   bool _isHeaderExpanded = true;
 
@@ -66,10 +60,19 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
   Widget build(BuildContext context) {
     TransferBetweenStocksProvider transferBetweenStocksProvider =
         Provider.of(context, listen: true);
-    ConfigurationsProvider configurationsProvider =
-        Provider.of(context, listen: true);
     final enterprise =
         ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
+
+    final pages = [
+      TransferBetweenStocksProductsPage(
+        enterprise: enterprise,
+        isHeaderExpanded: _isHeaderExpanded,
+        consultProductController: _consultProductController,
+        consultedProductController: _consultedProductController,
+        scrollController: _scrollController,
+      ),
+      const Center(child: Text("Lote")),
+    ];
 
     return PopScope(
       canPop: !transferBetweenStocksProvider.isLoadingAdjustStock &&
@@ -81,104 +84,62 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
               .clearProductsJustificationsStockTypesAndJsonAdjustStock();
         }
       },
-      child: Scaffold(
-        resizeToAvoidBottomInset: kIsWeb ? false : true,
-        appBar: AppBar(
-          title: const FittedBox(
-            child: Text(
-              'TRANSFERÊNCIA ENTRE ESTOQUES',
+      child: Stack(
+        children: [
+          Scaffold(
+            resizeToAvoidBottomInset: kIsWeb ? false : true,
+            appBar: AppBar(
+              title: const FittedBox(
+                child: Text(
+                  'TRANSFERÊNCIA ENTRE ESTOQUES',
+                ),
+              ),
             ),
-          ),
-        ),
-        body: Column(
-          children: [
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-              height: _isHeaderExpanded ? 240.0 : 0.0,
-              // color: Colors.lightBlue[100],
-              alignment: Alignment.center,
-              child: SingleChildScrollView(
-                physics: const NeverScrollableScrollPhysics(),
-                child: Column(
-                  children: [
-                    SearchWidget(
-                      configurations: [
-                        ConfigurationType.autoScan,
-                        ConfigurationType.legacyCode,
-                        ConfigurationType.personalizedCode,
-                      ],
-                      searchFocusNode:
-                          transferBetweenStocksProvider.consultProductFocusNode,
-                      onPressSearch: () async {
-                        await transferBetweenStocksProvider.getProducts(
-                          enterprise: enterprise,
-                          controllerText: _consultProductController.text,
-                          context: context,
-                          configurationsProvider: configurationsProvider,
-                        );
-
-                        if (transferBetweenStocksProvider.productsCount > 0) {
-                          _consultProductController.clear();
-                        }
-                      },
-                      searchProductController: _consultProductController,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: JustificationsAndStocksDropwdownWidget(
-                            dropDownFormKey: _dropDownFormKey,
-                            keyJustifications: _keyJustifications,
-                            keyOriginStockType: _keyOriginStockType,
-                            keyDestinyStockType: _keyDestinyStockType,
+            bottomNavigationBar: BottomNavigationBar(
+              currentIndex: pageIndex,
+              onTap: (index) {
+                setState(() {
+                  pageIndex = index;
+                });
+              },
+              selectedIconTheme: const IconThemeData(size: 35),
+              items: [
+                const BottomNavigationBarItem(
+                  label: 'Produtos',
+                  icon: Icon(Icons.list),
+                ),
+                BottomNavigationBarItem(
+                  label: 'Lote',
+                  icon: Stack(
+                    children: [
+                      const Icon(Icons.shopping_cart_rounded),
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.red,
+                          minRadius: pageIndex == 1 ? 8 : 6,
+                          maxRadius: pageIndex == 1 ? 8 : 6,
+                          child: const FittedBox(
+                            child: Text(
+                              "99", //TODO fix this
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                         ),
-                        RefreshIconButton(
-                          keyJustifications: _keyJustifications,
-                          keyOriginStockType: _keyOriginStockType,
-                          keyDestinyStockType: _keyDestinyStockType,
-                        ),
-                      ],
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+              ],
             ),
-            if (!transferBetweenStocksProvider.isLoadingProducts)
-              Expanded(
-                child: ProductsItems(
-                  scrollController: _scrollController,
-                  enterpriseCode: enterprise.Code,
-                  consultedProductController: _consultedProductController,
-                  dropDownFormKey: _dropDownFormKey,
-                  insertQuantityFormKey: _insertQuantityFormKey,
-                  getProductsWithCamera: () async {
-                    FocusScope.of(context).unfocus();
-                    _consultProductController.clear();
-
-                    _consultProductController.text =
-                        await ScanBarCode.scanBarcode(context);
-
-                    if (_consultProductController.text == "") {
-                      return;
-                    }
-
-                    await transferBetweenStocksProvider.getProducts(
-                      enterprise: enterprise,
-                      controllerText: _consultProductController.text,
-                      context: context,
-                      configurationsProvider: configurationsProvider,
-                    );
-
-                    if (transferBetweenStocksProvider.productsCount > 0) {
-                      _consultProductController.clear();
-                    }
-                  },
-                ),
-              ),
-          ],
-        ),
+            body: pages[pageIndex],
+          ),
+          loadingWidget(transferBetweenStocksProvider.isLoadingAdjustStock ||
+              transferBetweenStocksProvider.isLoadingProducts ||
+              transferBetweenStocksProvider
+                  .isLoadingTypeStockAndJustifications),
+        ],
       ),
     );
   }
