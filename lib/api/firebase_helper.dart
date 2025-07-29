@@ -10,9 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:platform_plus/platform_plus.dart';
 
+import '../components/components.dart';
 import '../firebase_options.dart';
 import '../Models/models.dart';
-import '../providers/providers.dart';
 import '../utils/utils.dart';
 import './api.dart';
 
@@ -172,24 +172,37 @@ class FirebaseHelper {
   }
 
   static Future<void> handleBackgroundMessage(RemoteMessage message) async {
-    //print('Got a message whilst in the background!');
-    //print("title: ${message.notification?.title}");
-    //print("body: ${message.notification?.body}");
-    //print("data: ${message.data}");
+    print('Got a message whilst in the background!');
+    print("title: ${message.notification?.title}");
+    print("body: ${message.notification?.body}");
+    print("data: ${message.data}");
   }
 
   static Future<void> initFirebase() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+    await _initNotifications();
   }
 
-  static Future<void> initNotifications(
-      NotificationsProvider notificationsProvider) async {
+  static Future<void> _initNotifications() async {
     if (kIsWeb || PlatformPlus.platform.isWindowsNative) {
       return;
     }
-    await _firebaseMessaging.requestPermission();
+    final settings = await _firebaseMessaging.requestPermission(
+      alert: true,
+      announcement: true,
+      badge: true,
+      carPlay: true,
+      criticalAlert: true,
+      provisional: true,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.denied) {
+      print('User denied permissions.');
+      return; // Don't continue if permissions are denied.
+    }
     String? fcmToken;
 
     if (Platform.isAndroid) {
@@ -208,10 +221,10 @@ class FirebaseHelper {
     }
 
     //quando clica na notificação pra abrir o aplicativo
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      Navigator.of(NavigatorKey.key.currentState!.context)
-          .pushNamed(APPROUTES.NOTIFICATIONS);
-    });
+    // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    //   Navigator.of(NavigatorKey.key.currentState!.context)
+    //       .pushNamed(APPROUTES.NOTIFICATIONS);
+    // });
 
     //mensagens em segundo plano
     FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
@@ -219,8 +232,20 @@ class FirebaseHelper {
     //abaixo recebe a notificação em primeiro plano
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       try {
-        notificationsProvider.setHasUnreadNotifications(
-            newValue: true, notify: false);
+        ShowAlertDialog.show(
+          context: NavigatorKey.key.currentState!.context,
+          title: message.notification?.title ?? "",
+          content: Text(
+            message.notification?.body ?? "",
+            textAlign: TextAlign.center,
+          ),
+          function: () async {},
+          showConfirmAndCancelMessage: false,
+          showCloseAlertDialogButton: true,
+          closeMessage: "OK",
+        );
+        debugPrint(message.notification!.title);
+        debugPrint(message.notification!.body);
       } catch (e) {
         print(e);
       }
