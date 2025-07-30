@@ -154,22 +154,6 @@ class _ProductsItemsState extends State<ProductsItems> {
                     color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
-                if (transferBetweenStocksProvider.lastUpdatedQuantity != "" &&
-                    transferBetweenStocksProvider
-                            .indexOfLastProductChangedStockQuantity ==
-                        index)
-                  Text(
-                    "Última quantidade: ${transferBetweenStocksProvider.lastUpdatedQuantity}",
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'BebasNeue',
-                      fontStyle: FontStyle.italic,
-                      letterSpacing: 1,
-                      wordSpacing: 5,
-                    ),
-                  ),
                 if (_selectedIndex == index)
                   InsertQuantity(
                     consultedProductController:
