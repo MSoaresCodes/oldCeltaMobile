@@ -76,7 +76,7 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
           });
         },
       ),
-      const Center(child: Text("Lote")),
+      const TransferBetweenStocksLotsPage(),
     ];
 
     return PopScope(
