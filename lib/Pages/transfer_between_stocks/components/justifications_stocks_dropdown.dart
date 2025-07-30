@@ -79,10 +79,11 @@ class _JustificationsAndStocksDropwdownWidgetState
                           transferBetweenStocksProvider
                               .changeSelectedOrigin(value);
                         },
-              validator: (value) {
-                if (value != null) {
+              validator: (_) {
+                if (transferBetweenStocksProvider.selectedOrigin != null) {
                   return null;
-                } else if (value == null) {
+                } else if (transferBetweenStocksProvider.selectedOrigin ==
+                    null) {
                   return 'Selecione um tipo de estoque!';
                 }
                 return null;
@@ -111,13 +112,12 @@ class _JustificationsAndStocksDropwdownWidgetState
                 transferBetweenStocksProvider.changeSelectedDestiny(value);
               },
               validator: (value) {
-                if (transferBetweenStocksProvider
+                if (transferBetweenStocksProvider.selectedDestiny == null) {
+                  return 'Selecione um tipo de estoque!';
+                } else if (transferBetweenStocksProvider
                         .selectedOrigin?.CodigoInterno_TipoEstoque ==
                     value?.CodigoInterno_TipoEstoque) {
                   return "Estoque igual ao de origem";
-                } else if (transferBetweenStocksProvider.selectedDestiny ==
-                    null) {
-                  return 'Selecione um tipo de estoque!';
                 } else if (transferBetweenStocksProvider
                         .selectedOrigin?.CodigoInterno_TipoEstoque ==
                     transferBetweenStocksProvider

@@ -325,6 +325,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
         quantity: oldProduct.quantity + product.quantity,
       );
     }
+    notifyListeners();
     //TODO save locally
   }
 
@@ -356,6 +357,10 @@ class TransferBetweenStocksProvider with ChangeNotifier {
   }
 
   GetStockTypesModel? getFixedOrigin() {
+    if (_selectedJustification == null || _originStockTypes.isEmpty) {
+      return null;
+    }
+
     if (_selectedJustification
             ?.CodigoInterno_TipoEstoque.Nome_TipoEstoque.isEmpty ==
         true) {

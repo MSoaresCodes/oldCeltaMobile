@@ -4,16 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../providers/providers.dart';
 
 class RefreshIconButton extends StatelessWidget {
-  final GlobalKey<FormState> keyJustifications;
-  final GlobalKey<FormState> keyOriginStockType;
-  final GlobalKey<FormState> keyDestinyStockType;
-
-  const RefreshIconButton({
-    super.key,
-    required this.keyJustifications,
-    required this.keyOriginStockType,
-    required this.keyDestinyStockType,
-  });
+  const RefreshIconButton({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -40,16 +31,6 @@ class RefreshIconButton extends StatelessWidget {
               : () async {
                   await transferBetweenStocksProvider
                       .getStockTypeAndJustifications(context);
-
-                  Future.delayed(const Duration(milliseconds: 500), () {
-                    if (keyJustifications.currentState != null &&
-                        keyOriginStockType.currentState != null &&
-                        keyDestinyStockType.currentState != null) {
-                      keyJustifications.currentState!.reset();
-                      keyOriginStockType.currentState!.reset();
-                      keyDestinyStockType.currentState!.reset();
-                    }
-                  });
                 },
     );
   }

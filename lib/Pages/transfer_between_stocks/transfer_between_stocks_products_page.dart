@@ -26,9 +26,6 @@ class TransferBetweenStocksProductsPage extends StatelessWidget {
 
   static final _insertQuantityFormKey = GlobalKey<FormState>();
   static final _dropDownFormKey = GlobalKey<FormState>();
-  static final _keyJustifications = GlobalKey<FormState>();
-  static final _keyOriginStockType = GlobalKey<FormState>();
-  static final _keyDestinyStockType = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -77,11 +74,7 @@ class TransferBetweenStocksProductsPage extends StatelessWidget {
                         dropDownFormKey: _dropDownFormKey,
                       ),
                     ),
-                    RefreshIconButton(
-                      keyJustifications: _keyJustifications,
-                      keyOriginStockType: _keyOriginStockType,
-                      keyDestinyStockType: _keyDestinyStockType,
-                    ),
+                    const RefreshIconButton(),
                   ],
                 ),
               ],
