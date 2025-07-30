@@ -120,10 +120,11 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                           backgroundColor: Colors.red,
                           minRadius: pageIndex == 1 ? 8 : 6,
                           maxRadius: pageIndex == 1 ? 8 : 6,
-                          child: const FittedBox(
+                          child: FittedBox(
                             child: Text(
-                              "99", //TODO fix this
-                              style: TextStyle(color: Colors.white),
+                              transferBetweenStocksProvider.productsLots.length
+                                  .toString(),
+                              style: const TextStyle(color: Colors.white),
                             ),
                           ),
                         ),
