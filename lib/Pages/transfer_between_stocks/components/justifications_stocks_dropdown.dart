@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/providers.dart';
-import 'drop_downs/justifications_dropdown.dart';
+import 'default_drop_down.dart';
 
 class JustificationsAndStocksDropwdownWidget extends StatefulWidget {
   final GlobalKey<FormState> keyJustifications;
@@ -25,127 +25,119 @@ class JustificationsAndStocksDropwdownWidget extends StatefulWidget {
 
 class _JustificationsAndStocksDropwdownWidgetState
     extends State<JustificationsAndStocksDropwdownWidget> {
-  final _keyOriginStockType = GlobalKey<FormState>();
-  final _keyDestinyStockType = GlobalKey<FormState>();
-
-  //se a justificativa possuir um código de estoque atrelado, significa que
-  //somente esse estoque pode ser alterado quando selecionar essa justificativa.
-  //Por isso, quando selecionar a justificativa, está validando se ela possui um
-  //estoque atrelado e caso tenha, desativa o dropdown de tipo de estoque,
-  //altera o nome do dropdown do tipo de estoque e atualiza o código do estoque
-  //que precisa ser enviado na requisição do json
-
-  bool _changedOriginStockType = false;
-  bool _changedDestinyStockType = false;
+  String? selectedJustification; //TODO move to provider
+  String? selectedOriginStock; //TODO move to provider
+  String? selectedDestinyStock; //TODO move to provider
 
   @override
   Widget build(BuildContext context) {
     TransferBetweenStocksProvider transferBetweenStocksProvider =
         Provider.of(context);
-    final theme = Theme.of(context);
-    final hintStyle = TextStyle(
-      color: theme.colorScheme.primary,
-    );
-    final errorStyle = TextStyle(
-      color: theme.colorScheme.error,
-    );
 
-    if (transferBetweenStocksProvider.isLoadingTypeStockAndJustifications) {
-      if (_changedOriginStockType) {
-        _keyOriginStockType.currentState?.reset();
-        _changedOriginStockType = false;
-      }
-      if (_changedDestinyStockType) {
-        _keyDestinyStockType.currentState?.reset();
-        _changedDestinyStockType = false;
-      }
-    }
+    int indexSelectedJustification = transferBetweenStocksProvider
+        .justifications
+        .indexWhere((e) => e.Descricao_JustMov == selectedJustification);
+
+    String fixedOrigin = indexSelectedJustification == -1
+        ? ""
+        : transferBetweenStocksProvider
+            .justifications[indexSelectedJustification].Nome_TipoEstoque;
+
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.only(left: 8),
       child: Form(
         key: widget.dropDownFormKey,
         child: Column(
           children: [
-            JustificationsDropdown(
+            DefaultDropDown(
               dropDownFormKey: widget.dropDownFormKey,
-              errorStyle: errorStyle,
-              hintStyle: hintStyle,
+              hintText: "Justificativas",
+              selectedValue: selectedJustification,
+              validator: (_) {
+                if (selectedJustification == null) {
+                  return 'Selecione uma justificativa!';
+                }
+                return null;
+              },
+              changeSelectedValue: (value) {
+                setState(() {
+                  selectedJustification = value;
+                  indexSelectedJustification =
+                      transferBetweenStocksProvider.justifications.indexWhere(
+                          (e) => e.Descricao_JustMov == selectedJustification);
+
+                  fixedOrigin = indexSelectedJustification == -1
+                      ? ""
+                      : transferBetweenStocksProvider
+                          .justifications[indexSelectedJustification]
+                          .Nome_TipoEstoque;
+
+                  if (fixedOrigin.isNotEmpty) {
+                    selectedOriginStock = fixedOrigin;
+                  } else {
+                    selectedOriginStock = null;
+                  }
+                });
+                debugPrint("selectedOriginStock $selectedOriginStock");
+              },
+              items: transferBetweenStocksProvider.justifications
+                  .map(
+                    (value) => DropdownMenuItem(
+                      alignment: Alignment.center,
+                      value: value.Descricao_JustMov,
+                      child: FittedBox(
+                        child: Center(child: Text(value.Descricao_JustMov)),
+                      ),
+                    ),
+                  )
+                  .toList(),
             ),
-            const SizedBox(height: 10),
-            DropdownButtonFormField<dynamic>(
-              // isDense: false,
-              key: _keyOriginStockType,
-              disabledHint: Center(
-                child: Text(
-                  transferBetweenStocksProvider.justificationHasStockType
-                      ? transferBetweenStocksProvider
-                          .fixedJustificationStockName
-                      : "Estoque de origem",
-                ),
-              ),
-              isExpanded: true,
-              hint: Center(
-                child: Text(
-                  'Estoque de origem',
-                  style: hintStyle,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              validator: (value) {
-                if (transferBetweenStocksProvider.justificationHasStockType) {
+            DefaultDropDown(
+              dropDownFormKey: widget.dropDownFormKey,
+              selectedValue: selectedOriginStock,
+              hintText: selectedOriginStock ?? "Estoque de origem",
+              changeSelectedValue: fixedOrigin.isNotEmpty == true
+                  ? null
+                  : (value) {
+                      setState(() {
+                        selectedOriginStock = value;
+                      });
+                    },
+              validator: (_) {
+                if (selectedOriginStock?.isNotEmpty == true) {
                   return null;
-                } else if (value == null) {
+                } else if (selectedOriginStock == null) {
                   return 'Selecione um tipo de estoque!';
                 }
                 return null;
               },
-              onChanged:
-                  transferBetweenStocksProvider.justificationHasStockType ||
-                          transferBetweenStocksProvider.products.isEmpty
-                      ? null
-                      : (value) {
-                          _changedOriginStockType = true;
-                        },
               items: transferBetweenStocksProvider.originStockTypes
                   .map(
                     (value) => DropdownMenuItem(
                       alignment: Alignment.center,
-                      onTap: () {
-                        transferBetweenStocksProvider.updateBody(
-                          originStock: value,
-                        );
-                      },
                       value: value.Nome_TipoEstoque,
                       child: FittedBox(
                         child: Text(
-                          transferBetweenStocksProvider
-                                  .justificationHasStockType
-                              ? transferBetweenStocksProvider
-                                  .fixedJustificationStockName
-                              : value.Nome_TipoEstoque,
-                          style: const TextStyle(
-                            fontSize: 15,
-                          ),
+                          value.Nome_TipoEstoque,
+                          style: const TextStyle(fontSize: 15),
                         ),
                       ),
                     ),
                   )
                   .toList(),
             ),
-            DropdownButtonFormField<dynamic>(
-              // isDense: false,
-              key: _keyDestinyStockType,
-              disabledHint: const Center(child: Text("Estoque de destino")),
-              isExpanded: true,
-              hint: Center(
-                child: Text(
-                  'Estoque de destino',
-                  style: hintStyle,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              validator: (value) {
-                if (value == null) {
+            //TODO BELOW, man kkkkk
+            DefaultDropDown(
+              dropDownFormKey: widget.dropDownFormKey,
+              selectedValue: selectedDestinyStock,
+              hintText: selectedDestinyStock ?? "Estoque de destino",
+              changeSelectedValue: (value) {
+                setState(() {
+                  selectedDestinyStock = value;
+                });
+              },
+              validator: (_) {
+                if (selectedDestinyStock == null) {
                   return 'Selecione um tipo de estoque!';
                 } else if (transferBetweenStocksProvider
                         .transferBodyModel?.StockTypeCode ==
@@ -155,11 +147,6 @@ class _JustificationsAndStocksDropwdownWidgetState
                 }
                 return null;
               },
-              onChanged: transferBetweenStocksProvider.products.isEmpty
-                  ? null
-                  : (value) {
-                      _changedDestinyStockType = true;
-                    },
               items: transferBetweenStocksProvider.destinyStockTypes
                   .map(
                     (value) => DropdownMenuItem(

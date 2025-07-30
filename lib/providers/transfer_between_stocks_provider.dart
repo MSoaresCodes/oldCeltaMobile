@@ -19,8 +19,9 @@ class TransferBetweenStocksProvider with ChangeNotifier {
   List<GetJustificationsModel> _justifications = [];
   List<GetJustificationsModel> get justifications => _justifications;
 
-  TransferBetweenStockBodyModel? _transferBodyModel;
-  TransferBetweenStockBodyModel? get transferBodyModel => _transferBodyModel;
+  TransferBetweenStockBodyModel? _transferBodyModel; //TODO delete this
+  TransferBetweenStockBodyModel? get transferBodyModel =>
+      _transferBodyModel; //TODO delete this
 
   List<TransferBetweenStockLotProductsModel> _productsLots = [];
   List<TransferBetweenStockLotProductsModel> get productsLots => _productsLots;
@@ -40,13 +41,6 @@ class TransferBetweenStocksProvider with ChangeNotifier {
       _errorMessageTypeStockAndJustifications;
   String _errorMessageAdjustStock = '';
 
-  String _fixedJustificationStockName = "";
-  String get fixedJustificationStockName => _fixedJustificationStockName;
-  void updateJustificationStockTypeName(String newValue) {
-    _fixedJustificationStockName = newValue;
-    notifyListeners();
-  }
-
   String _lastUpdatedQuantity = "";
   int _indexOfLastProductChangedStockQuantity = -1;
   String get lastUpdatedQuantity => _lastUpdatedQuantity;
@@ -64,12 +58,12 @@ class TransferBetweenStocksProvider with ChangeNotifier {
   var consultProductFocusNode = FocusNode();
   var consultedProductFocusNode = FocusNode();
 
-  bool _justificationHasStockType = false;
-  bool get justificationHasStockType => _justificationHasStockType;
-  set justificationHasStockType(bool value) {
-    _justificationHasStockType = value;
-    notifyListeners();
-  }
+  // bool _justificationHasStockType = false;
+  // bool get justificationHasStockType => _justificationHasStockType;
+  // set justificationHasStockType(bool value) {
+  //   _justificationHasStockType = value;
+  //   notifyListeners();
+  // }
 
   void clearProductsJustificationsStockTypesAndJsonAdjustStock() {
     _justifications.clear();
@@ -79,7 +73,6 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     _transferBodyModel = null;
     _lastUpdatedQuantity = "";
     _indexOfLastProductChangedStockQuantity = -1;
-    _justificationHasStockType = false;
     notifyListeners();
   }
 
@@ -196,7 +189,6 @@ class TransferBetweenStocksProvider with ChangeNotifier {
   Future<void> getStockTypeAndJustifications(BuildContext context) async {
     _isLoadingTypeStockAndJustifications = true;
     _errorMessageTypeStockAndJustifications = "";
-    _justificationHasStockType = false;
     notifyListeners();
 
     await _getStockType(context);
@@ -280,12 +272,6 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     final hasFixedDestinyStock =
         justification?.CodigoInterno_TipoEstoque.CodigoInterno_TipoEstoque !=
             -1;
-
-    if (hasFixedDestinyStock) {
-      _fixedJustificationStockName =
-          justification?.CodigoInterno_TipoEstoque.Nome_TipoEstoque ??
-              _fixedJustificationStockName;
-    }
 
     _transferBodyModel = TransferBetweenStockBodyModel(
       IsPendingAdjust: isPendingAdjust ?? oldBody?.IsPendingAdjust,
