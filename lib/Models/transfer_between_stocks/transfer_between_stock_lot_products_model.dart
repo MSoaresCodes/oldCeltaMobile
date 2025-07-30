@@ -3,7 +3,7 @@ import 'dart:convert';
 class TransferBetweenStockLotProductsModel {
   final int productPackingCode;
   final int productCode;
-  final int quantity;
+  final double quantity;
 
   TransferBetweenStockLotProductsModel({
     required this.productPackingCode,
@@ -24,7 +24,7 @@ class TransferBetweenStockLotProductsModel {
     return TransferBetweenStockLotProductsModel(
       productPackingCode: map['productPackingCode'] as int,
       productCode: map['productCode'] as int,
-      quantity: map['quantity'] as int,
+      quantity: map['quantity'] as double,
     );
   }
 
@@ -37,7 +37,7 @@ class TransferBetweenStockLotProductsModel {
   TransferBetweenStockLotProductsModel copyWith({
     int? productPackingCode,
     int? productCode,
-    int? quantity,
+    double? quantity,
   }) {
     return TransferBetweenStockLotProductsModel(
       productPackingCode: productPackingCode ?? this.productPackingCode,

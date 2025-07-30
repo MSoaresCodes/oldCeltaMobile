@@ -22,6 +22,9 @@ class TransferBetweenStocksProvider with ChangeNotifier {
   TransferBetweenStockBodyModel? _transferBodyModel;
   TransferBetweenStockBodyModel? get transferBodyModel => _transferBodyModel;
 
+  List<TransferBetweenStockLotProductsModel> _productsLots = [];
+  List<TransferBetweenStockLotProductsModel> get productsLots => _productsLots;
+
   int get productsCount => _products.length;
   int get justificationsCount => _justifications.length;
   int get originStockTypesCount => _originStockTypes.length;
@@ -302,5 +305,45 @@ class TransferBetweenStocksProvider with ChangeNotifier {
           oldBody?.StockTypeRecipientCode,
       Quantity: quantity ?? oldBody?.Quantity,
     );
+  }
+
+  Future<void> addProductInLot(
+    TransferBetweenStockLotProductsModel product,
+  ) async {
+    int equalProductIndex = _productsLots.indexWhere((e) =>
+        e.productCode == product.productCode &&
+        e.productPackingCode == product.productPackingCode);
+
+    if (equalProductIndex == -1) {
+      _productsLots.add(
+        TransferBetweenStockLotProductsModel(
+          productCode: product.productCode,
+          productPackingCode: product.productPackingCode,
+          quantity: product.quantity,
+        ),
+      );
+    } else {
+      final oldProduct = _productsLots[equalProductIndex];
+
+      _productsLots[equalProductIndex] = oldProduct.copyWith(
+        quantity: oldProduct.quantity + product.quantity,
+      );
+    }
+    //TODO save locally
+  }
+
+  Future<void> removeProductFromLot(
+    TransferBetweenStockLotProductsModel product,
+  ) async {
+    int equalProductIndex = _productsLots.indexWhere((e) =>
+        e.productCode == product.productCode &&
+        e.productPackingCode == product.productPackingCode);
+
+    if (equalProductIndex != -1) {
+      _productsLots.removeAt(equalProductIndex);
+    } else {
+      //product not found. Never should happpen this
+    }
+    //TODO save locally
   }
 }
