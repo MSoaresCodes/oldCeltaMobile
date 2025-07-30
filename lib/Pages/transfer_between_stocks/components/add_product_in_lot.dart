@@ -2,33 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import '../../../Models/models.dart';
 import '../../../components/components.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/utils.dart';
 
-class InsertQuantity extends StatefulWidget {
-  final TextEditingController consultedProductController;
+class AddProductInLot extends StatefulWidget {
+  final TextEditingController quantityController;
   final GlobalKey<FormState> dropDownFormKey;
   final GlobalKey<FormState> insertQuantityFormKey;
   final int internalEnterpriseCode;
-  final int index;
   final Function getProductsWithCamera;
+  final GetProductJsonModel product;
 
-  const InsertQuantity({
+  const AddProductInLot({
     required this.internalEnterpriseCode,
     required this.getProductsWithCamera,
     required this.dropDownFormKey,
     required this.insertQuantityFormKey,
-    required this.consultedProductController,
-    required this.index,
+    required this.quantityController,
+    required this.product,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<InsertQuantity> createState() => _InsertQuantityState();
+  State<AddProductInLot> createState() => _AddProductInLotState();
 }
 
-class _InsertQuantityState extends State<InsertQuantity> {
+class _AddProductInLotState extends State<AddProductInLot> {
   bool _isValid() {
     widget.dropDownFormKey.currentState!.validate();
     widget.insertQuantityFormKey.currentState!.validate();
@@ -37,45 +38,32 @@ class _InsertQuantityState extends State<InsertQuantity> {
         widget.insertQuantityFormKey.currentState!.validate();
   }
 
-  Future<void> _confirmAdjustStock({
+  Future<void> _addProductInLot({
     required TransferBetweenStocksProvider transferBetweenStocksProvider,
-    required ConfigurationsProvider configurationsProvider,
-    required bool isPendingAdjust,
+    required ConfigurationsProvider
+        configurationsProvider, //TODO must use the autoscan
   }) async {
     if (!_isValid()) {
       return;
     }
 
-    ShowAlertDialog.show(
-      context: context,
-      title: "${isPendingAdjust ? "Solicitar" : "Confirmar"} a transferência?",
-      function: () async {
-        if (widget.consultedProductController.text.contains("\,")) {
-          widget.consultedProductController.text = widget
-              .consultedProductController.text
-              .replaceAll(RegExp(r'\,'), '.');
-        }
-
-        await transferBetweenStocksProvider.confirmAdjustStock(
-          context: context,
-          indexOfProduct: widget.index,
-          consultedProductControllerText:
-              widget.consultedProductController.text,
-          enterpriseCode: widget.internalEnterpriseCode,
-          quantity: widget.consultedProductController.text.toDouble(),
-          isPendingAdjust: isPendingAdjust,
-        );
-
-        if (transferBetweenStocksProvider.errorMessageAdjustStock == "") {
-          widget.consultedProductController.clear();
-        }
-
-        if (configurationsProvider.autoScan?.value == true &&
-            transferBetweenStocksProvider.errorMessageAdjustStock == "") {
-          await widget.getProductsWithCamera();
-        }
-      },
+    await transferBetweenStocksProvider.addProductInLot(
+      TransferBetweenStockLotProductsModel(
+        productPackingCode: widget.product.productPackingCode!,
+        productCode: widget.product.productCode!,
+        quantity: widget.quantityController.text.toDouble(),
+      ),
     );
+
+    if (transferBetweenStocksProvider.errorMessageAdjustStock.isNotEmpty) {
+      return;
+    }
+
+    widget.quantityController.clear();
+
+    if (configurationsProvider.autoScan?.value == true) {
+      await widget.getProductsWithCamera();
+    }
   }
 
   @override
@@ -96,14 +84,13 @@ class _InsertQuantityState extends State<InsertQuantity> {
                 child: TextFormField(
                   focusNode:
                       transferBetweenStocksProvider.consultedProductFocusNode,
-                  controller: widget.consultedProductController,
+                  controller: widget.quantityController,
                   inputFormatters: [LengthLimitingTextInputFormatter(10)],
                   onFieldSubmitted: (_) async {
-                    await _confirmAdjustStock(
+                    await _addProductInLot(
                       transferBetweenStocksProvider:
                           transferBetweenStocksProvider,
                       configurationsProvider: configurationsProvider,
-                      isPendingAdjust: false,
                     );
                   },
                   onChanged: (value) {
@@ -111,12 +98,12 @@ class _InsertQuantityState extends State<InsertQuantity> {
                       value = '0';
                     }
                     if (value.startsWith(",") || value.startsWith(".")) {
-                      widget.consultedProductController.text =
-                          "0" + widget.consultedProductController.text;
-                      widget.consultedProductController.selection =
+                      widget.quantityController.text =
+                          "0" + widget.quantityController.text;
+                      widget.quantityController.selection =
                           TextSelection.fromPosition(
                         TextPosition(
-                          offset: widget.consultedProductController.text.length,
+                          offset: widget.quantityController.text.length,
                         ),
                       );
                     }
@@ -142,11 +129,10 @@ class _InsertQuantityState extends State<InsertQuantity> {
                         maximumSize: const Size(double.infinity, 35),
                       ),
                       onPressed: () async {
-                        await _confirmAdjustStock(
+                        await _addProductInLot(
                           transferBetweenStocksProvider:
                               transferBetweenStocksProvider,
                           configurationsProvider: configurationsProvider,
-                          isPendingAdjust: false,
                         );
                       },
                       child: const FittedBox(
@@ -165,11 +151,10 @@ class _InsertQuantityState extends State<InsertQuantity> {
                 Flexible(
                   child: TextButton(
                     onPressed: () async {
-                      await _confirmAdjustStock(
+                      await _addProductInLot(
                         transferBetweenStocksProvider:
                             transferBetweenStocksProvider,
                         configurationsProvider: configurationsProvider,
-                        isPendingAdjust: true,
                       );
                     },
                     child: const Text("Solicitar"),

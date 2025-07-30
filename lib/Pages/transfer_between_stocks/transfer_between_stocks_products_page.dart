@@ -62,7 +62,7 @@ class TransferBetweenStocksProductsPage extends StatelessWidget {
                       configurationsProvider: configurationsProvider,
                     );
 
-                    if (transferBetweenStocksProvider.productsCount > 0) {
+                    if (transferBetweenStocksProvider.products.length > 0) {
                       consultProductController.clear();
                     }
                   },
@@ -115,7 +115,7 @@ class TransferBetweenStocksProductsPage extends StatelessWidget {
                   configurationsProvider: configurationsProvider,
                 );
 
-                if (transferBetweenStocksProvider.productsCount > 0) {
+                if (transferBetweenStocksProvider.products.length > 0) {
                   consultProductController.clear();
                 }
               },

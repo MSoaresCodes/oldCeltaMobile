@@ -25,7 +25,6 @@ class TransferBetweenStocksProvider with ChangeNotifier {
   List<TransferBetweenStockLotProductsModel> _productsLots = [];
   List<TransferBetweenStockLotProductsModel> get productsLots => _productsLots;
 
-  int get productsCount => _products.length;
   int get justificationsCount => _justifications.length;
   int get originStockTypesCount => _originStockTypes.length;
   int get destinyStockTypesCount => _destinyStockTypes.length;

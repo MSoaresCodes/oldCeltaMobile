@@ -1,9 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/providers.dart';
-import '../../../Models/products/products.dart';
 import '../../../components/components.dart';
 import 'components.dart';
 
@@ -49,25 +47,9 @@ class _ProductsItemsState extends State<ProductsItems> {
   }) {
     widget.consultedProductController.text = "";
 
-    if (transferBetweenStocksProvider.productsCount == 1 ||
+    if (transferBetweenStocksProvider.products.length == 1 ||
         transferBetweenStocksProvider.isLoadingProducts ||
         transferBetweenStocksProvider.isLoadingAdjustStock) {
-      return;
-    }
-
-    if (kIsWeb) {
-      if (_selectedIndex != index) {
-        setState(() {
-          _selectedIndex = index;
-          changeFocusToConsultedProductFocusNode(
-            transferBetweenStocksProvider: transferBetweenStocksProvider,
-          );
-        });
-      } else {
-        setState(() {
-          _selectedIndex = -1;
-        });
-      }
       return;
     }
 
@@ -112,23 +94,21 @@ class _ProductsItemsState extends State<ProductsItems> {
     return ListView.builder(
       // shrinkWrap: true,
       controller: widget.scrollController,
-      itemCount: transferBetweenStocksProvider.productsCount,
+      itemCount: transferBetweenStocksProvider.products.length,
       itemBuilder: (context, index) {
-        if (transferBetweenStocksProvider.productsCount == 1) {
+        final product = transferBetweenStocksProvider.products[index];
+
+        if (transferBetweenStocksProvider.products.length == 1) {
           _selectedIndex = index;
         }
 
-        GetProductJsonModel product =
-            transferBetweenStocksProvider.products[index];
         return GestureDetector(
           onTap: transferBetweenStocksProvider
                       .isLoadingTypeStockAndJustifications ||
                   transferBetweenStocksProvider.isLoadingAdjustStock
               ? null
               : () {
-                  transferBetweenStocksProvider.updateBody(
-                    product: product,
-                  );
+                  transferBetweenStocksProvider.updateBody(product: product);
 
                   selectIndexAndFocus(
                     transferBetweenStocksProvider:
@@ -155,13 +135,12 @@ class _ProductsItemsState extends State<ProductsItems> {
                   ),
                 ),
                 if (_selectedIndex == index)
-                  InsertQuantity(
-                    consultedProductController:
-                        widget.consultedProductController,
+                  AddProductInLot(
+                    quantityController: widget.consultedProductController,
                     dropDownFormKey: widget.dropDownFormKey,
                     insertQuantityFormKey: widget.insertQuantityFormKey,
                     internalEnterpriseCode: widget.enterpriseCode,
-                    index: index,
+                    product: product,
                     getProductsWithCamera: widget.getProductsWithCamera,
                   ),
               ],
