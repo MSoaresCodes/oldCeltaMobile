@@ -75,6 +75,9 @@ class EnterpriseItems extends StatelessWidget {
   bool _hasMinimumVersion(EnterpriseProvider enterpriseProvider) {
     if (nextPageRoute == APPROUTES.REPORTS) {
       return enterpriseProvider.bsDate?.isAfter(DateTime(2025, 07, 30)) == true;
+    } else if (nextPageRoute == APPROUTES.TRANSFER_BETWEEN_STOCK) {
+      //TODO test this
+      return enterpriseProvider.bsDate?.isAfter(DateTime(2025, 07, 30)) == true;
     }
 
     return true;
