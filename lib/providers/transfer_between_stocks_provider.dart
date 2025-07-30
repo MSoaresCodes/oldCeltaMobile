@@ -267,6 +267,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
   }
 
   void updateBody({
+    //TODO delete this function
     GetStockTypesModel? originStock,
     GetStockTypesModel? destinyStock,
     GetJustificationsModel? justification,
