@@ -349,6 +349,11 @@ class TransferBetweenStocksProvider with ChangeNotifier {
 
   void changeSelectedJustification(GetJustificationsModel? value) {
     _selectedJustification = value;
+
+    final fixedOrigin = getFixedOrigin();
+    if (fixedOrigin != null) {
+      changeSelectedOrigin(fixedOrigin);
+    }
   }
 
   void changeSelectedOrigin(GetStockTypesModel? value) {

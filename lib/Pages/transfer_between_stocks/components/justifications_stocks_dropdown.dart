@@ -47,12 +47,6 @@ class _JustificationsAndStocksDropwdownWidgetState
                 setState(() {
                   transferBetweenStocksProvider
                       .changeSelectedJustification(value);
-
-                  final fixedOrigin =
-                      transferBetweenStocksProvider.getFixedOrigin();
-
-                  transferBetweenStocksProvider
-                      .changeSelectedOrigin(fixedOrigin);
                 });
               },
               items: transferBetweenStocksProvider.justifications
