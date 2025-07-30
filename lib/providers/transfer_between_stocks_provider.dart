@@ -199,6 +199,9 @@ class TransferBetweenStocksProvider with ChangeNotifier {
   Future<void> getStockTypeAndJustifications(BuildContext context) async {
     _isLoadingTypeStockAndJustifications = true;
     _errorMessageTypeStockAndJustifications = "";
+    _selectedJustification = null;
+    _selectedOrigin = null;
+    _selectedDestiny = null;
     notifyListeners();
 
     await _getStockType(context);
