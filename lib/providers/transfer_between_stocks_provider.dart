@@ -72,7 +72,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  void clearProductsJustificationsStockTypesAndJsonAdjustStock() {
+  void clearAllData() {
     _justifications.clear();
     _originStockTypes.clear();
     _destinyStockTypes.clear();
@@ -80,6 +80,9 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     _transferBodyModel = null;
     _lastUpdatedQuantity = "";
     _indexOfLastProductChangedStockQuantity = -1;
+    _selectedDestiny = null;
+    _selectedOrigin = null;
+    _selectedJustification = null;
     notifyListeners();
   }
 

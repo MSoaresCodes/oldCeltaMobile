@@ -59,7 +59,7 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
   @override
   Widget build(BuildContext context) {
     TransferBetweenStocksProvider transferBetweenStocksProvider =
-        Provider.of(context, listen: true);
+        Provider.of(context);
     final enterprise =
         ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
 
@@ -85,8 +85,7 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
           !transferBetweenStocksProvider.isLoadingTypeStockAndJustifications,
       onPopInvokedWithResult: (value, __) {
         if (value == true) {
-          transferBetweenStocksProvider
-              .clearProductsJustificationsStockTypesAndJsonAdjustStock();
+          transferBetweenStocksProvider.clearAllData();
         }
       },
       child: Stack(
