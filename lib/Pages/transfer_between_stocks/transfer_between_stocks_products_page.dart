@@ -75,9 +75,6 @@ class TransferBetweenStocksProductsPage extends StatelessWidget {
                     Expanded(
                       child: JustificationsAndStocksDropwdownWidget(
                         dropDownFormKey: _dropDownFormKey,
-                        keyJustifications: _keyJustifications,
-                        keyOriginStockType: _keyOriginStockType,
-                        keyDestinyStockType: _keyDestinyStockType,
                       ),
                     ),
                     RefreshIconButton(

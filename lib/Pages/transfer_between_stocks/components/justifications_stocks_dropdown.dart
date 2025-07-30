@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../Models/models.dart';
 import '../../../providers/providers.dart';
 import 'default_drop_down.dart';
 
 class JustificationsAndStocksDropwdownWidget extends StatefulWidget {
-  final GlobalKey<FormState> keyJustifications;
-  final GlobalKey<FormState> keyOriginStockType;
-  final GlobalKey<FormState> keyDestinyStockType;
   final GlobalKey<FormState> dropDownFormKey;
 
   const JustificationsAndStocksDropwdownWidget({
     required this.dropDownFormKey,
-    required this.keyJustifications,
-    required this.keyOriginStockType,
-    required this.keyDestinyStockType,
     Key? key,
   }) : super(key: key);
 
@@ -25,23 +20,10 @@ class JustificationsAndStocksDropwdownWidget extends StatefulWidget {
 
 class _JustificationsAndStocksDropwdownWidgetState
     extends State<JustificationsAndStocksDropwdownWidget> {
-  String? selectedJustification; //TODO move to provider
-  String? selectedOriginStock; //TODO move to provider
-  String? selectedDestinyStock; //TODO move to provider
-
   @override
   Widget build(BuildContext context) {
     TransferBetweenStocksProvider transferBetweenStocksProvider =
         Provider.of(context);
-
-    int indexSelectedJustification = transferBetweenStocksProvider
-        .justifications
-        .indexWhere((e) => e.Descricao_JustMov == selectedJustification);
-
-    String fixedOrigin = indexSelectedJustification == -1
-        ? ""
-        : transferBetweenStocksProvider
-            .justifications[indexSelectedJustification].Nome_TipoEstoque;
 
     return Padding(
       padding: const EdgeInsets.only(left: 8),
@@ -49,42 +31,35 @@ class _JustificationsAndStocksDropwdownWidgetState
         key: widget.dropDownFormKey,
         child: Column(
           children: [
-            DefaultDropDown(
+            DefaultDropDown<GetJustificationsModel?>(
               dropDownFormKey: widget.dropDownFormKey,
               hintText: "Justificativas",
-              selectedValue: selectedJustification,
+              selectedValue: transferBetweenStocksProvider
+                  .selectedJustification?.Descricao_JustMov,
               validator: (_) {
-                if (selectedJustification == null) {
+                if (transferBetweenStocksProvider.selectedJustification ==
+                    null) {
                   return 'Selecione uma justificativa!';
                 }
                 return null;
               },
-              changeSelectedValue: (value) {
+              changeSelectedValue: (GetJustificationsModel? value) {
                 setState(() {
-                  selectedJustification = value;
-                  indexSelectedJustification =
-                      transferBetweenStocksProvider.justifications.indexWhere(
-                          (e) => e.Descricao_JustMov == selectedJustification);
+                  transferBetweenStocksProvider
+                      .changeSelectedJustification(value);
 
-                  fixedOrigin = indexSelectedJustification == -1
-                      ? ""
-                      : transferBetweenStocksProvider
-                          .justifications[indexSelectedJustification]
-                          .Nome_TipoEstoque;
+                  final fixedOrigin =
+                      transferBetweenStocksProvider.getFixedOrigin();
 
-                  if (fixedOrigin.isNotEmpty) {
-                    selectedOriginStock = fixedOrigin;
-                  } else {
-                    selectedOriginStock = null;
-                  }
+                  transferBetweenStocksProvider
+                      .changeSelectedOrigin(fixedOrigin);
                 });
-                debugPrint("selectedOriginStock $selectedOriginStock");
               },
               items: transferBetweenStocksProvider.justifications
                   .map(
-                    (value) => DropdownMenuItem(
+                    (GetJustificationsModel value) => DropdownMenuItem(
                       alignment: Alignment.center,
-                      value: value.Descricao_JustMov,
+                      value: value,
                       child: FittedBox(
                         child: Center(child: Text(value.Descricao_JustMov)),
                       ),
@@ -92,21 +67,22 @@ class _JustificationsAndStocksDropwdownWidgetState
                   )
                   .toList(),
             ),
-            DefaultDropDown(
+            DefaultDropDown<GetStockTypesModel?>(
               dropDownFormKey: widget.dropDownFormKey,
-              selectedValue: selectedOriginStock,
-              hintText: selectedOriginStock ?? "Estoque de origem",
-              changeSelectedValue: fixedOrigin.isNotEmpty == true
-                  ? null
-                  : (value) {
-                      setState(() {
-                        selectedOriginStock = value;
-                      });
-                    },
-              validator: (_) {
-                if (selectedOriginStock?.isNotEmpty == true) {
+              selectedValue: transferBetweenStocksProvider
+                  .selectedOrigin?.Nome_TipoEstoque,
+              hintText: "Estoque de origem",
+              changeSelectedValue:
+                  transferBetweenStocksProvider.getFixedOrigin() != null
+                      ? null
+                      : (value) {
+                          transferBetweenStocksProvider
+                              .changeSelectedOrigin(value);
+                        },
+              validator: (value) {
+                if (value != null) {
                   return null;
-                } else if (selectedOriginStock == null) {
+                } else if (value == null) {
                   return 'Selecione um tipo de estoque!';
                 }
                 return null;
@@ -115,7 +91,7 @@ class _JustificationsAndStocksDropwdownWidgetState
                   .map(
                     (value) => DropdownMenuItem(
                       alignment: Alignment.center,
-                      value: value.Nome_TipoEstoque,
+                      value: value,
                       child: FittedBox(
                         child: Text(
                           value.Nome_TipoEstoque,
@@ -126,23 +102,26 @@ class _JustificationsAndStocksDropwdownWidgetState
                   )
                   .toList(),
             ),
-            //TODO BELOW, man kkkkk
-            DefaultDropDown(
+            DefaultDropDown<GetStockTypesModel?>(
               dropDownFormKey: widget.dropDownFormKey,
-              selectedValue: selectedDestinyStock,
-              hintText: selectedDestinyStock ?? "Estoque de destino",
+              selectedValue: transferBetweenStocksProvider
+                  .selectedDestiny?.Nome_TipoEstoque,
+              hintText: "Estoque de destino",
               changeSelectedValue: (value) {
-                setState(() {
-                  selectedDestinyStock = value;
-                });
+                transferBetweenStocksProvider.changeSelectedDestiny(value);
               },
-              validator: (_) {
-                if (selectedDestinyStock == null) {
+              validator: (value) {
+                if (transferBetweenStocksProvider
+                        .selectedOrigin?.CodigoInterno_TipoEstoque ==
+                    value?.CodigoInterno_TipoEstoque) {
+                  return "Estoque igual ao de origem";
+                } else if (transferBetweenStocksProvider.selectedDestiny ==
+                    null) {
                   return 'Selecione um tipo de estoque!';
                 } else if (transferBetweenStocksProvider
-                        .transferBodyModel?.StockTypeCode ==
+                        .selectedOrigin?.CodigoInterno_TipoEstoque ==
                     transferBetweenStocksProvider
-                        .transferBodyModel?.StockTypeRecipientCode) {
+                        .selectedDestiny?.CodigoInterno_TipoEstoque) {
                   return "Os estoques devem ser diferentes!";
                 }
                 return null;
@@ -156,7 +135,7 @@ class _JustificationsAndStocksDropwdownWidgetState
                           destinyStock: value,
                         );
                       },
-                      value: value.Nome_TipoEstoque,
+                      value: value,
                       child: FittedBox(
                         child: Text(
                           value.Nome_TipoEstoque,

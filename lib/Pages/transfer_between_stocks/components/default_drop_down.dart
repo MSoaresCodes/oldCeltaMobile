@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 class DefaultDropDown<T> extends StatefulWidget {
   final GlobalKey<FormState> dropDownFormKey;
   final String? selectedValue;
-  final void Function(String?)? changeSelectedValue;
-  final String? Function(String?)? validator;
+  final void Function(T?)? changeSelectedValue;
+  final String? Function(T?)? validator;
   final String hintText;
   final List<DropdownMenuItem<T>>? items;
 
@@ -19,10 +19,10 @@ class DefaultDropDown<T> extends StatefulWidget {
   });
 
   @override
-  State<DefaultDropDown> createState() => _DefaultDropDownState();
+  State<DefaultDropDown<T>> createState() => _DefaultDropDownState<T>();
 }
 
-class _DefaultDropDownState extends State<DefaultDropDown> {
+class _DefaultDropDownState<T> extends State<DefaultDropDown<T>> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -37,11 +37,11 @@ class _DefaultDropDownState extends State<DefaultDropDown> {
 
     return Container(
       height: 45,
-      child: FormField(
+      child: FormField<T>(
         validator: widget.validator,
         builder: (field) {
           return SizedBox.expand(
-            child: DropdownButton<dynamic>(
+            child: DropdownButton<T>(
               padding: const EdgeInsets.only(top: 10),
               isDense: true,
               disabledHint:
@@ -63,7 +63,7 @@ class _DefaultDropDownState extends State<DefaultDropDown> {
               ),
               onChanged: widget.changeSelectedValue == null
                   ? null
-                  : (value) {
+                  : (T? value) {
                       widget.dropDownFormKey.currentState?.reset();
                       if (widget.changeSelectedValue != null) {
                         widget.changeSelectedValue!(value);
@@ -71,7 +71,9 @@ class _DefaultDropDownState extends State<DefaultDropDown> {
                       field.validate();
                       field.didChange(value);
                     },
-              items: widget.items,
+              items: widget.items?.map<DropdownMenuItem<T>>((dynamic item) {
+                return item as DropdownMenuItem<T>;
+              }).toList(),
             ),
           );
         },

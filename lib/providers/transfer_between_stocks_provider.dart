@@ -26,6 +26,13 @@ class TransferBetweenStocksProvider with ChangeNotifier {
   List<TransferBetweenStockLotProductsModel> _productsLots = [];
   List<TransferBetweenStockLotProductsModel> get productsLots => _productsLots;
 
+  GetJustificationsModel? _selectedJustification;
+  GetStockTypesModel? _selectedOrigin;
+  GetStockTypesModel? _selectedDestiny;
+  GetJustificationsModel? get selectedJustification => _selectedJustification;
+  GetStockTypesModel? get selectedOrigin => _selectedOrigin;
+  GetStockTypesModel? get selectedDestiny => _selectedDestiny;
+
   int get justificationsCount => _justifications.length;
   int get originStockTypesCount => _originStockTypes.length;
   int get destinyStockTypesCount => _destinyStockTypes.length;
@@ -55,8 +62,8 @@ class TransferBetweenStocksProvider with ChangeNotifier {
 
   bool get isLoadingTypeStockAndJustifications =>
       _isLoadingTypeStockAndJustifications;
-  var consultProductFocusNode = FocusNode();
-  var consultedProductFocusNode = FocusNode();
+  var consultProductFocusNode = FocusNode(); //TODO URGENTE DELETE FROM HERE
+  var consultedProductFocusNode = FocusNode(); //TODO URGENTE DELETE FROM HERE
 
   // bool _justificationHasStockType = false;
   // bool get justificationHasStockType => _justificationHasStockType;
@@ -331,5 +338,29 @@ class TransferBetweenStocksProvider with ChangeNotifier {
       //product not found. Never should happpen this
     }
     //TODO save locally
+  }
+
+  void changeSelectedJustification(GetJustificationsModel? value) {
+    _selectedJustification = value;
+  }
+
+  void changeSelectedOrigin(GetStockTypesModel? value) {
+    _selectedOrigin = value;
+  }
+
+  void changeSelectedDestiny(GetStockTypesModel? value) {
+    _selectedDestiny = value;
+  }
+
+  GetStockTypesModel? getFixedOrigin() {
+    if (_selectedJustification
+            ?.CodigoInterno_TipoEstoque.Nome_TipoEstoque.isEmpty ==
+        true) {
+      return null;
+    }
+
+    return _originStockTypes.firstWhere((e) =>
+        _selectedJustification?.CodigoInterno_TipoEstoque.Nome_TipoEstoque ==
+        e.Nome_TipoEstoque);
   }
 }
