@@ -24,9 +24,9 @@ class JustificationsAndStocksDropwdownWidget extends StatefulWidget {
 
 class _JustificationsAndStocksDropwdownWidgetState
     extends State<JustificationsAndStocksDropwdownWidget> {
-  final GlobalKey<FormFieldState> _keyJustifications = GlobalKey();
-  final GlobalKey<FormFieldState> _keyOriginStockType = GlobalKey();
-  final GlobalKey<FormFieldState> _keyDestinyStockType = GlobalKey();
+  final _keyJustifications = GlobalKey<FormState>();
+  final _keyOriginStockType = GlobalKey<FormState>();
+  final _keyDestinyStockType = GlobalKey<FormState>();
 
   //se a justificativa possuir um código de estoque atrelado, significa que
   //somente esse estoque pode ser alterado quando selecionar essa justificativa.
@@ -43,6 +43,10 @@ class _JustificationsAndStocksDropwdownWidgetState
   Widget build(BuildContext context) {
     TransferBetweenStocksProvider transferBetweenStocksProvider =
         Provider.of(context);
+    final theme = Theme.of(context);
+    final hintStyle = TextStyle(
+      color: theme.colorScheme.primary,
+    );
 
     if (transferBetweenStocksProvider.isLoadingTypeStockAndJustifications) {
       if (_changedJustifications) {
@@ -67,36 +71,12 @@ class _JustificationsAndStocksDropwdownWidgetState
             DropdownButtonFormField<dynamic>(
               // isDense: false,
               key: _keyJustifications,
-              disabledHint: transferBetweenStocksProvider
-                      .isLoadingTypeStockAndJustifications
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const FittedBox(
-                          child: Text(
-                            "Consultando",
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 60,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 15),
-                        Container(
-                          height: 15,
-                          width: 15,
-                          child: const CircularProgressIndicator(),
-                        ),
-                      ],
-                    )
-                  : const Center(child: Text("Justificativas")),
+              disabledHint: const Center(child: Text("Justificativas")),
               isExpanded: true,
               hint: Center(
                 child: Text(
                   'Justificativas',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
+                  style: hintStyle,
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -106,11 +86,7 @@ class _JustificationsAndStocksDropwdownWidgetState
                 }
                 return null;
               },
-              onChanged: transferBetweenStocksProvider
-                          .isLoadingTypeStockAndJustifications ||
-                      transferBetweenStocksProvider.isLoadingAdjustStock ||
-                      transferBetweenStocksProvider.isLoadingProducts ||
-                      transferBetweenStocksProvider.products.isEmpty
+              onChanged: transferBetweenStocksProvider.products.isEmpty
                   ? null
                   : (value) {
                       _changedJustifications = true;
@@ -143,18 +119,10 @@ class _JustificationsAndStocksDropwdownWidgetState
                       },
                       value: value.Descricao_JustMov,
                       child: FittedBox(
-                        child: Column(
-                          children: [
-                            Center(
-                              child: Text(
-                                value.Descricao_JustMov,
-                              ),
-                            ),
-                            const Divider(
-                              height: 4,
-                              color: Colors.black,
-                            ),
-                          ],
+                        child: Center(
+                          child: Text(
+                            value.Descricao_JustMov,
+                          ),
                         ),
                       ),
                     ),
@@ -165,43 +133,19 @@ class _JustificationsAndStocksDropwdownWidgetState
             DropdownButtonFormField<dynamic>(
               // isDense: false,
               key: _keyOriginStockType,
-              disabledHint: transferBetweenStocksProvider
-                      .isLoadingTypeStockAndJustifications
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const FittedBox(
-                          child: Text(
-                            "Consultando",
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 60,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 15),
-                        Container(
-                          height: 15,
-                          width: 15,
-                          child: const CircularProgressIndicator(),
-                        ),
-                      ],
-                    )
-                  : Center(
-                      child: Text(
-                        transferBetweenStocksProvider.justificationHasStockType
-                            ? transferBetweenStocksProvider
-                                .fixedJustificationStockName
-                            : "Estoque de origem",
-                      ),
-                    ),
+              disabledHint: Center(
+                child: Text(
+                  transferBetweenStocksProvider.justificationHasStockType
+                      ? transferBetweenStocksProvider
+                          .fixedJustificationStockName
+                      : "Estoque de origem",
+                ),
+              ),
               isExpanded: true,
               hint: Center(
                 child: Text(
                   'Estoque de origem',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
+                  style: hintStyle,
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -213,16 +157,13 @@ class _JustificationsAndStocksDropwdownWidgetState
                 }
                 return null;
               },
-              onChanged: transferBetweenStocksProvider
-                          .isLoadingTypeStockAndJustifications ||
-                      transferBetweenStocksProvider.isLoadingAdjustStock ||
-                      transferBetweenStocksProvider.isLoadingProducts ||
-                      transferBetweenStocksProvider.justificationHasStockType ||
-                      transferBetweenStocksProvider.products.isEmpty
-                  ? null
-                  : (value) {
-                      _changedOriginStockType = true;
-                    },
+              onChanged:
+                  transferBetweenStocksProvider.justificationHasStockType ||
+                          transferBetweenStocksProvider.products.isEmpty
+                      ? null
+                      : (value) {
+                          _changedOriginStockType = true;
+                        },
               items: transferBetweenStocksProvider.originStockTypes
                   .map(
                     (value) => DropdownMenuItem(
@@ -234,26 +175,15 @@ class _JustificationsAndStocksDropwdownWidgetState
                       },
                       value: value.Nome_TipoEstoque,
                       child: FittedBox(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Center(
-                              child: Text(
-                                transferBetweenStocksProvider
-                                        .justificationHasStockType
-                                    ? transferBetweenStocksProvider
-                                        .fixedJustificationStockName
-                                    : value.Nome_TipoEstoque,
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ),
-                            const Divider(
-                              height: 4,
-                              color: Colors.black,
-                            ),
-                          ],
+                        child: Text(
+                          transferBetweenStocksProvider
+                                  .justificationHasStockType
+                              ? transferBetweenStocksProvider
+                                  .fixedJustificationStockName
+                              : value.Nome_TipoEstoque,
+                          style: const TextStyle(
+                            fontSize: 15,
+                          ),
                         ),
                       ),
                     ),
@@ -263,40 +193,12 @@ class _JustificationsAndStocksDropwdownWidgetState
             DropdownButtonFormField<dynamic>(
               // isDense: false,
               key: _keyDestinyStockType,
-              disabledHint: transferBetweenStocksProvider
-                      .isLoadingTypeStockAndJustifications
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const FittedBox(
-                          child: Text(
-                            "Consultando",
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 60,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 15),
-                        Container(
-                          height: 15,
-                          width: 15,
-                          child: const CircularProgressIndicator(),
-                        ),
-                      ],
-                    )
-                  : const Center(
-                      child: Text(
-                        "Estoque de destino",
-                      ),
-                    ),
+              disabledHint: const Center(child: Text("Estoque de destino")),
               isExpanded: true,
               hint: Center(
                 child: Text(
                   'Estoque de destino',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
+                  style: hintStyle,
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -311,11 +213,7 @@ class _JustificationsAndStocksDropwdownWidgetState
                 }
                 return null;
               },
-              onChanged: transferBetweenStocksProvider
-                          .isLoadingTypeStockAndJustifications ||
-                      transferBetweenStocksProvider.isLoadingAdjustStock ||
-                      transferBetweenStocksProvider.isLoadingProducts ||
-                      transferBetweenStocksProvider.products.isEmpty
+              onChanged: transferBetweenStocksProvider.products.isEmpty
                   ? null
                   : (value) {
                       _changedDestinyStockType = true;
@@ -331,22 +229,11 @@ class _JustificationsAndStocksDropwdownWidgetState
                       },
                       value: value.Nome_TipoEstoque,
                       child: FittedBox(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Center(
-                              child: Text(
-                                value.Nome_TipoEstoque,
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ),
-                            const Divider(
-                              height: 4,
-                              color: Colors.black,
-                            ),
-                          ],
+                        child: Text(
+                          value.Nome_TipoEstoque,
+                          style: const TextStyle(
+                            fontSize: 15,
+                          ),
                         ),
                       ),
                     ),
