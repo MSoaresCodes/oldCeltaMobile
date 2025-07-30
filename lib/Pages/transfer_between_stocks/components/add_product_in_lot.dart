@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +16,7 @@ class AddProductInLot extends StatefulWidget {
   final int internalEnterpriseCode;
   final Function getProductsWithCamera;
   final GetProductJsonModel product;
+  final VoidCallback expandHeader;
 
   const AddProductInLot({
     required this.internalEnterpriseCode,
@@ -22,6 +25,7 @@ class AddProductInLot extends StatefulWidget {
     required this.insertQuantityFormKey,
     required this.quantityController,
     required this.product,
+    required this.expandHeader,
     Key? key,
   }) : super(key: key);
 
@@ -44,20 +48,18 @@ class _AddProductInLotState extends State<AddProductInLot> {
         configurationsProvider, //TODO must use the autoscan
   }) async {
     if (!_isValid()) {
+      widget.expandHeader();
       return;
     }
 
     await transferBetweenStocksProvider.addProductInLot(
+      //TODO add justification, stockOrigin and destinyStock
       TransferBetweenStockLotProductsModel(
         productPackingCode: widget.product.productPackingCode!,
         productCode: widget.product.productCode!,
         quantity: widget.quantityController.text.toDouble(),
       ),
     );
-
-    if (transferBetweenStocksProvider.errorMessageAdjustStock.isNotEmpty) {
-      return;
-    }
 
     widget.quantityController.clear();
 
@@ -71,106 +73,64 @@ class _AddProductInLotState extends State<AddProductInLot> {
     TransferBetweenStocksProvider transferBetweenStocksProvider =
         Provider.of(context);
     ConfigurationsProvider configurationsProvider = Provider.of(context);
-    EnterpriseProvider enterpriseProvider = Provider.of(context);
 
     return Form(
       key: widget.insertQuantityFormKey,
-      child: Column(
+      child: Row(
         children: [
-          Row(
-            children: [
-              Flexible(
-                flex: 10,
-                child: TextFormField(
-                  focusNode:
-                      transferBetweenStocksProvider.consultedProductFocusNode,
-                  controller: widget.quantityController,
-                  inputFormatters: [LengthLimitingTextInputFormatter(10)],
-                  onFieldSubmitted: (_) async {
-                    await _addProductInLot(
-                      transferBetweenStocksProvider:
-                          transferBetweenStocksProvider,
-                      configurationsProvider: configurationsProvider,
-                    );
-                  },
-                  onChanged: (value) {
-                    if (value.isEmpty || value == '-') {
-                      value = '0';
-                    }
-                    if (value.startsWith(",") || value.startsWith(".")) {
-                      widget.quantityController.text =
-                          "0" + widget.quantityController.text;
-                      widget.quantityController.selection =
-                          TextSelection.fromPosition(
-                        TextPosition(
-                          offset: widget.quantityController.text.length,
-                        ),
-                      );
-                    }
-                  },
-                  validator: FormFieldValidations.number,
-                  decoration: FormFieldDecoration.decoration(
-                    context: context,
-                    labelText: "Quantidade",
-                  ),
-                  style: FormFieldStyle.style(),
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
-                ),
-              ),
-              const SizedBox(width: 5),
-              Flexible(
-                flex: 9,
-                child: Column(
-                  children: [
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(double.infinity, 35),
-                        maximumSize: const Size(double.infinity, 35),
-                      ),
-                      onPressed: () async {
-                        await _addProductInLot(
-                          transferBetweenStocksProvider:
-                              transferBetweenStocksProvider,
-                          configurationsProvider: configurationsProvider,
-                        );
-                      },
-                      child: const FittedBox(
-                        child: Text("CONFIRMAR"),
-                      ),
+          Expanded(
+            flex: 10,
+            child: TextFormField(
+              focusNode:
+                  transferBetweenStocksProvider.consultedProductFocusNode,
+              controller: widget.quantityController,
+              inputFormatters: [LengthLimitingTextInputFormatter(10)],
+              onFieldSubmitted: (_) async {
+                await _addProductInLot(
+                  transferBetweenStocksProvider: transferBetweenStocksProvider,
+                  configurationsProvider: configurationsProvider,
+                );
+              },
+              onChanged: (value) {
+                if (value.isEmpty || value == '-') {
+                  value = '0';
+                }
+                if (value.startsWith(",") || value.startsWith(".")) {
+                  widget.quantityController.text =
+                      "0" + widget.quantityController.text;
+                  widget.quantityController.selection =
+                      TextSelection.fromPosition(
+                    TextPosition(
+                      offset: widget.quantityController.text.length,
                     ),
-                  ],
-                ),
+                  );
+                }
+              },
+              validator: FormFieldValidations.number,
+              decoration: FormFieldDecoration.decoration(
+                context: context,
+                labelText: "Quantidade",
               ),
-            ],
+              style: FormFieldStyle.style(),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
+            ),
           ),
-          if (enterpriseProvider.bsDate?.isAfter(DateTime(2025, 6, 23)) == true)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+          const SizedBox(width: 5),
+          ElevatedButton(
+            onPressed: () async {
+              await _addProductInLot(
+                transferBetweenStocksProvider: transferBetweenStocksProvider,
+                configurationsProvider: configurationsProvider,
+              );
+            },
+            child: Row(
               children: [
-                Flexible(
-                  child: TextButton(
-                    onPressed: () async {
-                      await _addProductInLot(
-                        transferBetweenStocksProvider:
-                            transferBetweenStocksProvider,
-                        configurationsProvider: configurationsProvider,
-                      );
-                    },
-                    child: const Text("Solicitar"),
-                  ),
-                ),
-                Tooltip(
-                  triggerMode: TooltipTriggerMode.tap,
-                  message: "Será criada uma solicitação no CeltaBS",
-                  child: Icon(
-                    Icons.warning,
-                    size: 15,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                ),
+                const Text("Lote"),
+                Icon(Platform.isIOS ? Icons.add : Icons.add)
               ],
             ),
+          ),
         ],
       ),
     );

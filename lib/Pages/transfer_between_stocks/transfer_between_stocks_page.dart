@@ -70,6 +70,11 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
         consultProductController: _consultProductController,
         consultedProductController: _consultedProductController,
         scrollController: _scrollController,
+        expandHeader: () {
+          setState(() {
+            _isHeaderExpanded = true;
+          });
+        },
       ),
       const Center(child: Text("Lote")),
     ];

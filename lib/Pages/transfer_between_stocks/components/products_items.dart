@@ -12,6 +12,7 @@ class ProductsItems extends StatefulWidget {
   final GlobalKey<FormState> insertQuantityFormKey;
   final Function getProductsWithCamera;
   final ScrollController scrollController;
+  final VoidCallback expandHeader;
   const ProductsItems({
     required this.getProductsWithCamera,
     required this.enterpriseCode,
@@ -19,6 +20,7 @@ class ProductsItems extends StatefulWidget {
     required this.dropDownFormKey,
     required this.insertQuantityFormKey,
     required this.scrollController,
+    required this.expandHeader,
     Key? key,
   }) : super(key: key);
 
@@ -46,12 +48,6 @@ class _ProductsItemsState extends State<ProductsItems> {
     required int index,
   }) {
     widget.consultedProductController.text = "";
-
-    if (transferBetweenStocksProvider.products.length == 1 ||
-        transferBetweenStocksProvider.isLoadingProducts ||
-        transferBetweenStocksProvider.isLoadingAdjustStock) {
-      return;
-    }
 
     if (_selectedIndex != index) {
       setState(() {
@@ -108,8 +104,6 @@ class _ProductsItemsState extends State<ProductsItems> {
                   transferBetweenStocksProvider.isLoadingAdjustStock
               ? null
               : () {
-                  transferBetweenStocksProvider.updateBody(product: product);
-
                   selectIndexAndFocus(
                     transferBetweenStocksProvider:
                         transferBetweenStocksProvider,
@@ -122,17 +116,14 @@ class _ProductsItemsState extends State<ProductsItems> {
             showPrice: false,
             showWholeInformations: false,
             componentAfterProductInformations: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Icon(
-                    _selectedIndex == index
-                        ? Icons.arrow_drop_up
-                        : Icons.arrow_drop_down,
-                    size: 20,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
+                Icon(
+                  _selectedIndex == index
+                      ? Icons.arrow_drop_up
+                      : Icons.arrow_drop_down,
+                  size: 20,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
                 if (_selectedIndex == index)
                   AddProductInLot(
@@ -142,6 +133,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                     internalEnterpriseCode: widget.enterpriseCode,
                     product: product,
                     getProductsWithCamera: widget.getProductsWithCamera,
+                    expandHeader: widget.expandHeader,
                   ),
               ],
             ),

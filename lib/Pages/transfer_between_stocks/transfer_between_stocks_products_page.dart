@@ -13,6 +13,7 @@ class TransferBetweenStocksProductsPage extends StatelessWidget {
   final TextEditingController consultProductController;
   final TextEditingController consultedProductController;
   final ScrollController scrollController;
+  final VoidCallback expandHeader;
   const TransferBetweenStocksProductsPage({
     super.key,
     required this.isHeaderExpanded,
@@ -20,6 +21,7 @@ class TransferBetweenStocksProductsPage extends StatelessWidget {
     required this.consultProductController,
     required this.consultedProductController,
     required this.scrollController,
+    required this.expandHeader,
   });
 
   static final _insertQuantityFormKey = GlobalKey<FormState>();
@@ -97,6 +99,7 @@ class TransferBetweenStocksProductsPage extends StatelessWidget {
               consultedProductController: consultedProductController,
               dropDownFormKey: _dropDownFormKey,
               insertQuantityFormKey: _insertQuantityFormKey,
+              expandHeader: expandHeader,
               getProductsWithCamera: () async {
                 FocusScope.of(context).unfocus();
                 consultProductController.clear();
