@@ -38,8 +38,7 @@ class TransferBetweenStocksProductsPage extends StatelessWidget {
         AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
-          height: isHeaderExpanded ? 240.0 : 0.0,
-          // color: Colors.lightBlue[100],
+          height: isHeaderExpanded ? 200.0 : 0.0,
           alignment: Alignment.center,
           child: SingleChildScrollView(
             physics: const NeverScrollableScrollPhysics(),
