@@ -7,7 +7,7 @@ import '../../providers/providers.dart';
 import '../../utils/utils.dart';
 import 'transfer_between_stocks.dart';
 
-class TransferBetweenStocksProductsPage extends StatelessWidget {
+class TransferBetweenStocksProductsPage extends StatefulWidget {
   final bool isHeaderExpanded;
   final EnterpriseModel enterprise;
   final TextEditingController consultProductController;
@@ -28,6 +28,21 @@ class TransferBetweenStocksProductsPage extends StatelessWidget {
   static final _dropDownFormKey = GlobalKey<FormState>();
 
   @override
+  State<TransferBetweenStocksProductsPage> createState() =>
+      _TransferBetweenStocksProductsPageState();
+}
+
+class _TransferBetweenStocksProductsPageState
+    extends State<TransferBetweenStocksProductsPage> {
+  final searchFocusNode = FocusNode();
+
+  @override
+  void dispose() {
+    super.dispose();
+    searchFocusNode.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final transferBetweenStocksProvider =
         Provider.of<TransferBetweenStocksProvider>(context);
@@ -38,7 +53,7 @@ class TransferBetweenStocksProductsPage extends StatelessWidget {
         AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
-          height: isHeaderExpanded ? 200.0 : 0.0,
+          height: widget.isHeaderExpanded ? 200.0 : 0.0,
           alignment: Alignment.center,
           child: SingleChildScrollView(
             physics: const NeverScrollableScrollPhysics(),
@@ -50,30 +65,33 @@ class TransferBetweenStocksProductsPage extends StatelessWidget {
                     ConfigurationType.legacyCode,
                     ConfigurationType.personalizedCode,
                   ],
-                  searchFocusNode:
-                      transferBetweenStocksProvider.consultProductFocusNode,
+                  searchFocusNode: searchFocusNode,
                   onPressSearch: () async {
                     await transferBetweenStocksProvider.getProducts(
-                      enterprise: enterprise,
-                      controllerText: consultProductController.text,
+                      enterprise: widget.enterprise,
+                      controllerText: widget.consultProductController.text,
                       context: context,
                       configurationsProvider: configurationsProvider,
+                      searchFocusNode: searchFocusNode,
                     );
 
                     if (transferBetweenStocksProvider.products.length > 0) {
-                      consultProductController.clear();
+                      widget.consultProductController.clear();
                     }
                   },
-                  searchProductController: consultProductController,
+                  searchProductController: widget.consultProductController,
                 ),
                 Row(
                   children: [
                     Expanded(
                       child: JustificationsAndStocksDropwdownWidget(
-                        dropDownFormKey: _dropDownFormKey,
+                        dropDownFormKey:
+                            TransferBetweenStocksProductsPage._dropDownFormKey,
                       ),
                     ),
-                    RefreshIconButton(dropDownFormKey: _dropDownFormKey),
+                    RefreshIconButton(
+                        dropDownFormKey:
+                            TransferBetweenStocksProductsPage._dropDownFormKey),
                   ],
                 ),
               ],
@@ -83,32 +101,36 @@ class TransferBetweenStocksProductsPage extends StatelessWidget {
         if (!transferBetweenStocksProvider.isLoadingProducts)
           Expanded(
             child: ProductsItems(
-              scrollController: scrollController,
-              enterpriseCode: enterprise.Code,
-              consultedProductController: consultedProductController,
-              dropDownFormKey: _dropDownFormKey,
-              insertQuantityFormKey: _insertQuantityFormKey,
-              expandHeader: expandHeader,
+              scrollController: widget.scrollController,
+              enterpriseCode: widget.enterprise.Code,
+              searchFocusNode: searchFocusNode,
+              consultedProductController: widget.consultedProductController,
+              dropDownFormKey:
+                  TransferBetweenStocksProductsPage._dropDownFormKey,
+              insertQuantityFormKey:
+                  TransferBetweenStocksProductsPage._insertQuantityFormKey,
+              expandHeader: widget.expandHeader,
               getProductsWithCamera: () async {
                 FocusScope.of(context).unfocus();
-                consultProductController.clear();
+                widget.consultProductController.clear();
 
-                consultProductController.text =
+                widget.consultProductController.text =
                     await ScanBarCode.scanBarcode(context);
 
-                if (consultProductController.text == "") {
+                if (widget.consultProductController.text == "") {
                   return;
                 }
 
                 await transferBetweenStocksProvider.getProducts(
-                  enterprise: enterprise,
-                  controllerText: consultProductController.text,
+                  enterprise: widget.enterprise,
+                  controllerText: widget.consultProductController.text,
                   context: context,
                   configurationsProvider: configurationsProvider,
+                  searchFocusNode: searchFocusNode,
                 );
 
                 if (transferBetweenStocksProvider.products.length > 0) {
-                  consultProductController.clear();
+                  widget.consultProductController.clear();
                 }
               },
             ),

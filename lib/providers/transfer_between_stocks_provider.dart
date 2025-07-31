@@ -62,8 +62,6 @@ class TransferBetweenStocksProvider with ChangeNotifier {
 
   bool get isLoadingTypeStockAndJustifications =>
       _isLoadingTypeStockAndJustifications;
-  var consultProductFocusNode = FocusNode(); //TODO URGENTE DELETE FROM HERE
-  var consultedProductFocusNode = FocusNode(); //TODO URGENTE DELETE FROM HERE
 
   // bool _justificationHasStockType = false;
   // bool get justificationHasStockType => _justificationHasStockType;
@@ -120,6 +118,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     required String controllerText,
     required BuildContext context,
     required ConfigurationsProvider configurationsProvider,
+    required FocusNode searchFocusNode,
   }) async {
     _lastUpdatedQuantity = "";
     _indexOfLastProductChangedStockQuantity = -1;
@@ -144,7 +143,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
       //campo de pesquisa dos produtos
       Future.delayed(const Duration(milliseconds: 100), () {
         //se não colocar em um future pra mudar o foco, não funciona corretamente
-        FocusScope.of(context).requestFocus(consultProductFocusNode);
+        FocusScope.of(context).requestFocus(searchFocusNode);
         //altera o foco para o campo de pesquisa novamente
       });
       // ShowErrorMessage.showErrorMessage(

@@ -17,6 +17,7 @@ class AddProductInLot extends StatefulWidget {
   final Function getProductsWithCamera;
   final GetProductJsonModel product;
   final VoidCallback expandHeader;
+  final FocusNode searchFocusNode;
 
   const AddProductInLot({
     required this.internalEnterpriseCode,
@@ -26,6 +27,7 @@ class AddProductInLot extends StatefulWidget {
     required this.quantityController,
     required this.product,
     required this.expandHeader,
+    required this.searchFocusNode,
     Key? key,
   }) : super(key: key);
 
@@ -81,8 +83,7 @@ class _AddProductInLotState extends State<AddProductInLot> {
           Expanded(
             flex: 10,
             child: TextFormField(
-              focusNode:
-                  transferBetweenStocksProvider.consultedProductFocusNode,
+              focusNode: widget.searchFocusNode,
               controller: widget.quantityController,
               inputFormatters: [LengthLimitingTextInputFormatter(10)],
               onFieldSubmitted: (_) async {

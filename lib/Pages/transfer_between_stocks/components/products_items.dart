@@ -13,6 +13,7 @@ class ProductsItems extends StatefulWidget {
   final Function getProductsWithCamera;
   final ScrollController scrollController;
   final VoidCallback expandHeader;
+  final FocusNode searchFocusNode;
   const ProductsItems({
     required this.getProductsWithCamera,
     required this.enterpriseCode,
@@ -21,6 +22,7 @@ class ProductsItems extends StatefulWidget {
     required this.insertQuantityFormKey,
     required this.scrollController,
     required this.expandHeader,
+    required this.searchFocusNode,
     Key? key,
   }) : super(key: key);
 
@@ -37,9 +39,7 @@ class _ProductsItemsState extends State<ProductsItems> {
     Future.delayed(const Duration(milliseconds: 300), () {
       //se não colocar em um future pra mudar o foco,
       //não funciona corretamente
-      FocusScope.of(context).requestFocus(
-        transferBetweenStocksProvider.consultedProductFocusNode,
-      );
+      FocusScope.of(context).requestFocus(widget.searchFocusNode);
     });
   }
 
@@ -54,14 +54,14 @@ class _ProductsItemsState extends State<ProductsItems> {
         _selectedIndex = index;
       });
 
-      if (transferBetweenStocksProvider.consultedProductFocusNode.hasFocus &&
+      if (widget.searchFocusNode.hasFocus &&
           MediaQuery.of(context).viewInsets.bottom == 0) {
         FocusScope.of(context).unfocus();
         changeFocusToConsultedProductFocusNode(
           transferBetweenStocksProvider: transferBetweenStocksProvider,
         );
       }
-      if (!transferBetweenStocksProvider.consultedProductFocusNode.hasFocus) {
+      if (!widget.searchFocusNode.hasFocus) {
         changeFocusToConsultedProductFocusNode(
           transferBetweenStocksProvider: transferBetweenStocksProvider,
         );
@@ -70,7 +70,7 @@ class _ProductsItemsState extends State<ProductsItems> {
     }
 
     if (_selectedIndex == index) {
-      if (!transferBetweenStocksProvider.consultedProductFocusNode.hasFocus) {
+      if (!widget.searchFocusNode.hasFocus) {
         changeFocusToConsultedProductFocusNode(
           transferBetweenStocksProvider: transferBetweenStocksProvider,
         );
@@ -127,6 +127,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                 ),
                 if (_selectedIndex == index)
                   AddProductInLot(
+                    searchFocusNode: widget.searchFocusNode,
                     quantityController: widget.consultedProductController,
                     dropDownFormKey: widget.dropDownFormKey,
                     insertQuantityFormKey: widget.insertQuantityFormKey,
