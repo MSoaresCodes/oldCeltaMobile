@@ -31,22 +31,26 @@ class _OpenDialogProductInformationsState
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return InkWell(
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Text(
-            widget.title,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
+          Expanded(
+            child: Text(
+              widget.title,
+              textAlign: TextAlign.end,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ),
           ),
           const SizedBox(width: 3),
-          Icon(
-            Icons.info,
-            color: Theme.of(context).colorScheme.primary,
-          ),
+          if (size.width > 250)
+            Icon(
+              Icons.info,
+              color: Theme.of(context).colorScheme.primary,
+            ),
         ],
       ),
       onTap: () {

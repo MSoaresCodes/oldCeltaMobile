@@ -58,21 +58,25 @@ class ProductItem extends StatelessWidget {
                         subtitle: product.plu,
                       ),
                     ),
-                    OpenDialogProductInformations(
-                      product: product,
-                      pages: [
-                        if (showPrice == true &&
-                                (product.wholePracticedPrice ?? 0) > 0 ||
-                            (product.retailPracticedPrice ?? 0) > 0 ||
-                            (product.eCommercePracticedPrice ?? 0) > 0)
-                          Prices(product: product),
-                        if (showStocks == true) Stocks(product: product),
-                        if (showAddress == true) StockAddress(product: product),
-                        if (showLastBuyEntrance == true)
-                          LastBuyEntrance(product: product),
-                        if (showCosts == true) Costs(product: product),
-                        if (showMargins == true) Margins(product: product),
-                      ],
+                    Expanded(
+                      flex: 3,
+                      child: OpenDialogProductInformations(
+                        product: product,
+                        pages: [
+                          if (showPrice == true &&
+                                  (product.wholePracticedPrice ?? 0) > 0 ||
+                              (product.retailPracticedPrice ?? 0) > 0 ||
+                              (product.eCommercePracticedPrice ?? 0) > 0)
+                            Prices(product: product),
+                          if (showStocks == true) Stocks(product: product),
+                          if (showAddress == true)
+                            StockAddress(product: product),
+                          if (showLastBuyEntrance == true)
+                            LastBuyEntrance(product: product),
+                          if (showCosts == true) Costs(product: product),
+                          if (showMargins == true) Margins(product: product),
+                        ],
+                      ),
                     ),
                   ],
                 ),
