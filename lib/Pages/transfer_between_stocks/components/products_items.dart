@@ -8,7 +8,6 @@ import 'components.dart';
 class ProductsItems extends StatefulWidget {
   final int enterpriseCode;
   final TextEditingController consultedProductController;
-  final GlobalKey<FormState> dropDownFormKey;
   final GlobalKey<FormState> insertQuantityFormKey;
   final Function getProductsWithCamera;
   final ScrollController scrollController;
@@ -18,7 +17,6 @@ class ProductsItems extends StatefulWidget {
     required this.getProductsWithCamera,
     required this.enterpriseCode,
     required this.consultedProductController,
-    required this.dropDownFormKey,
     required this.insertQuantityFormKey,
     required this.scrollController,
     required this.expandHeader,
@@ -129,7 +127,6 @@ class _ProductsItemsState extends State<ProductsItems> {
                   AddProductInLot(
                     searchFocusNode: widget.searchFocusNode,
                     quantityController: widget.consultedProductController,
-                    dropDownFormKey: widget.dropDownFormKey,
                     insertQuantityFormKey: widget.insertQuantityFormKey,
                     internalEnterpriseCode: widget.enterpriseCode,
                     product: product,

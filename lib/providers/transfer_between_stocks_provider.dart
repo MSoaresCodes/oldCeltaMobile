@@ -63,12 +63,12 @@ class TransferBetweenStocksProvider with ChangeNotifier {
   bool get isLoadingTypeStockAndJustifications =>
       _isLoadingTypeStockAndJustifications;
 
-  // bool _justificationHasStockType = false;
-  // bool get justificationHasStockType => _justificationHasStockType;
-  // set justificationHasStockType(bool value) {
-  //   _justificationHasStockType = value;
-  //   notifyListeners();
-  // }
+  String? _errorSelectedJustification;
+  String? get errorSelectedJustification => _errorSelectedJustification;
+  String? _errorSelectedOrigin;
+  String? get errorSelectedOrigin => _errorSelectedOrigin;
+  String? _errorSelectedDestiny;
+  String? get errorSelectedDestiny => _errorSelectedDestiny;
 
   void clearAllData() {
     _justifications.clear();
@@ -201,6 +201,9 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     _selectedJustification = null;
     _selectedOrigin = null;
     _selectedDestiny = null;
+    _errorSelectedDestiny = null;
+    _errorSelectedOrigin = null;
+    _errorSelectedJustification = null;
     notifyListeners();
 
     await _getStockType(context);
@@ -353,23 +356,49 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     if (fixedOrigin != null) {
       changeSelectedOrigin(fixedOrigin);
     }
+    _errorSelectedJustification = null;
+
+    notifyListeners();
   }
 
   void changeSelectedOrigin(GetStockTypesModel? value) {
-    if (_selectedDestiny == value) {
-      _selectedDestiny = null;
-    }
     _selectedOrigin = value;
+    _errorSelectedOrigin = null;
+    notifyListeners();
   }
 
   void changeSelectedDestiny(GetStockTypesModel? value) {
-    if (_selectedOrigin?.CodigoInterno_TipoEstoque ==
-            value?.CodigoInterno_TipoEstoque &&
-        value != null) {
+    _selectedDestiny = value;
+    _errorSelectedDestiny = null;
+    notifyListeners();
+  }
+
+  void validateDropdowns() {
+    if (_selectedJustification == null) {
+      _errorSelectedJustification = "Selecione uma justificativa!";
+      _selectedJustification = null;
+    } else {
+      _errorSelectedJustification = null;
+    }
+
+    if (_selectedOrigin == null) {
+      _errorSelectedOrigin = "Selecione a origem!";
+      _selectedOrigin = null;
+    } else {
+      _errorSelectedOrigin = null;
+    }
+
+    if (_selectedDestiny == null) {
+      _errorSelectedDestiny = "Selecione o destino!";
+      _selectedDestiny = null;
+    } else if (_selectedDestiny?.CodigoInterno_TipoEstoque ==
+        _selectedOrigin?.CodigoInterno_TipoEstoque) {
+      _errorSelectedDestiny = "Os estoques devem ser diferentes!";
       _selectedDestiny = null;
     } else {
-      _selectedDestiny = value;
+      _errorSelectedDestiny = null;
     }
+    notifyListeners();
   }
 
   GetStockTypesModel? getFixedOrigin() {

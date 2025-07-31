@@ -4,8 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../providers/providers.dart';
 
 class RefreshIconButton extends StatelessWidget {
-  final GlobalKey<FormState> dropDownFormKey;
-  const RefreshIconButton({super.key, required this.dropDownFormKey});
+  const RefreshIconButton({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +31,6 @@ class RefreshIconButton extends StatelessWidget {
               : () async {
                   await transferBetweenStocksProvider
                       .getStockTypeAndJustifications(context);
-                  dropDownFormKey.currentState!.reset();
                 },
     );
   }

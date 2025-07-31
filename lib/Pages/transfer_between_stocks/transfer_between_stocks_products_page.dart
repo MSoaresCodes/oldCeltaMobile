@@ -24,9 +24,6 @@ class TransferBetweenStocksProductsPage extends StatefulWidget {
     required this.expandHeader,
   });
 
-  static final _insertQuantityFormKey = GlobalKey<FormState>();
-  static final _dropDownFormKey = GlobalKey<FormState>();
-
   @override
   State<TransferBetweenStocksProductsPage> createState() =>
       _TransferBetweenStocksProductsPageState();
@@ -34,6 +31,7 @@ class TransferBetweenStocksProductsPage extends StatefulWidget {
 
 class _TransferBetweenStocksProductsPageState
     extends State<TransferBetweenStocksProductsPage> {
+  final insertQuantityFormKey = GlobalKey<FormState>();
   final searchFocusNode = FocusNode();
 
   @override
@@ -81,17 +79,10 @@ class _TransferBetweenStocksProductsPageState
                   },
                   searchProductController: widget.consultProductController,
                 ),
-                Row(
+                const Row(
                   children: [
-                    Expanded(
-                      child: JustificationsAndStocksDropwdownWidget(
-                        dropDownFormKey:
-                            TransferBetweenStocksProductsPage._dropDownFormKey,
-                      ),
-                    ),
-                    RefreshIconButton(
-                        dropDownFormKey:
-                            TransferBetweenStocksProductsPage._dropDownFormKey),
+                    Expanded(child: JustificationsAndStocksDropwdownWidget()),
+                    RefreshIconButton(),
                   ],
                 ),
               ],
@@ -105,10 +96,7 @@ class _TransferBetweenStocksProductsPageState
               enterpriseCode: widget.enterprise.Code,
               searchFocusNode: searchFocusNode,
               consultedProductController: widget.consultedProductController,
-              dropDownFormKey:
-                  TransferBetweenStocksProductsPage._dropDownFormKey,
-              insertQuantityFormKey:
-                  TransferBetweenStocksProductsPage._insertQuantityFormKey,
+              insertQuantityFormKey: insertQuantityFormKey,
               expandHeader: widget.expandHeader,
               getProductsWithCamera: () async {
                 FocusScope.of(context).unfocus();

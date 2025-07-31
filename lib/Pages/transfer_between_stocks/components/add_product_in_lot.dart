@@ -11,7 +11,6 @@ import '../../../utils/utils.dart';
 
 class AddProductInLot extends StatefulWidget {
   final TextEditingController quantityController;
-  final GlobalKey<FormState> dropDownFormKey;
   final GlobalKey<FormState> insertQuantityFormKey;
   final int internalEnterpriseCode;
   final Function getProductsWithCamera;
@@ -22,7 +21,6 @@ class AddProductInLot extends StatefulWidget {
   const AddProductInLot({
     required this.internalEnterpriseCode,
     required this.getProductsWithCamera,
-    required this.dropDownFormKey,
     required this.insertQuantityFormKey,
     required this.quantityController,
     required this.product,
@@ -36,20 +34,15 @@ class AddProductInLot extends StatefulWidget {
 }
 
 class _AddProductInLotState extends State<AddProductInLot> {
-  bool _isValid() {
-    widget.dropDownFormKey.currentState!.validate();
-    widget.insertQuantityFormKey.currentState!.validate();
-
-    return widget.dropDownFormKey.currentState!.validate() &&
-        widget.insertQuantityFormKey.currentState!.validate();
-  }
-
   Future<void> _addProductInLot({
     required TransferBetweenStocksProvider transferBetweenStocksProvider,
     required ConfigurationsProvider
         configurationsProvider, //TODO must use the autoscan
   }) async {
-    if (!_isValid()) {
+    transferBetweenStocksProvider.validateDropdowns();
+    if (transferBetweenStocksProvider.errorSelectedJustification != null ||
+        transferBetweenStocksProvider.errorSelectedOrigin != null ||
+        transferBetweenStocksProvider.errorSelectedDestiny != null) {
       widget.expandHeader();
       return;
     }
