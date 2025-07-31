@@ -285,6 +285,19 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     }
   }
 
+  Future<bool> changeQuantityInLot(int index, double quantity) async {
+    try {
+      final oldProduct = _productsLots[index];
+
+      _productsLots[index] = oldProduct.copyWith(quantity: quantity);
+      //TODO save locally
+      notifyListeners();
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   Future<void> removeProductFromLot(
     TransferBetweenStockLotProductsModel itemLot,
   ) async {
