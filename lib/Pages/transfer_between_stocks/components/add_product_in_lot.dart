@@ -38,8 +38,7 @@ class AddProductInLot extends StatefulWidget {
 class _AddProductInLotState extends State<AddProductInLot> {
   Future<void> _addProductInLot({
     required TransferBetweenStocksProvider transferBetweenStocksProvider,
-    required ConfigurationsProvider
-        configurationsProvider, //TODO must use the autoscan
+    required ConfigurationsProvider configurationsProvider,
   }) async {
     transferBetweenStocksProvider.validateDropdowns();
     if (transferBetweenStocksProvider.errorSelectedJustification != null ||
