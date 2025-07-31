@@ -24,15 +24,11 @@ class TransferBetweenStocksLotsPage extends StatelessWidget {
             child: Column(
               children: [
                 TitleAndSubtitle.titleAndSubtitle(
-                  title: "ProductCode",
-                  subtitle: lot.product.productCode.toString(),
+                  title: "Produto",
+                  subtitle: '${lot.product.name} (${lot.product.plu})',
                 ),
                 TitleAndSubtitle.titleAndSubtitle(
-                  title: "productPackingCode",
-                  subtitle: lot.product.productPackingCode.toString(),
-                ),
-                TitleAndSubtitle.titleAndSubtitle(
-                  title: "quantity",
+                  title: "Quantidade",
                   subtitle: lot.quantity.toString().toBrazilianNumber(),
                 ),
               ],
