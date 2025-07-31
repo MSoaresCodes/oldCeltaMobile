@@ -125,12 +125,17 @@ class ReportsProvider with ChangeNotifier {
       }
 
       if (execute) {
-        ShowSnackbarMessage.show(
-          message:
-              "O agendamento está sendo executado com sucesso. Assim que finalizar, você receberá uma notificação.",
+        ShowAlertDialog.show(
           context: NavigatorKey.key.currentState!.context,
-          backgroundColor: Colors.green,
+          title: "Execução em andamento",
+          function: () async {},
+          showConfirmAndCancelMessage: false,
+          showCloseAlertDialogButton: true,
+          closeMessage: "Ok",
+          content: const Text(
+              "O agendamento está sendo executado. Atualize a lista de agendamentos em alguns instantes e verifique se a data da última execução foi atualizada..."),
         );
+
         return;
       }
 
