@@ -23,7 +23,7 @@ class _TransferBetweenStocksLotsPageState
 
   Future<void> changeProductQuantity(
       TransferBetweenStocksProvider provider) async {
-    if (selectedIndex == null) {
+    if (selectedIndex == null || formKey.currentState?.validate() != true) {
       return;
     }
 
@@ -87,40 +87,48 @@ class _TransferBetweenStocksLotsPageState
                 Row(
                   children: [
                     Expanded(
-                      flex: 3,
+                      flex: 4,
                       child: TitleAndSubtitle.titleAndSubtitle(
                         title: "Qtd",
-                        subtitle: lot.quantity.toString().toBrazilianNumber(),
+                        subtitle: lot.quantity.toString().toBrazilianNumber(3),
                       ),
                     ),
                     if (selectedIndex == index)
                       Expanded(
-                        flex: 7,
-                        child: TextFormField(
-                          controller: quantityController,
-                          focusNode: quantityFocusNode,
-                          keyboardType: TextInputType.number,
-                          decoration: FormFieldDecoration.decoration(
-                            context: context,
-                            hintText: "Nova qtd",
-                            labelText: "Nova qtd",
-                            suffixIcon: IconButton(
-                              onPressed: () {
+                        flex: 6,
+                        child: Form(
+                          key: formKey,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 8, top: 8),
+                            child: TextFormField(
+                              controller: quantityController,
+                              focusNode: quantityFocusNode,
+                              keyboardType: TextInputType.number,
+                              validator: FormFieldValidations.number,
+                              decoration: FormFieldDecoration.decoration(
+                                context: context,
+                                hintText: "Nova qtd",
+                                labelText: "Nova qtd",
+                                suffixIcon: IconButton(
+                                  padding: const EdgeInsets.only(right: 4),
+                                  onPressed: () {
+                                    changeProductQuantity(
+                                      transferBetweenStocksProvider,
+                                    );
+                                  },
+                                  icon: Icon(
+                                    Icons.save,
+                                    color: theme.colorScheme.primary,
+                                  ),
+                                ),
+                              ),
+                              onFieldSubmitted: (_) async {
                                 changeProductQuantity(
                                   transferBetweenStocksProvider,
                                 );
                               },
-                              icon: Icon(
-                                Icons.save,
-                                color: theme.colorScheme.primary,
-                              ),
                             ),
                           ),
-                          onFieldSubmitted: (_) async {
-                            changeProductQuantity(
-                              transferBetweenStocksProvider,
-                            );
-                          },
                         ),
                       ),
                     IconButton(
