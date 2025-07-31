@@ -106,8 +106,10 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                 TransferBetweenStocksProductsPage(
                   enterprise: enterprise,
                   isHeaderExpanded: _isHeaderExpanded,
-                  consultProductController: _consultProductController,
-                  consultedProductController: _consultedProductController,
+                  consultProductController:
+                      _consultProductController, //TODO move this to the other page
+                  quantityController:
+                      _consultedProductController, //TODO move this to the other page
                   scrollController: _scrollController,
                   expandHeader: () {
                     setState(() {

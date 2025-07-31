@@ -11,7 +11,7 @@ class TransferBetweenStocksProductsPage extends StatefulWidget {
   final bool isHeaderExpanded;
   final EnterpriseModel enterprise;
   final TextEditingController consultProductController;
-  final TextEditingController consultedProductController;
+  final TextEditingController quantityController;
   final ScrollController scrollController;
   final VoidCallback expandHeader;
   const TransferBetweenStocksProductsPage({
@@ -19,7 +19,7 @@ class TransferBetweenStocksProductsPage extends StatefulWidget {
     required this.isHeaderExpanded,
     required this.enterprise,
     required this.consultProductController,
-    required this.consultedProductController,
+    required this.quantityController,
     required this.scrollController,
     required this.expandHeader,
   });
@@ -97,7 +97,7 @@ class _TransferBetweenStocksProductsPageState
               scrollController: widget.scrollController,
               enterpriseCode: widget.enterprise.Code,
               searchFocusNode: quantityFocusNode,
-              consultedProductController: widget.consultedProductController,
+              quantityController: widget.quantityController,
               insertQuantityFormKey: insertQuantityFormKey,
               expandHeader: widget.expandHeader,
               getProductsWithCamera: () async {

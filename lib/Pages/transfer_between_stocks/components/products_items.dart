@@ -8,7 +8,7 @@ import 'components.dart';
 
 class ProductsItems extends StatefulWidget {
   final int enterpriseCode;
-  final TextEditingController consultedProductController;
+  final TextEditingController quantityController;
   final GlobalKey<FormState> insertQuantityFormKey;
   final Function getProductsWithCamera;
   final ScrollController scrollController;
@@ -17,7 +17,7 @@ class ProductsItems extends StatefulWidget {
   const ProductsItems({
     required this.getProductsWithCamera,
     required this.enterpriseCode,
-    required this.consultedProductController,
+    required this.quantityController,
     required this.insertQuantityFormKey,
     required this.scrollController,
     required this.expandHeader,
@@ -46,7 +46,7 @@ class _ProductsItemsState extends State<ProductsItems> {
     required TransferBetweenStocksProvider transferBetweenStocksProvider,
     required int index,
   }) {
-    widget.consultedProductController.text = "";
+    widget.quantityController.text = "";
 
     if (_selectedIndex != index) {
       setState(() {
@@ -160,7 +160,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                 if (_selectedIndex == index)
                   AddProductInLot(
                     searchFocusNode: widget.searchFocusNode,
-                    quantityController: widget.consultedProductController,
+                    quantityController: widget.quantityController,
                     insertQuantityFormKey: widget.insertQuantityFormKey,
                     internalEnterpriseCode: widget.enterpriseCode,
                     product: product,
