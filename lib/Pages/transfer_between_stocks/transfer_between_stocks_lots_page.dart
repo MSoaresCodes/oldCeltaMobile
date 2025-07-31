@@ -85,6 +85,7 @@ class _TransferBetweenStocksLotsPageState
                   subtitle: lot.destinyStock.Nome_TipoEstoque,
                 ),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
                       flex: 4,
