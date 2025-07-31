@@ -357,11 +357,20 @@ class TransferBetweenStocksProvider with ChangeNotifier {
   }
 
   void changeSelectedOrigin(GetStockTypesModel? value) {
+    if (_selectedDestiny == value) {
+      _selectedDestiny = null;
+    }
     _selectedOrigin = value;
   }
 
   void changeSelectedDestiny(GetStockTypesModel? value) {
-    _selectedDestiny = value;
+    if (_selectedOrigin?.CodigoInterno_TipoEstoque ==
+            value?.CodigoInterno_TipoEstoque &&
+        value != null) {
+      _selectedDestiny = null;
+    } else {
+      _selectedDestiny = value;
+    }
   }
 
   GetStockTypesModel? getFixedOrigin() {

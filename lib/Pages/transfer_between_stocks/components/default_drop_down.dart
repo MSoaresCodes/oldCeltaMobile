@@ -64,12 +64,12 @@ class _DefaultDropDownState<T> extends State<DefaultDropDown<T>> {
               onChanged: widget.changeSelectedValue == null
                   ? null
                   : (T? value) {
-                      widget.dropDownFormKey.currentState?.reset();
                       if (widget.changeSelectedValue != null) {
                         widget.changeSelectedValue!(value);
                       }
                       field.validate();
                       field.didChange(value);
+                      widget.dropDownFormKey.currentState?.reset();
                     },
               items: widget.items?.map<DropdownMenuItem<T>>((dynamic item) {
                 return item as DropdownMenuItem<T>;

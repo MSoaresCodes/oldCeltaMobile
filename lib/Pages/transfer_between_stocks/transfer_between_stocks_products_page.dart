@@ -73,7 +73,7 @@ class TransferBetweenStocksProductsPage extends StatelessWidget {
                         dropDownFormKey: _dropDownFormKey,
                       ),
                     ),
-                    const RefreshIconButton(),
+                    RefreshIconButton(dropDownFormKey: _dropDownFormKey),
                   ],
                 ),
               ],
