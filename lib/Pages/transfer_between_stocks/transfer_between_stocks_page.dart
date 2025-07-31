@@ -17,22 +17,24 @@ class TransferBetweenStockPage extends StatefulWidget {
 }
 
 class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
+  late PageController _pageController;
   final _scrollController = ScrollController();
   final _consultProductController = TextEditingController();
   final _consultedProductController = TextEditingController();
   int pageIndex = 0;
-
   bool _isHeaderExpanded = true;
 
   @override
   void initState() {
     super.initState();
 
+    _pageController = PageController();
     _scrollController.addListener(_scrollListener);
   }
 
   @override
   void dispose() {
+    _pageController.dispose();
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
     super.dispose();
@@ -56,28 +58,26 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
     }
   }
 
+  void _onItemTapped(int index) {
+    _pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
+  }
+
+  void _onPageChanged(int index) {
+    setState(() {
+      pageIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     TransferBetweenStocksProvider transferBetweenStocksProvider =
         Provider.of(context);
     final enterprise =
         ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
-
-    final pages = [
-      TransferBetweenStocksProductsPage(
-        enterprise: enterprise,
-        isHeaderExpanded: _isHeaderExpanded,
-        consultProductController: _consultProductController,
-        consultedProductController: _consultedProductController,
-        scrollController: _scrollController,
-        expandHeader: () {
-          setState(() {
-            _isHeaderExpanded = true;
-          });
-        },
-      ),
-      const TransferBetweenStocksLotsPage(),
-    ];
 
     return PopScope(
       canPop: !transferBetweenStocksProvider.isLoadingAdjustStock &&
@@ -99,13 +99,28 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                 ),
               ),
             ),
+            body: PageView(
+              controller: _pageController,
+              onPageChanged: _onPageChanged,
+              children: <Widget>[
+                TransferBetweenStocksProductsPage(
+                  enterprise: enterprise,
+                  isHeaderExpanded: _isHeaderExpanded,
+                  consultProductController: _consultProductController,
+                  consultedProductController: _consultedProductController,
+                  scrollController: _scrollController,
+                  expandHeader: () {
+                    setState(() {
+                      _isHeaderExpanded = true;
+                    });
+                  },
+                ),
+                const TransferBetweenStocksLotsPage(),
+              ],
+            ),
             bottomNavigationBar: BottomNavigationBar(
               currentIndex: pageIndex,
-              onTap: (index) {
-                setState(() {
-                  pageIndex = index;
-                });
-              },
+              onTap: _onItemTapped,
               selectedIconTheme: const IconThemeData(size: 35),
               items: [
                 const BottomNavigationBarItem(
@@ -138,7 +153,6 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                 ),
               ],
             ),
-            body: pages[pageIndex],
           ),
           loadingWidget(transferBetweenStocksProvider.isLoadingAdjustStock ||
               transferBetweenStocksProvider.isLoadingProducts ||
