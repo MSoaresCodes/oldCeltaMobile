@@ -37,28 +37,12 @@ class _EnableNotificationsState extends State<EnableNotifications>
   }
 
   Future<void> openPermissionsIfIsDisabled() async {
-    //TODO test this because wasnt installing in the phone
     if (widget.permissionStatus?.isGranted == true) {
       print("Notification permission is granted.");
-
       return;
     }
 
-    if (widget.permissionStatus?.isDenied == true) {
-      final result = await Permission.notification.request();
-      if (result.isGranted) {
-        print("Notification permission granted after request.");
-      } else {
-        print("User denied the notification permission.");
-      }
-      return;
-    }
-
-    if (widget.permissionStatus?.isPermanentlyDenied == true) {
-      print("Permission is permanently denied. Opening app settings.");
-
-      await openAppSettings();
-    }
+    await openAppSettings();
   }
 
   @override
