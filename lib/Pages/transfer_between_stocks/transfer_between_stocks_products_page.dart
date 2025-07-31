@@ -32,11 +32,13 @@ class TransferBetweenStocksProductsPage extends StatefulWidget {
 class _TransferBetweenStocksProductsPageState
     extends State<TransferBetweenStocksProductsPage> {
   final insertQuantityFormKey = GlobalKey<FormState>();
+  final quantityFocusNode = FocusNode();
   final searchFocusNode = FocusNode();
 
   @override
   void dispose() {
     super.dispose();
+    quantityFocusNode.dispose();
     searchFocusNode.dispose();
   }
 
@@ -70,7 +72,7 @@ class _TransferBetweenStocksProductsPageState
                       controllerText: widget.consultProductController.text,
                       context: context,
                       configurationsProvider: configurationsProvider,
-                      searchFocusNode: searchFocusNode,
+                      searchFocusNode: quantityFocusNode,
                     );
 
                     if (transferBetweenStocksProvider.products.length > 0) {
@@ -94,7 +96,7 @@ class _TransferBetweenStocksProductsPageState
             child: ProductsItems(
               scrollController: widget.scrollController,
               enterpriseCode: widget.enterprise.Code,
-              searchFocusNode: searchFocusNode,
+              searchFocusNode: quantityFocusNode,
               consultedProductController: widget.consultedProductController,
               insertQuantityFormKey: insertQuantityFormKey,
               expandHeader: widget.expandHeader,
@@ -114,7 +116,7 @@ class _TransferBetweenStocksProductsPageState
                   controllerText: widget.consultProductController.text,
                   context: context,
                   configurationsProvider: configurationsProvider,
-                  searchFocusNode: searchFocusNode,
+                  searchFocusNode: quantityFocusNode,
                 );
 
                 if (transferBetweenStocksProvider.products.length > 0) {
