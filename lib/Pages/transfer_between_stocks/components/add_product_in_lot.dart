@@ -48,10 +48,8 @@ class _AddProductInLotState extends State<AddProductInLot> {
     }
 
     await transferBetweenStocksProvider.addProductInLot(
-      //TODO add justification, stockOrigin and destinyStock
       TransferBetweenStockLotProductsModel(
-        productPackingCode: widget.product.productPackingCode!,
-        productCode: widget.product.productCode!,
+        product: widget.product,
         quantity: widget.quantityController.text.toDouble(),
       ),
     );

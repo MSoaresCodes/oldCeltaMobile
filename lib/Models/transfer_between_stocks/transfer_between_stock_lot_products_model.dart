@@ -1,20 +1,21 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import '../models.dart';
+
 class TransferBetweenStockLotProductsModel {
-  final int productPackingCode;
-  final int productCode;
+  final GetProductJsonModel product;
   final double quantity;
+  //TODO add justification, stockOrigin and destinyStock
 
   TransferBetweenStockLotProductsModel({
-    required this.productPackingCode,
-    required this.productCode,
+    required this.product,
     required this.quantity,
   });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'productPackingCode': productPackingCode,
-      'productCode': productCode,
+      'product': product.toJson(),
       'quantity': quantity,
     };
   }
@@ -22,8 +23,8 @@ class TransferBetweenStockLotProductsModel {
   factory TransferBetweenStockLotProductsModel.fromMap(
       Map<String, dynamic> map) {
     return TransferBetweenStockLotProductsModel(
-      productPackingCode: map['productPackingCode'] as int,
-      productCode: map['productCode'] as int,
+      product:
+          GetProductJsonModel.fromJson(map['product'] as Map<String, dynamic>),
       quantity: map['quantity'] as double,
     );
   }
@@ -35,13 +36,11 @@ class TransferBetweenStockLotProductsModel {
           json.decode(source) as Map<String, dynamic>);
 
   TransferBetweenStockLotProductsModel copyWith({
-    int? productPackingCode,
-    int? productCode,
+    GetProductJsonModel? product,
     double? quantity,
   }) {
     return TransferBetweenStockLotProductsModel(
-      productPackingCode: productPackingCode ?? this.productPackingCode,
-      productCode: productCode ?? this.productCode,
+      product: product ?? this.product,
       quantity: quantity ?? this.quantity,
     );
   }

@@ -309,25 +309,24 @@ class TransferBetweenStocksProvider with ChangeNotifier {
   }
 
   Future<void> addProductInLot(
-    TransferBetweenStockLotProductsModel product,
+    TransferBetweenStockLotProductsModel lotItem,
   ) async {
     int equalProductIndex = _productsLots.indexWhere((e) =>
-        e.productCode == product.productCode &&
-        e.productPackingCode == product.productPackingCode);
+        e.product.productCode == lotItem.product.productCode &&
+        e.product.productPackingCode == lotItem.product.productPackingCode);
 
     if (equalProductIndex == -1) {
       _productsLots.add(
         TransferBetweenStockLotProductsModel(
-          productCode: product.productCode,
-          productPackingCode: product.productPackingCode,
-          quantity: product.quantity,
+          product: lotItem.product,
+          quantity: lotItem.quantity,
         ),
       );
     } else {
       final oldProduct = _productsLots[equalProductIndex];
 
       _productsLots[equalProductIndex] = oldProduct.copyWith(
-        quantity: oldProduct.quantity + product.quantity,
+        quantity: oldProduct.quantity + lotItem.quantity,
       );
     }
     notifyListeners();
@@ -335,11 +334,11 @@ class TransferBetweenStocksProvider with ChangeNotifier {
   }
 
   Future<void> removeProductFromLot(
-    TransferBetweenStockLotProductsModel product,
+    TransferBetweenStockLotProductsModel itemLot,
   ) async {
     int equalProductIndex = _productsLots.indexWhere((e) =>
-        e.productCode == product.productCode &&
-        e.productPackingCode == product.productPackingCode);
+        e.product.productCode == itemLot.product.productCode &&
+        e.product.productPackingCode == itemLot.product.productPackingCode);
 
     if (equalProductIndex != -1) {
       _productsLots.removeAt(equalProductIndex);
