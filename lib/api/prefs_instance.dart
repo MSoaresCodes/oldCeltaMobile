@@ -17,6 +17,7 @@ enum PrefsKeys {
   searchCustomerByPersonalizedCode,
   searchProductByPersonalizedCode,
   showMessageToUseCameraInWebVersion,
+  transferBetweenStocksProductslots,
   transferCart,
   urlCCS,
   useAutoScan,
@@ -38,6 +39,7 @@ class PrefsInstance {
     await _prefs.remove(PrefsKeys.notifications.name);
     await _prefs.remove(PrefsKeys.showMessageToUseCameraInWebVersion.name);
     await _prefs.remove(PrefsKeys.userIdentity.name);
+    await _prefs.remove(PrefsKeys.transferBetweenStocksProductslots.name);
     await _prefs.remove(PrefsKeys.transferCart.name);
   }
 
@@ -53,6 +55,7 @@ class PrefsInstance {
   }) async {
     _prefs = await SharedPreferences.getInstance();
 
+    await _prefs.remove(prefsKeys.name);
     await _prefs.setString(prefsKeys.name, value);
   }
 

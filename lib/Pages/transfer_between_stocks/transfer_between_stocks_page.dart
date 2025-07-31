@@ -28,6 +28,13 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
 
     _pageController = PageController();
     _scrollController.addListener(_scrollListener);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (mounted) {
+        await Provider.of<TransferBetweenStocksProvider>(context, listen: false)
+            .restoreProductsLots();
+      }
+    });
   }
 
   @override
@@ -137,7 +144,10 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                           maxRadius: pageIndex == 1 ? 8 : 6,
                           child: FittedBox(
                             child: Text(
-                              transferBetweenStocksProvider.productsLots.length
+                              transferBetweenStocksProvider.productsLots
+                                  .where((e) =>
+                                      e.enterpriseCode == enterprise.Code)
+                                  .length
                                   .toString(),
                               style: const TextStyle(color: Colors.white),
                             ),

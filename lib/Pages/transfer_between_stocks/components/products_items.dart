@@ -100,7 +100,8 @@ class _ProductsItemsState extends State<ProductsItems> {
         double quantityInLot = transferBetweenStocksProvider.productsLots
             .where((e) =>
                 e.product.productPackingCode == product.productPackingCode &&
-                e.product.productCode == product.productCode)
+                e.product.productCode == product.productCode &&
+                e.enterpriseCode == widget.enterpriseCode)
             .fold(
               0.0,
               (previousValue, element) => previousValue + element.quantity,

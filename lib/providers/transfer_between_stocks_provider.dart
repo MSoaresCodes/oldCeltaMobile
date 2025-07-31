@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import '../api/api.dart';
@@ -229,6 +231,10 @@ class TransferBetweenStocksProvider with ChangeNotifier {
         //TODO test if is possible get the lot number
 
         // _indexOfLastProductChangedStockQuantity = indexOfProduct;
+
+        await PrefsInstance.removeKey(
+          PrefsKeys.transferBetweenStocksProductslots,
+        );
       }
 
       if (SoapRequestResponse.errorMessage != "") {
@@ -250,26 +256,34 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> addProductInLot(
-    GetProductJsonModel product,
-    double quantity,
-  ) async {
+  Future<bool> addProductInLot({
+    required GetProductJsonModel product,
+    required double quantity,
+    required int enterpriseCode,
+  }) async {
     try {
-      int equalProductIndex = _productsLots.indexWhere((e) =>
-          e.product.productCode == product.productCode &&
-          e.product.productPackingCode == product.productPackingCode);
+      int equalProductIndex = _productsLots.indexWhere(
+        (e) =>
+            e.product.productCode == product.productCode &&
+            e.product.productPackingCode == product.productPackingCode &&
+            e.enterpriseCode == enterpriseCode,
+      );
 
       if (equalProductIndex == -1) {
         _productsLots.add(
           TransferBetweenStockLotProductsModel(
             product: product,
             quantity: quantity,
+            enterpriseCode: enterpriseCode,
             destinyStock: _selectedDestiny!,
             originStock: _selectedOrigin!,
             justification: _selectedJustification!,
           ),
         );
-        //TODO save locally
+        await PrefsInstance.setString(
+          prefsKeys: PrefsKeys.transferBetweenStocksProductslots,
+          value: jsonEncode(_productsLots.map((e) => e.toJson()).toList()),
+        );
         return true;
       } else {
         ShowSnackbarMessage.show(
@@ -290,7 +304,10 @@ class TransferBetweenStocksProvider with ChangeNotifier {
       final oldProduct = _productsLots[index];
 
       _productsLots[index] = oldProduct.copyWith(quantity: quantity);
-      //TODO save locally
+      await PrefsInstance.setString(
+        prefsKeys: PrefsKeys.transferBetweenStocksProductslots,
+        value: jsonEncode(_productsLots.map((e) => e.toJson()).toList()),
+      );
       notifyListeners();
       return true;
     } catch (e) {
@@ -310,7 +327,10 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     } else {
       //product not found. Never should happpen this
     }
-    //TODO save locally
+    await PrefsInstance.setString(
+      prefsKeys: PrefsKeys.transferBetweenStocksProductslots,
+      value: jsonEncode(_productsLots.map((e) => e.toJson()).toList()),
+    );
   }
 
   void changeSelectedJustification(GetJustificationsModel? value) {
@@ -379,5 +399,28 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     return _originStockTypes.firstWhere((e) =>
         _selectedJustification?.CodigoInterno_TipoEstoque.Nome_TipoEstoque ==
         e.Nome_TipoEstoque);
+  }
+
+  Future<void> restoreProductsLots() async {
+    try {
+      _isLoadingProducts = true;
+      notifyListeners();
+
+      // await PrefsInstance.removeKey(
+      //     PrefsKeys.transferBetweenStocksProductslots);
+      _productsLots.clear();
+      final value = await PrefsInstance.getString(
+          PrefsKeys.transferBetweenStocksProductslots);
+      _productsLots = value.isEmpty
+          ? []
+          : (jsonDecode(value) as List)
+              .map((e) => TransferBetweenStockLotProductsModel.fromJson(e))
+              .toList();
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      _isLoadingProducts = false;
+      notifyListeners();
+    }
   }
 }

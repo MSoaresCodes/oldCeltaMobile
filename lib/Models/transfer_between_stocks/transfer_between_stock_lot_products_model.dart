@@ -9,6 +9,7 @@ class TransferBetweenStockLotProductsModel {
   final GetJustificationsModel justification;
   final GetStockTypesModel originStock;
   final GetStockTypesModel destinyStock;
+  final int enterpriseCode;
 
   TransferBetweenStockLotProductsModel({
     required this.product,
@@ -16,6 +17,7 @@ class TransferBetweenStockLotProductsModel {
     required this.justification,
     required this.originStock,
     required this.destinyStock,
+    required this.enterpriseCode,
   });
 
   Map<String, dynamic> toMap() {
@@ -25,6 +27,7 @@ class TransferBetweenStockLotProductsModel {
       'justification': justification.toJson(),
       'originStock': originStock.toJson(),
       'destinyStock': destinyStock.toJson(),
+      'enterpriseCode': enterpriseCode,
     };
   }
 
@@ -34,6 +37,7 @@ class TransferBetweenStockLotProductsModel {
       product:
           GetProductJsonModel.fromJson(map['product'] as Map<String, dynamic>),
       quantity: map['quantity'] as double,
+      enterpriseCode: map['enterpriseCode'] as int,
       justification: GetJustificationsModel.fromJson(map['justification']),
       destinyStock: GetStockTypesModel.fromJson(map['destinyStock']),
       originStock: GetStockTypesModel.fromJson(map['originStock']),
@@ -52,6 +56,7 @@ class TransferBetweenStockLotProductsModel {
     GetJustificationsModel? justification,
     GetStockTypesModel? originStock,
     GetStockTypesModel? destinyStock,
+    int? enterpriseCode,
   }) {
     return TransferBetweenStockLotProductsModel(
       product: product ?? this.product,
@@ -59,6 +64,7 @@ class TransferBetweenStockLotProductsModel {
       justification: justification ?? this.justification,
       originStock: originStock ?? this.originStock,
       destinyStock: destinyStock ?? this.destinyStock,
+      enterpriseCode: enterpriseCode ?? this.enterpriseCode,
     );
   }
 }

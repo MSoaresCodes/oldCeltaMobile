@@ -2,6 +2,7 @@ import 'package:celta_inventario/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../Models/models.dart';
 import '../../components/components.dart';
 import '../../providers/providers.dart';
 
@@ -43,13 +44,24 @@ class _TransferBetweenStocksLotsPageState
   Widget build(BuildContext context) {
     final transferBetweenStocksProvider =
         Provider.of<TransferBetweenStocksProvider>(context);
-
     final theme = Theme.of(context);
+    final enterprise =
+        ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
+
+    final filteredProducts = transferBetweenStocksProvider.productsLots
+        .where((e) => e.enterpriseCode == enterprise.Code)
+        .toList();
+
+    if (filteredProducts.isEmpty) {
+      return const Center(
+        child: Text("Adicione produtos no lote"),
+      );
+    }
 
     return ListView.builder(
-      itemCount: transferBetweenStocksProvider.productsLots.length,
+      itemCount: filteredProducts.length,
       itemBuilder: (context, index) {
-        final lot = transferBetweenStocksProvider.productsLots[index];
+        final lot = filteredProducts[index];
 
         return Card(
           child: Padding(
