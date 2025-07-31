@@ -102,7 +102,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
 
   Future<void> getProducts({
     required EnterpriseModel enterprise,
-    required String controllerText,
+    required String text,
     required BuildContext context,
     required ConfigurationsProvider configurationsProvider,
     required FocusNode searchFocusNode,
@@ -112,7 +112,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
 
     await _getProducts(
       enterprise: enterprise,
-      controllerText: controllerText,
+      controllerText: text,
       context: context,
       configurationsProvider: configurationsProvider,
     );

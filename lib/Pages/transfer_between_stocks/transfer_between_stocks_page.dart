@@ -19,8 +19,6 @@ class TransferBetweenStockPage extends StatefulWidget {
 class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
   late PageController _pageController;
   final _scrollController = ScrollController();
-  final _consultProductController = TextEditingController();
-  final _consultedProductController = TextEditingController();
   int pageIndex = 0;
   bool _isHeaderExpanded = true;
 
@@ -106,10 +104,6 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                 TransferBetweenStocksProductsPage(
                   enterprise: enterprise,
                   isHeaderExpanded: _isHeaderExpanded,
-                  consultProductController:
-                      _consultProductController, //TODO move this to the other page
-                  quantityController:
-                      _consultedProductController, //TODO move this to the other page
                   scrollController: _scrollController,
                   expandHeader: () {
                     setState(() {
