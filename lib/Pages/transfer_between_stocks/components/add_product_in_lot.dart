@@ -69,63 +69,67 @@ class _AddProductInLotState extends State<AddProductInLot> {
         Provider.of(context);
     ConfigurationsProvider configurationsProvider = Provider.of(context);
 
-    return Form(
-      key: widget.insertQuantityFormKey,
-      child: Row(
-        children: [
-          Expanded(
-            flex: 10,
-            child: TextFormField(
-              focusNode: widget.searchFocusNode,
-              controller: widget.quantityController,
-              inputFormatters: [LengthLimitingTextInputFormatter(10)],
-              onFieldSubmitted: (_) async {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Form(
+        key: widget.insertQuantityFormKey,
+        child: Row(
+          children: [
+            Expanded(
+              flex: 10,
+              child: TextFormField(
+                focusNode: widget.searchFocusNode,
+                controller: widget.quantityController,
+                inputFormatters: [LengthLimitingTextInputFormatter(10)],
+                onFieldSubmitted: (_) async {
+                  await _addProductInLot(
+                    transferBetweenStocksProvider:
+                        transferBetweenStocksProvider,
+                    configurationsProvider: configurationsProvider,
+                  );
+                },
+                onChanged: (value) {
+                  if (value.isEmpty || value == '-') {
+                    value = '0';
+                  }
+                  if (value.startsWith(",") || value.startsWith(".")) {
+                    widget.quantityController.text =
+                        "0" + widget.quantityController.text;
+                    widget.quantityController.selection =
+                        TextSelection.fromPosition(
+                      TextPosition(
+                        offset: widget.quantityController.text.length,
+                      ),
+                    );
+                  }
+                },
+                validator: FormFieldValidations.number,
+                decoration: FormFieldDecoration.decoration(
+                  context: context,
+                  labelText: "Quantidade",
+                ),
+                style: FormFieldStyle.style(),
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
+              ),
+            ),
+            const SizedBox(width: 5),
+            ElevatedButton(
+              onPressed: () async {
                 await _addProductInLot(
                   transferBetweenStocksProvider: transferBetweenStocksProvider,
                   configurationsProvider: configurationsProvider,
                 );
               },
-              onChanged: (value) {
-                if (value.isEmpty || value == '-') {
-                  value = '0';
-                }
-                if (value.startsWith(",") || value.startsWith(".")) {
-                  widget.quantityController.text =
-                      "0" + widget.quantityController.text;
-                  widget.quantityController.selection =
-                      TextSelection.fromPosition(
-                    TextPosition(
-                      offset: widget.quantityController.text.length,
-                    ),
-                  );
-                }
-              },
-              validator: FormFieldValidations.number,
-              decoration: FormFieldDecoration.decoration(
-                context: context,
-                labelText: "Quantidade",
+              child: Row(
+                children: [
+                  const Text("Lote"),
+                  Icon(Platform.isIOS ? Icons.add : Icons.add)
+                ],
               ),
-              style: FormFieldStyle.style(),
-              keyboardType:
-                  const TextInputType.numberWithOptions(decimal: true),
             ),
-          ),
-          const SizedBox(width: 5),
-          ElevatedButton(
-            onPressed: () async {
-              await _addProductInLot(
-                transferBetweenStocksProvider: transferBetweenStocksProvider,
-                configurationsProvider: configurationsProvider,
-              );
-            },
-            child: Row(
-              children: [
-                const Text("Lote"),
-                Icon(Platform.isIOS ? Icons.add : Icons.add)
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
