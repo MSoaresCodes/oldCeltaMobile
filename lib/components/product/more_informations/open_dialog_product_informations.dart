@@ -46,7 +46,7 @@ class _OpenDialogProductInformationsState
             ),
           ),
           const SizedBox(width: 3),
-          if (size.width > 250)
+          if (size.width > 310)
             Icon(
               Icons.info,
               color: Theme.of(context).colorScheme.primary,

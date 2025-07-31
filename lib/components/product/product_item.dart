@@ -53,13 +53,14 @@ class ProductItem extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(
+                      // flex: 6,
                       child: TitleAndSubtitle.titleAndSubtitle(
                         title: "PLU",
                         subtitle: product.plu,
                       ),
                     ),
                     Expanded(
-                      flex: 3,
+                      // flex: 4,
                       child: OpenDialogProductInformations(
                         product: product,
                         pages: [
