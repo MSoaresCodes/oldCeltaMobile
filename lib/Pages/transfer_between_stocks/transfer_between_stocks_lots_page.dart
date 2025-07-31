@@ -58,113 +58,155 @@ class _TransferBetweenStocksLotsPageState
       );
     }
 
-    return ListView.builder(
-      itemCount: filteredProducts.length,
-      itemBuilder: (context, index) {
-        final lot = filteredProducts[index];
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+            itemCount: filteredProducts.length,
+            itemBuilder: (context, index) {
+              final lot = filteredProducts[index];
 
-        return Card(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                TitleAndSubtitle.titleAndSubtitle(
-                  title: "Produto",
-                  subtitle: '${lot.product.name} (${lot.product.plu})',
-                ),
-                TitleAndSubtitle.titleAndSubtitle(
-                  title: "Justificativa",
-                  subtitle: lot.justification.Descricao_JustMov,
-                ),
-                TitleAndSubtitle.titleAndSubtitle(
-                  title: "De",
-                  subtitle: lot.originStock.Nome_TipoEstoque,
-                ),
-                TitleAndSubtitle.titleAndSubtitle(
-                  title: "Para",
-                  subtitle: lot.destinyStock.Nome_TipoEstoque,
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 4,
-                      child: TitleAndSubtitle.titleAndSubtitle(
-                        title: "Qtd",
-                        subtitle: lot.quantity.toString().toBrazilianNumber(3),
+              return Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      TitleAndSubtitle.titleAndSubtitle(
+                        title: "Produto",
+                        subtitle: '${lot.product.name} (${lot.product.plu})',
                       ),
-                    ),
-                    if (selectedIndex == index)
-                      Expanded(
-                        flex: 6,
-                        child: Form(
-                          key: formKey,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 8, top: 8),
-                            child: TextFormField(
-                              controller: quantityController,
-                              focusNode: quantityFocusNode,
-                              keyboardType: TextInputType.number,
-                              validator: FormFieldValidations.number,
-                              decoration: FormFieldDecoration.decoration(
-                                context: context,
-                                hintText: "Nova qtd",
-                                labelText: "Nova qtd",
-                                suffixIcon: IconButton(
-                                  padding: const EdgeInsets.only(right: 4),
-                                  onPressed: () {
-                                    changeProductQuantity(
-                                      transferBetweenStocksProvider,
-                                    );
-                                  },
-                                  icon: Icon(
-                                    Icons.save,
-                                    color: theme.colorScheme.primary,
+                      TitleAndSubtitle.titleAndSubtitle(
+                        title: "Justificativa",
+                        subtitle: lot.justification.Descricao_JustMov,
+                      ),
+                      TitleAndSubtitle.titleAndSubtitle(
+                        title: "De",
+                        subtitle: lot.originStock.Nome_TipoEstoque,
+                      ),
+                      TitleAndSubtitle.titleAndSubtitle(
+                        title: "Para",
+                        subtitle: lot.destinyStock.Nome_TipoEstoque,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 4,
+                            child: TitleAndSubtitle.titleAndSubtitle(
+                              title: "Qtd",
+                              subtitle:
+                                  lot.quantity.toString().toBrazilianNumber(3),
+                            ),
+                          ),
+                          if (selectedIndex == index)
+                            Expanded(
+                              flex: 6,
+                              child: Form(
+                                key: formKey,
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.only(left: 8, top: 8),
+                                  child: TextFormField(
+                                    controller: quantityController,
+                                    focusNode: quantityFocusNode,
+                                    keyboardType: TextInputType.number,
+                                    validator: FormFieldValidations.number,
+                                    decoration: FormFieldDecoration.decoration(
+                                      context: context,
+                                      hintText: "Nova qtd",
+                                      labelText: "Nova qtd",
+                                      suffixIcon: IconButton(
+                                        padding:
+                                            const EdgeInsets.only(right: 4),
+                                        onPressed: () {
+                                          changeProductQuantity(
+                                            transferBetweenStocksProvider,
+                                          );
+                                        },
+                                        icon: Icon(
+                                          Icons.save,
+                                          color: theme.colorScheme.primary,
+                                        ),
+                                      ),
+                                    ),
+                                    onFieldSubmitted: (_) async {
+                                      changeProductQuantity(
+                                        transferBetweenStocksProvider,
+                                      );
+                                    },
                                   ),
                                 ),
                               ),
-                              onFieldSubmitted: (_) async {
-                                changeProductQuantity(
-                                  transferBetweenStocksProvider,
-                                );
-                              },
+                            ),
+                          IconButton(
+                            onPressed: () {
+                              if (selectedIndex == index) {
+                                setState(() {
+                                  selectedIndex = null;
+                                });
+                              } else {
+                                setState(() {
+                                  selectedIndex = index;
+                                  Future.delayed(
+                                      const Duration(milliseconds: 100), () {
+                                    quantityFocusNode.requestFocus();
+                                    quantityController.clear();
+                                  });
+                                });
+                              }
+                            },
+                            icon: Icon(
+                              selectedIndex != index
+                                  ? Icons.edit
+                                  : Icons.cancel_sharp,
+                              color: selectedIndex != index
+                                  ? theme.colorScheme.primary
+                                  : Colors.red,
                             ),
                           ),
-                        ),
+                        ],
                       ),
-                    IconButton(
-                      onPressed: () {
-                        if (selectedIndex == index) {
-                          setState(() {
-                            selectedIndex = null;
-                          });
-                        } else {
-                          setState(() {
-                            selectedIndex = index;
-                            Future.delayed(const Duration(milliseconds: 100),
-                                () {
-                              quantityFocusNode.requestFocus();
-                              quantityController.clear();
-                            });
-                          });
-                        }
-                      },
-                      icon: Icon(
-                        selectedIndex != index
-                            ? Icons.edit
-                            : Icons.cancel_sharp,
-                        color: selectedIndex != index
-                            ? theme.colorScheme.primary
-                            : Colors.red,
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ],
+              );
+            },
+          ),
+        ),
+        Row(children: [
+          Expanded(
+            child: ElevatedButton(
+              onPressed: () {
+                ShowAlertDialog.show(
+                    context: context,
+                    title: "Solicitar?",
+                    function: () async {
+                      transferBetweenStocksProvider.confirmAdjustStock(
+                        enterpriseCode: enterprise.Code,
+                        isPendingAdjust: true,
+                      );
+                    });
+              },
+              child: const Text("Solicitar"),
             ),
           ),
-        );
-      },
+          Expanded(
+              child: ElevatedButton(
+            onPressed: () {
+              ShowAlertDialog.show(
+                  context: context,
+                  title: "Confirmar?",
+                  function: () async {
+                    transferBetweenStocksProvider.confirmAdjustStock(
+                      enterpriseCode: enterprise.Code,
+                      isPendingAdjust: false,
+                    );
+                  });
+            },
+            child: const Text("Confirmar"),
+          )),
+        ])
+      ],
     );
   }
 }

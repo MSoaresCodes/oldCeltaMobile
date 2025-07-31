@@ -209,8 +209,6 @@ class TransferBetweenStocksProvider with ChangeNotifier {
   }
 
   Future<void> confirmAdjustStock({
-    required String consultedProductControllerText,
-    required double quantity,
     required int enterpriseCode,
     required bool isPendingAdjust,
   }) async {
@@ -223,24 +221,23 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     );
 
     try {
-      SoapHelper.confirmAdjustStock(
+      await SoapHelper.confirmAdjustStock(
         _productsLots.where((e) => e.enterpriseCode == enterpriseCode).toList(),
         isPendingAdjust,
       );
-
-      // await SoapHelper.confirmAdjustStock(TransferBetweenStockBodyModel.toJson());//TODO delete this model
-
       _errorMessageAdjustStock = SoapRequestResponse.errorMessage;
 
       if (_errorMessageAdjustStock == "") {
-        //TODO test if is possible get the lot number
-
-        // _indexOfLastProductChangedStockQuantity = indexOfProduct;
-
         _productsLots.removeWhere((e) => e.enterpriseCode == enterpriseCode);
         await PrefsInstance.setString(
           prefsKeys: PrefsKeys.transferBetweenStocksProductslots,
           value: jsonEncode(_productsLots.map((e) => e.toJson()).toList()),
+        );
+
+        ShowSnackbarMessage.show(
+          message: "Lote salvo com sucesso",
+          context: NavigatorKey.key.currentState!.context,
+          backgroundColor: Colors.green,
         );
       }
 
@@ -251,7 +248,6 @@ class TransferBetweenStocksProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      //print("Erro para confirmar o ajuste: $e");
       _errorMessageAdjustStock = DefaultErrorMessage.ERROR;
       ShowSnackbarMessage.show(
         message: _errorMessageAdjustStock,

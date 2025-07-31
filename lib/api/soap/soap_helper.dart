@@ -204,7 +204,7 @@ class SoapHelper {
                       e.destinyStock.CodigoInterno_TipoEstoque,
                   Quantity: e.quantity,
                   IsPendingAdjust: isPendingAdjust,
-                ),
+                ).toJson(),
               )
               .toList(),
         },
