@@ -167,6 +167,11 @@ class _ProductsItemsState extends State<ProductsItems> {
                     product: product,
                     getProductsWithCamera: widget.getProductsWithCamera,
                     expandHeader: widget.expandHeader,
+                    onSuccess: () {
+                      setState(() {
+                        _selectedIndex = -1;
+                      });
+                    },
                   ),
               ],
             ),

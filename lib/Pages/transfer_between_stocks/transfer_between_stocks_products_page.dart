@@ -51,7 +51,7 @@ class _TransferBetweenStocksProductsPageState
     return Column(
       children: [
         AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 500),
           curve: Curves.easeInOut,
           height: widget.isHeaderExpanded ? 200.0 : 0.0,
           alignment: Alignment.center,
@@ -60,6 +60,7 @@ class _TransferBetweenStocksProductsPageState
             child: Column(
               children: [
                 SearchWidget(
+                  autofocus: false,
                   configurations: [
                     ConfigurationType.autoScan,
                     ConfigurationType.legacyCode,

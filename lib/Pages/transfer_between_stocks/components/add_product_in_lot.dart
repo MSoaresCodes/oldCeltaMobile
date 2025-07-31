@@ -17,6 +17,7 @@ class AddProductInLot extends StatefulWidget {
   final GetProductJsonModel product;
   final VoidCallback expandHeader;
   final FocusNode searchFocusNode;
+  final VoidCallback onSuccess;
 
   const AddProductInLot({
     required this.internalEnterpriseCode,
@@ -26,6 +27,7 @@ class AddProductInLot extends StatefulWidget {
     required this.product,
     required this.expandHeader,
     required this.searchFocusNode,
+    required this.onSuccess,
     Key? key,
   }) : super(key: key);
 
@@ -56,6 +58,7 @@ class _AddProductInLotState extends State<AddProductInLot> {
     if (!added) return;
 
     widget.quantityController.clear();
+    widget.onSuccess();
 
     if (configurationsProvider.autoScan?.value == true) {
       await widget.getProductsWithCamera();
