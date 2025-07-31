@@ -269,29 +269,25 @@ class TransferBetweenStocksProvider with ChangeNotifier {
             e.enterpriseCode == enterpriseCode,
       );
 
+      final newProduct = TransferBetweenStockLotProductsModel(
+        product: product,
+        quantity: quantity,
+        enterpriseCode: enterpriseCode,
+        destinyStock: _selectedDestiny!,
+        originStock: _selectedOrigin!,
+        justification: _selectedJustification!,
+      );
+
       if (equalProductIndex == -1) {
-        _productsLots.add(
-          TransferBetweenStockLotProductsModel(
-            product: product,
-            quantity: quantity,
-            enterpriseCode: enterpriseCode,
-            destinyStock: _selectedDestiny!,
-            originStock: _selectedOrigin!,
-            justification: _selectedJustification!,
-          ),
-        );
-        await PrefsInstance.setString(
-          prefsKeys: PrefsKeys.transferBetweenStocksProductslots,
-          value: jsonEncode(_productsLots.map((e) => e.toJson()).toList()),
-        );
-        return true;
+        _productsLots.add(newProduct);
       } else {
-        ShowSnackbarMessage.show(
-          message: 'Esse produto já foi adicionado',
-          context: NavigatorKey.key.currentState!.context,
-        );
-        return false;
+        _productsLots[equalProductIndex] = newProduct;
       }
+      await PrefsInstance.setString(
+        prefsKeys: PrefsKeys.transferBetweenStocksProductslots,
+        value: jsonEncode(_productsLots.map((e) => e.toJson()).toList()),
+      );
+      return true;
     } catch (e) {
       return false;
     } finally {
