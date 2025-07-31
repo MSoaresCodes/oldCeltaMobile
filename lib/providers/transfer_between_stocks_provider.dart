@@ -308,29 +308,35 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     );
   }
 
-  Future<void> addProductInLot(
+  Future<bool> addProductInLot(
     TransferBetweenStockLotProductsModel lotItem,
   ) async {
-    int equalProductIndex = _productsLots.indexWhere((e) =>
-        e.product.productCode == lotItem.product.productCode &&
-        e.product.productPackingCode == lotItem.product.productPackingCode);
+    try {
+      int equalProductIndex = _productsLots.indexWhere((e) =>
+          e.product.productCode == lotItem.product.productCode &&
+          e.product.productPackingCode == lotItem.product.productPackingCode);
 
-    if (equalProductIndex == -1) {
-      _productsLots.add(
-        TransferBetweenStockLotProductsModel(
-          product: lotItem.product,
-          quantity: lotItem.quantity,
-        ),
-      );
-    } else {
-      final oldProduct = _productsLots[equalProductIndex];
-
-      _productsLots[equalProductIndex] = oldProduct.copyWith(
-        quantity: oldProduct.quantity + lotItem.quantity,
-      );
+      if (equalProductIndex == -1) {
+        _productsLots.add(
+          TransferBetweenStockLotProductsModel(
+            product: lotItem.product,
+            quantity: lotItem.quantity,
+          ),
+        );
+        //TODO save locally
+        return true;
+      } else {
+        ShowSnackbarMessage.show(
+          message: 'Esse produto já foi adicionado',
+          context: NavigatorKey.key.currentState!.context,
+        );
+        return false;
+      }
+    } catch (e) {
+      return false;
+    } finally {
+      notifyListeners();
     }
-    notifyListeners();
-    //TODO save locally
   }
 
   Future<void> removeProductFromLot(
