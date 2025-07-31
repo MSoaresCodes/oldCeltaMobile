@@ -19,6 +19,29 @@ class GetJustificationsModel {
     required this.CodigoInterno_TipoEstoque,
   });
 
+  factory GetJustificationsModel.fromJson(Map<String, dynamic> json) {
+    return GetJustificationsModel(
+      CodigoInterno_JustMov: json["CodigoInterno_JustMov"],
+      Descricao_JustMov: json["Descricao_JustMov"],
+      FlagTipo_JustMov: json["FlagTipo_JustMov"],
+      TypeOperator: json["TypeOperator"],
+      Nome_TipoEstoque: json["Nome_TipoEstoque"],
+      CodigoInterno_TipoEstoque:
+          GetStockTypesModel.fromJson(json["CodigoInterno_TipoEstoque"]),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "CodigoInterno_JustMov": CodigoInterno_JustMov,
+      "Descricao_JustMov": Descricao_JustMov,
+      "FlagTipo_JustMov": FlagTipo_JustMov,
+      "TypeOperator": TypeOperator,
+      "Nome_TipoEstoque": Nome_TipoEstoque,
+      "CodigoInterno_TipoEstoque": CodigoInterno_TipoEstoque.toJson(),
+    };
+  }
+
   static resultAsStringToJustificationsModel({
     required String resultAsString,
     required List listToAdd,

@@ -251,18 +251,22 @@ class TransferBetweenStocksProvider with ChangeNotifier {
   }
 
   Future<bool> addProductInLot(
-    TransferBetweenStockLotProductsModel lotItem,
+    GetProductJsonModel product,
+    double quantity,
   ) async {
     try {
       int equalProductIndex = _productsLots.indexWhere((e) =>
-          e.product.productCode == lotItem.product.productCode &&
-          e.product.productPackingCode == lotItem.product.productPackingCode);
+          e.product.productCode == product.productCode &&
+          e.product.productPackingCode == product.productPackingCode);
 
       if (equalProductIndex == -1) {
         _productsLots.add(
           TransferBetweenStockLotProductsModel(
-            product: lotItem.product,
-            quantity: lotItem.quantity,
+            product: product,
+            quantity: quantity,
+            destinyStock: _selectedDestiny!,
+            originStock: _selectedOrigin!,
+            justification: _selectedJustification!,
           ),
         );
         //TODO save locally

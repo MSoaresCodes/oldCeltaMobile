@@ -48,10 +48,8 @@ class _AddProductInLotState extends State<AddProductInLot> {
     }
 
     final added = await transferBetweenStocksProvider.addProductInLot(
-      TransferBetweenStockLotProductsModel(
-        product: widget.product,
-        quantity: widget.quantityController.text.toDouble(),
-      ),
+      widget.product,
+      widget.quantityController.text.toDouble(),
     );
 
     if (!added) return;

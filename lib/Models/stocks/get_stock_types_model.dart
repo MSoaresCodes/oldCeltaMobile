@@ -26,4 +26,18 @@ class GetStockTypesModel {
       );
     });
   }
+
+  factory GetStockTypesModel.fromJson(Map<String, dynamic> json) {
+    return GetStockTypesModel(
+      CodigoInterno_TipoEstoque: json['CodigoInterno_TipoEstoque'] ?? -1,
+      Nome_TipoEstoque: json['Nome_TipoEstoque'],
+      FlagInterno_TipoEstoque: json['FlagInterno_TipoEstoque'],
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        "CodigoInterno_TipoEstoque": CodigoInterno_TipoEstoque,
+        "Nome_TipoEstoque": Nome_TipoEstoque,
+        "FlagInterno_TipoEstoque": FlagInterno_TipoEstoque,
+      };
 }
