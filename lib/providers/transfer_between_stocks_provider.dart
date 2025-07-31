@@ -222,7 +222,22 @@ class TransferBetweenStocksProvider with ChangeNotifier {
 
     try {
       await SoapHelper.confirmAdjustStock(
-        _productsLots.where((e) => e.enterpriseCode == enterpriseCode).toList(),
+        _productsLots
+            .where((e) => e.enterpriseCode == enterpriseCode)
+            .map(
+              (e) => TransferBetweenStockBodyModel(
+                EnterpriseCode: e.enterpriseCode,
+                ProductCode: e.product.productCode,
+                ProductPackingCode: e.product.productPackingCode,
+                JustificationCode: e.justification.CodigoInterno_JustMov,
+                StockTypeCode: e.originStock.CodigoInterno_TipoEstoque,
+                StockTypeRecipientCode:
+                    e.destinyStock.CodigoInterno_TipoEstoque,
+                Quantity: e.quantity,
+                IsPendingAdjust: isPendingAdjust,
+              ),
+            )
+            .toList(),
         isPendingAdjust,
       );
       _errorMessageAdjustStock = SoapRequestResponse.errorMessage;
