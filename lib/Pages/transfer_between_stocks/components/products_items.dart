@@ -1,3 +1,4 @@
+import 'package:celta_inventario/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -82,8 +83,8 @@ class _ProductsItemsState extends State<ProductsItems> {
 
   @override
   Widget build(BuildContext context) {
-    TransferBetweenStocksProvider transferBetweenStocksProvider =
-        Provider.of(context);
+    final transferBetweenStocksProvider =
+        Provider.of<TransferBetweenStocksProvider>(context);
 
     return ListView.builder(
       // shrinkWrap: true,
@@ -95,6 +96,15 @@ class _ProductsItemsState extends State<ProductsItems> {
         if (transferBetweenStocksProvider.products.length == 1) {
           _selectedIndex = index;
         }
+
+        double quantityInLot = transferBetweenStocksProvider.productsLots
+            .where((e) =>
+                e.product.productPackingCode == product.productPackingCode &&
+                e.product.productCode == product.productCode)
+            .fold(
+              0.0,
+              (previousValue, element) => previousValue + element.quantity,
+            );
 
         return GestureDetector(
           onTap: transferBetweenStocksProvider
@@ -116,12 +126,36 @@ class _ProductsItemsState extends State<ProductsItems> {
             componentAfterProductInformations: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Icon(
-                  _selectedIndex == index
-                      ? Icons.arrow_drop_up
-                      : Icons.arrow_drop_down,
-                  size: 20,
-                  color: Theme.of(context).colorScheme.primary,
+                Padding(
+                  padding: EdgeInsets.only(bottom: quantityInLot > 0 ? 8 : 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      if (quantityInLot > 0)
+                        Expanded(
+                          flex: 9,
+                          child: Text(
+                            "${quantityInLot.toString().toBrazilianNumber(2)} qtd(s) no lote",
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blueAccent,
+                            ),
+                          ),
+                        ),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Icon(
+                            _selectedIndex == index
+                                ? Icons.arrow_drop_up
+                                : Icons.arrow_drop_down,
+                            size: 20,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 if (_selectedIndex == index)
                   AddProductInLot(
