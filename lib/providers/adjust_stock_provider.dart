@@ -74,6 +74,7 @@ class AdjustStockProvider with ChangeNotifier {
   }
 
   Map<String, dynamic> jsonAdjustStock = {
+    //TODO delete this and test
     "EnterpriseCode": "", //esse parâmetro vem da tela de empresas
     "ProductCode": "", //quando clica no produto, altera o código
     "ProductPackingCode": "", //quando clica no produto, altera o código
@@ -278,7 +279,7 @@ class AdjustStockProvider with ChangeNotifier {
     _updateProductCodeAndProductPackingCode(indexOfProduct);
 
     try {
-      await SoapHelper.confirmAdjustStock(jsonAdjustStock);
+      // await SoapHelper.confirmAdjustStock(jsonAdjustStock);//TODO fix here
 
       _errorMessageAdjustStock = SoapRequestResponse.errorMessage;
       if (_errorMessageAdjustStock == "") {

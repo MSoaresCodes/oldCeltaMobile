@@ -212,7 +212,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     required String consultedProductControllerText,
     required double quantity,
     required int enterpriseCode,
-    required bool? isPendingAdjust,
+    required bool isPendingAdjust,
   }) async {
     _isLoadingAdjustStock = true;
     _errorMessageAdjustStock = "";
@@ -223,7 +223,12 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     );
 
     try {
-      // await SoapHelper.confirmAdjustStock(TransferBetweenStockBodyModel.toJson());//TODO insert correct model
+      SoapHelper.confirmAdjustStock(
+        _productsLots.where((e) => e.enterpriseCode == enterpriseCode).toList(),
+        isPendingAdjust,
+      );
+
+      // await SoapHelper.confirmAdjustStock(TransferBetweenStockBodyModel.toJson());//TODO delete this model
 
       _errorMessageAdjustStock = SoapRequestResponse.errorMessage;
 
@@ -232,8 +237,10 @@ class TransferBetweenStocksProvider with ChangeNotifier {
 
         // _indexOfLastProductChangedStockQuantity = indexOfProduct;
 
-        await PrefsInstance.removeKey(
-          PrefsKeys.transferBetweenStocksProductslots,
+        _productsLots.removeWhere((e) => e.enterpriseCode == enterpriseCode);
+        await PrefsInstance.setString(
+          prefsKeys: PrefsKeys.transferBetweenStocksProductslots,
+          value: jsonEncode(_productsLots.map((e) => e.toJson()).toList()),
         );
       }
 

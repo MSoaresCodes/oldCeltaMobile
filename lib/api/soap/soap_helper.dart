@@ -185,14 +185,28 @@ class SoapHelper {
   }
 
   static Future<void> confirmAdjustStock(
-    Map<String, dynamic> jsonAdjustStock, //TODO remove this
-    // TransferBetweenStockBodyModel jsonAdjustStock,
+    List<TransferBetweenStockLotProductsModel> items,
+    bool isPendingAdjust,
   ) async {
     try {
       await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
-          "jsonAdjustStock": jsonAdjustStock,
+          "jsonAdjustStock": items
+              .map(
+                (e) => TransferBetweenStockBodyModel(
+                  EnterpriseCode: e.enterpriseCode,
+                  ProductCode: e.product.productCode,
+                  ProductPackingCode: e.product.productPackingCode,
+                  JustificationCode: e.justification.CodigoInterno_JustMov,
+                  StockTypeCode: e.originStock.CodigoInterno_TipoEstoque,
+                  StockTypeRecipientCode:
+                      e.destinyStock.CodigoInterno_TipoEstoque,
+                  Quantity: e.quantity,
+                  IsPendingAdjust: isPendingAdjust,
+                ),
+              )
+              .toList(),
         },
         typeOfResponse: "ConfirmAdjustStockResponse",
         SOAPAction: "ConfirmAdjustStock",
