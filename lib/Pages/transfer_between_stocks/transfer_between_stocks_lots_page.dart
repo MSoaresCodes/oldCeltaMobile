@@ -20,6 +20,25 @@ class _TransferBetweenStocksLotsPageState
   final quantityFocusNode = FocusNode();
   int? selectedIndex;
 
+  Future<void> changeProductQuantity(
+      TransferBetweenStocksProvider provider) async {
+    if (selectedIndex == null) {
+      return;
+    }
+
+    bool updated = await provider.changeQuantityInLot(
+      selectedIndex!,
+      quantityController.text.toDouble(),
+    );
+
+    if (updated) {
+      quantityController.clear();
+      setState(() {
+        selectedIndex = null;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final transferBetweenStocksProvider =
@@ -75,7 +94,9 @@ class _TransferBetweenStocksLotsPageState
                             labelText: "Nova qtd",
                             suffixIcon: IconButton(
                               onPressed: () {
-                                //TODO validate form and save new quantity
+                                changeProductQuantity(
+                                  transferBetweenStocksProvider,
+                                );
                               },
                               icon: Icon(
                                 Icons.save,
@@ -84,7 +105,9 @@ class _TransferBetweenStocksLotsPageState
                             ),
                           ),
                           onFieldSubmitted: (_) async {
-                            //TODO validate form and save new quantity
+                            changeProductQuantity(
+                              transferBetweenStocksProvider,
+                            );
                           },
                         ),
                       ),
