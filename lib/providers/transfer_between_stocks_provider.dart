@@ -19,10 +19,6 @@ class TransferBetweenStocksProvider with ChangeNotifier {
   List<GetJustificationsModel> _justifications = [];
   List<GetJustificationsModel> get justifications => _justifications;
 
-  TransferBetweenStockBodyModel? _transferBodyModel; //TODO delete this
-  TransferBetweenStockBodyModel? get transferBodyModel =>
-      _transferBodyModel; //TODO delete this
-
   List<TransferBetweenStockLotProductsModel> _productsLots = [];
   List<TransferBetweenStockLotProductsModel> get productsLots => _productsLots;
 
@@ -48,12 +44,6 @@ class TransferBetweenStocksProvider with ChangeNotifier {
       _errorMessageTypeStockAndJustifications;
   String _errorMessageAdjustStock = '';
 
-  String _lastUpdatedQuantity = "";
-  int _indexOfLastProductChangedStockQuantity = -1;
-  String get lastUpdatedQuantity => _lastUpdatedQuantity;
-  int get indexOfLastProductChangedStockQuantity =>
-      _indexOfLastProductChangedStockQuantity;
-
   String get errorMessageAdjustStock => _errorMessageAdjustStock;
   static bool _isLoadingAdjustStock = false;
 
@@ -75,9 +65,6 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     _originStockTypes.clear();
     _destinyStockTypes.clear();
     _products.clear();
-    _transferBodyModel = null;
-    _lastUpdatedQuantity = "";
-    _indexOfLastProductChangedStockQuantity = -1;
     _selectedDestiny = null;
     _selectedOrigin = null;
     _selectedJustification = null;
@@ -120,8 +107,6 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     required ConfigurationsProvider configurationsProvider,
     required FocusNode searchFocusNode,
   }) async {
-    _lastUpdatedQuantity = "";
-    _indexOfLastProductChangedStockQuantity = -1;
     _products.clear();
     notifyListeners();
 
@@ -222,8 +207,6 @@ class TransferBetweenStocksProvider with ChangeNotifier {
   }
 
   Future<void> confirmAdjustStock({
-    required BuildContext context,
-    required int indexOfProduct,
     required String consultedProductControllerText,
     required double quantity,
     required int enterpriseCode,
@@ -238,26 +221,20 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     );
 
     try {
-      updateBody(
-        enterpriseCode: enterpriseCode,
-        quantity: quantity,
-        isPendingAdjust: isPendingAdjust,
-        product: _products[indexOfProduct],
-      );
-      await SoapHelper.confirmAdjustStock(transferBodyModel!.toJson());
+      // await SoapHelper.confirmAdjustStock(TransferBetweenStockBodyModel.toJson());//TODO insert correct model
 
       _errorMessageAdjustStock = SoapRequestResponse.errorMessage;
 
       if (_errorMessageAdjustStock == "") {
-        _lastUpdatedQuantity = ConvertString.convertToBrazilianNumber(
-            transferBodyModel?.Quantity?.toString());
-        _indexOfLastProductChangedStockQuantity = indexOfProduct;
+        //TODO test if is possible get the lot number
+
+        // _indexOfLastProductChangedStockQuantity = indexOfProduct;
       }
 
       if (SoapRequestResponse.errorMessage != "") {
         ShowSnackbarMessage.show(
           message: _errorMessageAdjustStock,
-          context: context,
+          context: NavigatorKey.key.currentState!.context,
         );
       }
     } catch (e) {
@@ -265,47 +242,12 @@ class TransferBetweenStocksProvider with ChangeNotifier {
       _errorMessageAdjustStock = DefaultErrorMessage.ERROR;
       ShowSnackbarMessage.show(
         message: _errorMessageAdjustStock,
-        context: context,
+        context: NavigatorKey.key.currentState!.context,
       );
     }
 
     _isLoadingAdjustStock = false;
     notifyListeners();
-  }
-
-  void updateBody({
-    //TODO delete this function
-    GetStockTypesModel? originStock,
-    GetStockTypesModel? destinyStock,
-    GetJustificationsModel? justification,
-    GetProductJsonModel? product,
-    int? enterpriseCode,
-    double? quantity,
-    bool? isPendingAdjust,
-  }) {
-    final oldBody = _transferBodyModel;
-    final hasFixedDestinyStock =
-        justification?.CodigoInterno_TipoEstoque.CodigoInterno_TipoEstoque !=
-            -1;
-
-    _transferBodyModel = TransferBetweenStockBodyModel(
-      IsPendingAdjust: isPendingAdjust ?? oldBody?.IsPendingAdjust,
-      EnterpriseCode: enterpriseCode ?? oldBody?.EnterpriseCode,
-      StockTypeCode: hasFixedDestinyStock &&
-              justification
-                      ?.CodigoInterno_TipoEstoque.CodigoInterno_TipoEstoque !=
-                  null
-          ? justification?.CodigoInterno_TipoEstoque.CodigoInterno_TipoEstoque
-          : (originStock?.CodigoInterno_TipoEstoque ?? oldBody?.StockTypeCode),
-      ProductCode: product?.productCode ?? oldBody?.ProductCode,
-      ProductPackingCode:
-          product?.productPackingCode ?? oldBody?.ProductPackingCode,
-      JustificationCode:
-          justification?.CodigoInterno_JustMov ?? oldBody?.JustificationCode,
-      StockTypeRecipientCode: destinyStock?.CodigoInterno_TipoEstoque ??
-          oldBody?.StockTypeRecipientCode,
-      Quantity: quantity ?? oldBody?.Quantity,
-    );
   }
 
   Future<bool> addProductInLot(

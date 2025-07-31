@@ -88,11 +88,6 @@ class _JustificationsAndStocksDropwdownWidgetState
                 .map(
                   (value) => DropdownMenuItem(
                     alignment: Alignment.center,
-                    onTap: () {
-                      transferBetweenStocksProvider.updateBody(
-                        destinyStock: value,
-                      );
-                    },
                     value: value,
                     child: FittedBox(
                       child: Text(
