@@ -92,6 +92,15 @@ class _TransferBetweenStocksProductsPageState
             ),
           ),
         ),
+        if (transferBetweenStocksProvider.errorMessageGetProducts != "" &&
+            !transferBetweenStocksProvider.isLoadingProducts)
+          Expanded(
+            child: Center(
+              child: ErrorMessage(
+                  errorMessage:
+                      transferBetweenStocksProvider.errorMessageGetProducts),
+            ),
+          ),
         if (!transferBetweenStocksProvider.isLoadingProducts)
           Expanded(
             child: ProductsItems(
