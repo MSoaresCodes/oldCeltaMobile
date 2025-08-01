@@ -30,9 +30,9 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
 
   @override
   Widget build(BuildContext context) {
-    ReceiptProvider receiptProvider = Provider.of(context, listen: true);
-    ConfigurationsProvider configurationsProvider =
-        Provider.of(context, listen: true);
+    ReceiptProvider receiptProvider = Provider.of(context);
+    ConfigurationsProvider configurationsProvider = Provider.of(context);
+    EnterpriseProvider enterpriseProvider = Provider.of(context);
     Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
     int docCode = arguments["grDocCode"];
     final EnterpriseModel enterprise = arguments["enterprise"];
@@ -131,13 +131,16 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                     padding: const EdgeInsets.all(5),
                     child: Row(
                       children: [
-                        Expanded(
-                          flex: 30,
-                          child: WighableProductsButton(
-                            docCode: docCode,
-                            enterprise: enterprise,
+                        if (enterpriseProvider.bsDate
+                                ?.isAfter(DateTime(2025, 8, 1)) ==
+                            true) //TODO fix this date, because is not working until this selected day
+                          Expanded(
+                            flex: 30,
+                            child: WighableProductsButton(
+                              docCode: docCode,
+                              enterprise: enterprise,
+                            ),
                           ),
-                        ),
                         Expanded(
                           flex: 30,
                           child: ConsultProductWithoutEanButton(
