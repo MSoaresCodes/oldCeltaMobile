@@ -49,7 +49,7 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
             }
           },
           child: Scaffold(
-            resizeToAvoidBottomInset: kIsWeb ? false : true,
+            resizeToAvoidBottomInset: false,
             appBar: AppBar(
               title: FittedBox(
                 child: Text(
@@ -60,79 +60,72 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                 ),
               ),
             ),
-            body: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SearchWidget(
-                  configurations: [
-                    ConfigurationType.autoScan,
-                    ConfigurationType.legacyCode,
-                    ConfigurationType.personalizedCode,
-                  ],
-                  searchFocusNode: receiptProvider.consultProductFocusNode,
-                  onPressSearch: () async {
-                    await receiptProvider.getProducts(
-                      configurationsProvider: configurationsProvider,
-                      docCode: docCode,
-                      controllerText: _consultProductController.text,
-                      context: context,
-                      isSearchAllCountedProducts: false,
-                      enterprise: enterprise,
-                    );
-    
-                    //não estava funcionando passar o productsCount como parâmetro
-                    //para o "SearchProductWithEanPluOrNameWidget" para apagar o
-                    //textEditingController após a consulta dos produtos se encontrar
-                    //algum produto
-                    if (receiptProvider.productsCount > 0) {
-                      //se for maior que 0 significa que deu certo a consulta e
-                      //por isso pode apagar o que foi escrito no campo de
-                      //consulta
-                      _consultProductController.clear();
-                    }
-                  },
-                  searchProductController: _consultProductController,
-                ),
-                if (receiptProvider.errorMessageGetProducts != "" &&
-                    receiptProvider.productsCount == 0)
-                  Expanded(
-                    child: Center(
-                      child: ErrorMessage(
-                        errorMessage: receiptProvider.errorMessageGetProducts,
+            body: SafeArea(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SearchWidget(
+                    configurations: [
+                      ConfigurationType.autoScan,
+                      ConfigurationType.legacyCode,
+                      ConfigurationType.personalizedCode,
+                    ],
+                    searchFocusNode: receiptProvider.consultProductFocusNode,
+                    onPressSearch: () async {
+                      await receiptProvider.getProducts(
+                        configurationsProvider: configurationsProvider,
+                        docCode: docCode,
+                        controllerText: _consultProductController.text,
+                        context: context,
+                        isSearchAllCountedProducts: false,
+                        enterprise: enterprise,
+                      );
+
+                      if (receiptProvider.productsCount > 0) {
+                        _consultProductController.clear();
+                      }
+                    },
+                    searchProductController: _consultProductController,
+                  ),
+                  if (receiptProvider.errorMessageGetProducts != "" &&
+                      receiptProvider.productsCount == 0)
+                    Expanded(
+                      child: Center(
+                        child: ErrorMessage(
+                          errorMessage: receiptProvider.errorMessageGetProducts,
+                        ),
                       ),
                     ),
-                  ),
-                if (receiptProvider.errorMessageGetProducts == "")
-                  Expanded(
-                    child: ConferenceProductsItems(
-                      getProductsWithCamera: () async {
-                        FocusScope.of(context).unfocus();
-                        _consultProductController.clear();
-    
-                        _consultProductController.text =
-                            await ScanBarCode.scanBarcode(context);
-    
-                        if (_consultProductController.text != "") {
-                          await receiptProvider.getProducts(
-                            configurationsProvider: configurationsProvider,
-                            docCode: docCode,
-                            controllerText: _consultProductController.text,
-                            context: context,
-                            isSearchAllCountedProducts: false,
-                            enterprise: enterprise,
-                          );
-                        }
-    
-                        if (receiptProvider.productsCount > 0) {
+                  if (receiptProvider.errorMessageGetProducts == "")
+                    Expanded(
+                      child: ConferenceProductsItems(
+                        getProductsWithCamera: () async {
+                          FocusScope.of(context).unfocus();
                           _consultProductController.clear();
-                        }
-                      },
-                      docCode: docCode,
-                      consultedProductController: _consultedProductController,
-                      consultProductController: _consultProductController,
+
+                          _consultProductController.text =
+                              await ScanBarCode.scanBarcode(context);
+
+                          if (_consultProductController.text != "") {
+                            await receiptProvider.getProducts(
+                              configurationsProvider: configurationsProvider,
+                              docCode: docCode,
+                              controllerText: _consultProductController.text,
+                              context: context,
+                              isSearchAllCountedProducts: false,
+                              enterprise: enterprise,
+                            );
+                          }
+
+                          if (receiptProvider.productsCount > 0) {
+                            _consultProductController.clear();
+                          }
+                        },
+                        docCode: docCode,
+                        consultedProductController: _consultedProductController,
+                        consultProductController: _consultProductController,
+                      ),
                     ),
-                  ),
-                if (MediaQuery.of(context).viewInsets.bottom == 0)
                   Padding(
                     padding: const EdgeInsets.all(5),
                     child: Row(
@@ -154,7 +147,8 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                       ],
                     ),
                   ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
