@@ -11,14 +11,15 @@ class ProductsWithoutCadasterButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
+    return TextButton.icon(
       onPressed: () {
         Navigator.of(context).pushNamed(
           APPROUTES.RECEIPT_PRODUCTS_WITHOUT_CADASTER,
           arguments: docCode,
         );
       },
-      child: const FittedBox(child: Text("Não encontrados")),
+      icon: const Icon(Icons.add),
+      label: const FittedBox(child: Text("Não encontrados")),
     );
   }
 }

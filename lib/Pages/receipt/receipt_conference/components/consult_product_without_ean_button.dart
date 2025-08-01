@@ -24,24 +24,19 @@ class _ConsultProductWithoutEanButtonState
   Widget build(BuildContext context) {
     ReceiptProvider receiptProvider = Provider.of(context);
     ConfigurationsProvider configurationsProvider = Provider.of(context);
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        foregroundColor: Colors.white,
-      ),
-      onPressed: receiptProvider.isLoadingProducts ||
-              receiptProvider.isLoadingUpdateQuantity
-          ? null
-          : () async {
-              await receiptProvider.getProducts(
-                docCode: widget.docCode,
-                context: context,
-                controllerText: "",
-                isSearchAllCountedProducts: true,
-                configurationsProvider: configurationsProvider,
-                enterprise: widget.enterprise,
-              );
-            },
-      child: const FittedBox(child: Text("Consultar todos sem EAN")),
+    return TextButton.icon(
+      onPressed: () async {
+        await receiptProvider.getProducts(
+          docCode: widget.docCode,
+          context: context,
+          searchValue: "",
+          isSearchAllCountedProducts: true,
+          configurationsProvider: configurationsProvider,
+          enterprise: widget.enterprise,
+        );
+      },
+      icon: const Icon(Icons.search),
+      label: const FittedBox(child: Text("Sem EAN")),
     );
   }
 }

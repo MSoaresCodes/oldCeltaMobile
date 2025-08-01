@@ -75,7 +75,7 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                       await receiptProvider.getProducts(
                         configurationsProvider: configurationsProvider,
                         docCode: docCode,
-                        controllerText: _consultProductController.text,
+                        searchValue: _consultProductController.text,
                         context: context,
                         isSearchAllCountedProducts: false,
                         enterprise: enterprise,
@@ -110,7 +110,7 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                             await receiptProvider.getProducts(
                               configurationsProvider: configurationsProvider,
                               docCode: docCode,
-                              controllerText: _consultProductController.text,
+                              searchValue: _consultProductController.text,
                               context: context,
                               isSearchAllCountedProducts: false,
                               enterprise: enterprise,
@@ -131,15 +131,21 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                     child: Row(
                       children: [
                         Expanded(
-                          flex: 6,
+                          flex: 30,
+                          child: WighableProductsButton(
+                            docCode: docCode,
+                            enterprise: enterprise,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 30,
                           child: ConsultProductWithoutEanButton(
                             docCode: docCode,
                             enterprise: enterprise,
                           ),
                         ),
-                        const SizedBox(width: 5),
                         Expanded(
-                          flex: 4,
+                          flex: 40,
                           child: ProductsWithoutCadasterButton(
                             docCode: docCode,
                           ),

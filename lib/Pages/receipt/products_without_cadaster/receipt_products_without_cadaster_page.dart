@@ -47,16 +47,18 @@ class _ReceiptProductsWithoutCadasterPageState
               ),
             ],
           ),
-          body: Column(
-            children: [
-              Expanded(
-                child: ProductsItems(
-                  isInserting: true,
-                  docCode: docCode,
+          body: SafeArea(
+            child: Column(
+              children: [
+                Expanded(
+                  child: ProductsItems(
+                    isInserting: true,
+                    docCode: docCode,
+                  ),
                 ),
-              ),
-              InsertNotFoundProductButton(docCode: docCode),
-            ],
+                InsertNotFoundProductButton(docCode: docCode),
+              ],
+            ),
           ),
         ),
         loadingWidget(receiptProvider.isLoadingProductsWithoutCadaster),

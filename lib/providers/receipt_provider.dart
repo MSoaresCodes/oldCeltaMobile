@@ -261,7 +261,7 @@ class ReceiptProvider with ChangeNotifier {
 
   Future<void> getProducts({
     required int docCode,
-    required String controllerText,
+    required String searchValue,
     required BuildContext context,
     required bool isSearchAllCountedProducts,
     required ConfigurationsProvider configurationsProvider,
@@ -275,7 +275,7 @@ class ReceiptProvider with ChangeNotifier {
     try {
       await SoapHelper.getProductReceipt(
         configurationsProvider: configurationsProvider,
-        searchValue: controllerText,
+        searchValue: searchValue,
         docCode: docCode,
         isSearchAllCountedProducts: isSearchAllCountedProducts,
         enterprise: enterprise,
