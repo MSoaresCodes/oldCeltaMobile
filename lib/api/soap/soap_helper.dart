@@ -249,6 +249,7 @@ class SoapHelper {
     required ConfigurationsProvider configurationsProvider,
     required String searchValue,
     required int docCode,
+    required bool getWeighableProducts,
     required bool isSearchAllCountedProducts,
     required EnterpriseModel enterprise,
   }) async {
@@ -256,9 +257,11 @@ class SoapHelper {
       await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
-          "searchTypeInt": isSearchAllCountedProducts
-              ? 19
-              : getSearchTypeInt(configurationsProvider),
+          "searchTypeInt": getWeighableProducts //produtos pesáveis
+              ? 20
+              : isSearchAllCountedProducts
+                  ? 19
+                  : getSearchTypeInt(configurationsProvider),
           "searchValue":
               changeSearchValueIfIsBalanceCode(searchValue, enterprise),
           "grDocCode": docCode,

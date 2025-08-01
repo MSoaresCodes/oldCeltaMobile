@@ -33,6 +33,7 @@ class _ConsultProductWithoutEanButtonState
           isSearchAllCountedProducts: true,
           configurationsProvider: configurationsProvider,
           enterprise: widget.enterprise,
+          getWeighableProducts: false,
         );
       },
       icon: const Icon(Icons.search),

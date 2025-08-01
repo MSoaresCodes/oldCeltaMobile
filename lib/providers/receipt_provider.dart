@@ -266,6 +266,7 @@ class ReceiptProvider with ChangeNotifier {
     required bool isSearchAllCountedProducts,
     required ConfigurationsProvider configurationsProvider,
     required EnterpriseModel enterprise,
+    required bool getWeighableProducts,
   }) async {
     _products.clear();
     _errorMessageGetProducts = "";
@@ -279,6 +280,7 @@ class ReceiptProvider with ChangeNotifier {
         docCode: docCode,
         isSearchAllCountedProducts: isSearchAllCountedProducts,
         enterprise: enterprise,
+        getWeighableProducts: getWeighableProducts,
       );
 
       _errorMessageGetProducts = SoapRequestResponse.errorMessage;

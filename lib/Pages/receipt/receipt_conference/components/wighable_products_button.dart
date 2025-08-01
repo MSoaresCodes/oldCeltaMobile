@@ -23,7 +23,8 @@ class WighableProductsButton extends StatelessWidget {
           docCode: docCode,
           context: context,
           searchValue: "",
-          isSearchAllCountedProducts: true,
+          isSearchAllCountedProducts: false,
+          getWeighableProducts: true,
           configurationsProvider: configurationsProvider,
           enterprise: enterprise,
         );
