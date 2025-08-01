@@ -19,6 +19,7 @@ class TransferBetweenStockPage extends StatefulWidget {
 class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
   late PageController _pageController;
   final _scrollController = ScrollController();
+  final searchFocusNode = FocusNode();
   int pageIndex = 0;
   bool _isHeaderExpanded = true;
 
@@ -42,6 +43,7 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
     _pageController.dispose();
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
+    searchFocusNode.dispose();
     super.dispose();
   }
 
@@ -52,6 +54,7 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
         setState(() {
           _isHeaderExpanded = false;
         });
+        searchFocusNode.unfocus();
       }
     } else if (_scrollController.position.userScrollDirection ==
         ScrollDirection.forward) {
@@ -110,6 +113,7 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
               children: <Widget>[
                 TransferBetweenStocksProductsPage(
                   enterprise: enterprise,
+                  searchFocusNode: searchFocusNode,
                   isHeaderExpanded: _isHeaderExpanded,
                   scrollController: _scrollController,
                   expandHeader: () {

@@ -12,12 +12,14 @@ class TransferBetweenStocksProductsPage extends StatefulWidget {
   final EnterpriseModel enterprise;
   final ScrollController scrollController;
   final VoidCallback expandHeader;
+  final FocusNode searchFocusNode;
   const TransferBetweenStocksProductsPage({
     super.key,
     required this.isHeaderExpanded,
     required this.enterprise,
     required this.scrollController,
     required this.expandHeader,
+    required this.searchFocusNode,
   });
 
   @override
@@ -29,7 +31,6 @@ class _TransferBetweenStocksProductsPageState
     extends State<TransferBetweenStocksProductsPage> {
   final insertQuantityFormKey = GlobalKey<FormState>();
   final quantityFocusNode = FocusNode();
-  final searchFocusNode = FocusNode();
   final productController = TextEditingController();
   final quantityController = TextEditingController();
 
@@ -37,7 +38,6 @@ class _TransferBetweenStocksProductsPageState
   void dispose() {
     super.dispose();
     quantityFocusNode.dispose();
-    searchFocusNode.dispose();
     productController.dispose();
     quantityController.dispose();
   }
@@ -66,7 +66,7 @@ class _TransferBetweenStocksProductsPageState
                     ConfigurationType.legacyCode,
                     ConfigurationType.personalizedCode,
                   ],
-                  searchFocusNode: searchFocusNode,
+                  searchFocusNode: widget.searchFocusNode,
                   onPressSearch: () async {
                     await transferBetweenStocksProvider.getProducts(
                       enterprise: widget.enterprise,
