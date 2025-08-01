@@ -13,6 +13,7 @@ class TransferBetweenStocksProductsPage extends StatefulWidget {
   final ScrollController scrollController;
   final VoidCallback expandHeader;
   final FocusNode searchFocusNode;
+
   const TransferBetweenStocksProductsPage({
     super.key,
     required this.isHeaderExpanded,
@@ -50,39 +51,41 @@ class _TransferBetweenStocksProductsPageState
 
     return Column(
       children: [
+        SearchWidget(
+          autofocus: false,
+          configurations: [
+            ConfigurationType.autoScan,
+            ConfigurationType.legacyCode,
+            ConfigurationType.personalizedCode,
+          ],
+          searchFocusNode: widget.searchFocusNode,
+          onPressSearch: () async {
+            await transferBetweenStocksProvider.getProducts(
+              enterprise: widget.enterprise,
+              text: productController.text,
+              context: context,
+              configurationsProvider: configurationsProvider,
+              searchFocusNode: quantityFocusNode,
+            );
+
+            widget.expandHeader();
+
+            if (transferBetweenStocksProvider.products.length > 0) {
+              productController.clear();
+            }
+          },
+          searchProductController: productController,
+        ),
         AnimatedContainer(
           duration: const Duration(milliseconds: 500),
           curve: Curves.easeInOut,
-          height: widget.isHeaderExpanded ? 200.0 : 0.0,
+          height: widget.isHeaderExpanded ? 130 : 0,
           alignment: Alignment.center,
-          child: SingleChildScrollView(
-            physics: const NeverScrollableScrollPhysics(),
+          child: const SingleChildScrollView(
+            physics: NeverScrollableScrollPhysics(),
             child: Column(
               children: [
-                SearchWidget(
-                  autofocus: false,
-                  configurations: [
-                    ConfigurationType.autoScan,
-                    ConfigurationType.legacyCode,
-                    ConfigurationType.personalizedCode,
-                  ],
-                  searchFocusNode: widget.searchFocusNode,
-                  onPressSearch: () async {
-                    await transferBetweenStocksProvider.getProducts(
-                      enterprise: widget.enterprise,
-                      text: productController.text,
-                      context: context,
-                      configurationsProvider: configurationsProvider,
-                      searchFocusNode: quantityFocusNode,
-                    );
-
-                    if (transferBetweenStocksProvider.products.length > 0) {
-                      productController.clear();
-                    }
-                  },
-                  searchProductController: productController,
-                ),
-                const Row(
+                Row(
                   children: [
                     Expanded(child: JustificationsAndStocksDropwdownWidget()),
                     RefreshIconButton(),

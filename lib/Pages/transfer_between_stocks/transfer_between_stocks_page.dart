@@ -19,9 +19,11 @@ class TransferBetweenStockPage extends StatefulWidget {
 class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
   late PageController _pageController;
   final _scrollController = ScrollController();
-  final searchFocusNode = FocusNode();
+  final _searchFocusNode = FocusNode();
   int pageIndex = 0;
   bool _isHeaderExpanded = true;
+  double _scrollAnchor = 0.0;
+  ScrollDirection _lastScrollDirection = ScrollDirection.idle;
 
   @override
   void initState() {
@@ -43,26 +45,44 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
     _pageController.dispose();
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
-    searchFocusNode.dispose();
+    _searchFocusNode.dispose();
     super.dispose();
   }
 
   void _scrollListener() {
-    if (_scrollController.position.userScrollDirection ==
-        ScrollDirection.reverse) {
-      if (_isHeaderExpanded) {
-        setState(() {
-          _isHeaderExpanded = false;
-        });
-        searchFocusNode.unfocus();
+    final currentOffset = _scrollController.offset;
+    final currentDirection = _scrollController.position.userScrollDirection;
+
+    // If the scroll direction changes, we set a new anchor point.
+    // This is the "start interaction position" you wanted.
+    if (currentDirection != _lastScrollDirection) {
+      _scrollAnchor = currentOffset;
+    }
+
+    // Logic to HIDE the header (when scrolling DOWN)
+    if (currentDirection == ScrollDirection.reverse && _isHeaderExpanded) {
+      // Hide only if we've scrolled down > 30px from our anchor.
+      if ((currentOffset - _scrollAnchor).abs() > 100) {
+        if (mounted) {
+          setState(() => _isHeaderExpanded = false);
+          _searchFocusNode.unfocus();
+        }
       }
-    } else if (_scrollController.position.userScrollDirection ==
-        ScrollDirection.forward) {
-      if (!_isHeaderExpanded) {
-        setState(() {
-          _isHeaderExpanded = true;
-        });
+    }
+    // Logic to SHOW the header (when scrolling UP)
+    else if (currentDirection == ScrollDirection.forward &&
+        !_isHeaderExpanded) {
+      // Show if we've scrolled up > 100px from our anchor, OR are near the top.
+      if ((_scrollAnchor - currentOffset).abs() > 100 || currentOffset <= 100) {
+        if (mounted) {
+          setState(() => _isHeaderExpanded = true);
+        }
       }
+    }
+
+    // Update the last known direction for the next scroll event.
+    if (mounted) {
+      _lastScrollDirection = currentDirection;
     }
   }
 
@@ -113,7 +133,7 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
               children: <Widget>[
                 TransferBetweenStocksProductsPage(
                   enterprise: enterprise,
-                  searchFocusNode: searchFocusNode,
+                  searchFocusNode: _searchFocusNode,
                   isHeaderExpanded: _isHeaderExpanded,
                   scrollController: _scrollController,
                   expandHeader: () {
