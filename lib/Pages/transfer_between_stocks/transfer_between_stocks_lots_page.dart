@@ -75,27 +75,82 @@ class _TransferBetweenStocksLotsPageState
                         title: "Produto",
                         subtitle: '${lot.product.name} (${lot.product.plu})',
                       ),
-                      TitleAndSubtitle.titleAndSubtitle(
-                        title: "Justificativa",
-                        subtitle: lot.justification.Descricao_JustMov,
-                      ),
-                      TitleAndSubtitle.titleAndSubtitle(
-                        title: "De",
-                        subtitle: lot.originStock.Nome_TipoEstoque,
-                      ),
-                      TitleAndSubtitle.titleAndSubtitle(
-                        title: "Para",
-                        subtitle: lot.destinyStock.Nome_TipoEstoque,
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              children: [
+                                TitleAndSubtitle.titleAndSubtitle(
+                                  title: "Just",
+                                  subtitle: lot.justification.Descricao_JustMov,
+                                ),
+                                TitleAndSubtitle.titleAndSubtitle(
+                                  title: "De",
+                                  subtitle: lot.originStock.Nome_TipoEstoque,
+                                ),
+                                TitleAndSubtitle.titleAndSubtitle(
+                                  title: "Para",
+                                  subtitle: lot.destinyStock.Nome_TipoEstoque,
+                                ),
+                                TitleAndSubtitle.titleAndSubtitle(
+                                  title: "Qtd",
+                                  subtitle: lot.quantity
+                                      .toString()
+                                      .toBrazilianNumber(3),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Column(
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  transferBetweenStocksProvider
+                                      .removeProductFromLot(lot);
+                                },
+                                icon: const Icon(
+                                  Icons.delete,
+                                  color: Colors.red,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  if (selectedIndex == index) {
+                                    setState(() {
+                                      selectedIndex = null;
+                                    });
+                                  } else {
+                                    setState(() {
+                                      selectedIndex = index;
+                                      Future.delayed(
+                                          const Duration(milliseconds: 100),
+                                          () {
+                                        quantityFocusNode.requestFocus();
+                                        quantityController.clear();
+                                      });
+                                    });
+                                  }
+                                },
+                                icon: Icon(
+                                  selectedIndex != index
+                                      ? Icons.edit
+                                      : Icons.cancel_sharp,
+                                  color: selectedIndex != index
+                                      ? theme.colorScheme.primary
+                                      : Colors.red,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
+                          const Expanded(
                             flex: 4,
-                            child: TitleAndSubtitle.titleAndSubtitle(
-                              title: "Qtd",
-                              subtitle:
-                                  lot.quantity.toString().toBrazilianNumber(3),
+                            child: Column(
+                              children: [],
                             ),
                           ),
                           if (selectedIndex == index)
@@ -138,32 +193,6 @@ class _TransferBetweenStocksLotsPageState
                                 ),
                               ),
                             ),
-                          IconButton(
-                            onPressed: () {
-                              if (selectedIndex == index) {
-                                setState(() {
-                                  selectedIndex = null;
-                                });
-                              } else {
-                                setState(() {
-                                  selectedIndex = index;
-                                  Future.delayed(
-                                      const Duration(milliseconds: 100), () {
-                                    quantityFocusNode.requestFocus();
-                                    quantityController.clear();
-                                  });
-                                });
-                              }
-                            },
-                            icon: Icon(
-                              selectedIndex != index
-                                  ? Icons.edit
-                                  : Icons.cancel_sharp,
-                              color: selectedIndex != index
-                                  ? theme.colorScheme.primary
-                                  : Colors.red,
-                            ),
-                          ),
                         ],
                       ),
                     ],

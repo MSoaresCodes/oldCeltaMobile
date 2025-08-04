@@ -345,6 +345,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
       prefsKeys: PrefsKeys.transferBetweenStocksProductslots,
       value: jsonEncode(_productsLots.map((e) => e.toJson()).toList()),
     );
+    notifyListeners();
   }
 
   void changeSelectedJustification(GetJustificationsModel? value) {
