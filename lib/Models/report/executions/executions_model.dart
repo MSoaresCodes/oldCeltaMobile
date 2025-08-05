@@ -14,9 +14,11 @@ class ExecutionsModel {
       ExecutionDate: json['ExecutionDate'] == null
           ? null
           : DateTime.parse(json['ExecutionDate']),
-      Attachments: (json['Attachments'] as List)
-          .map((e) => AttachmentsModel.fromJson(e))
-          .toList(),
+      Attachments: json['Attachments'] == null
+          ? []
+          : (json['Attachments'] as List)
+              .map((e) => AttachmentsModel.fromJson(e))
+              .toList(),
     );
   }
 
