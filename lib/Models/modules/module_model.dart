@@ -29,7 +29,7 @@ extension ModuleExtension on Modules {
       case Modules.customerRegister:
         return "Cadastro de clientes";
       case Modules.inventory:
-        return "Estoque";
+        return "Inventário";
       case Modules.priceConference:
         return "Conferencia de preços";
       case Modules.productsConference:
