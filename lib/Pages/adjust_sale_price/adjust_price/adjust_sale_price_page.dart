@@ -109,18 +109,13 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
                             }
                           }),
                       const Divider(),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          OpenDialogProductInformations(
-                            product: product,
-                            title: "Preços, custos e margens",
-                            pages: [
-                              Prices(product: product),
-                              Costs(product: product),
-                              Margins(product: product),
-                            ],
-                          ),
+                      OpenDialogProductInformations(
+                        product: product,
+                        title: "Preços, custos e margens",
+                        pages: [
+                          Prices(product: product),
+                          Costs(product: product),
+                          Margins(product: product),
                         ],
                       ),
                       const PriceFieldAndConfirmAdjustButton(),

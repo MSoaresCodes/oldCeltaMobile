@@ -31,36 +31,30 @@ class Prices extends StatelessWidget implements MoreInformationWidget {
             ),
           ),
         ),
-        if (product.retailPracticedPrice != null &&
-            product.retailPracticedPrice! > 0)
-          TitleAndSubtitle.titleAndSubtitle(
-            title: "Varejo",
-            subtitle: (product.retailPracticedPrice ?? 0)
-                .toDouble()
-                .toString()
-                .toBrazilianNumber()
-                .addBrazilianCoin(),
-          ),
-        if (product.wholePracticedPrice != null &&
-            product.wholePracticedPrice! > 0)
-          TitleAndSubtitle.titleAndSubtitle(
-            title: "Atacado",
-            subtitle: (product.wholePracticedPrice ?? 0)
-                .toDouble()
-                .toString()
-                .toBrazilianNumber()
-                .addBrazilianCoin(),
-          ),
-        if (product.eCommercePracticedPrice != null &&
-            product.eCommercePracticedPrice! > 0)
-          TitleAndSubtitle.titleAndSubtitle(
-            title: "Ecommerce",
-            subtitle: (product.eCommercePracticedPrice ?? 0)
-                .toDouble()
-                .toString()
-                .toBrazilianNumber()
-                .addBrazilianCoin(),
-          ),
+        TitleAndSubtitle.titleAndSubtitle(
+          title: "Varejo",
+          subtitle: (product.retailPracticedPrice ?? 0)
+              .toDouble()
+              .toString()
+              .toBrazilianNumber()
+              .addBrazilianCoin(),
+        ),
+        TitleAndSubtitle.titleAndSubtitle(
+          title: "Atacado",
+          subtitle: (product.wholePracticedPrice ?? 0)
+              .toDouble()
+              .toString()
+              .toBrazilianNumber()
+              .addBrazilianCoin(),
+        ),
+        TitleAndSubtitle.titleAndSubtitle(
+          title: "Ecommerce",
+          subtitle: (product.eCommercePracticedPrice ?? 0)
+              .toDouble()
+              .toString()
+              .toBrazilianNumber()
+              .addBrazilianCoin(),
+        ),
       ],
     );
   }
