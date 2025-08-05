@@ -3,10 +3,12 @@ import 'executions.dart';
 class ExecutionsModel {
   final DateTime? ExecutionDate;
   final List<AttachmentsModel> Attachments;
+  final bool ContainsData;
 
   ExecutionsModel({
     required this.ExecutionDate,
     required this.Attachments,
+    required this.ContainsData,
   });
 
   factory ExecutionsModel.fromJson(Map<String, dynamic> json) {
@@ -14,6 +16,7 @@ class ExecutionsModel {
       ExecutionDate: json['ExecutionDate'] == null
           ? null
           : DateTime.parse(json['ExecutionDate']),
+      ContainsData: json['ContainsData'] == true,
       Attachments: json['Attachments'] == null
           ? []
           : (json['Attachments'] as List)
