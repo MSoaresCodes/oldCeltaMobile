@@ -14,6 +14,7 @@ class ReportScheduleModel {
   final DateTime? LastExecutionStartDateTime;
   final bool? IsExecuting;
   final bool? ExecutionStatus;
+  final bool? LastExecutionContainsData;
 
   ReportScheduleModel({
     required this.Code,
@@ -31,6 +32,7 @@ class ReportScheduleModel {
     required this.LastExecutionStartDateTime,
     required this.IsExecuting,
     required this.ExecutionStatus,
+    required this.LastExecutionContainsData,
   });
 
   factory ReportScheduleModel.fromJson(Map<String, dynamic> json) {
@@ -54,6 +56,7 @@ class ReportScheduleModel {
           : null,
       IsExecuting: json["IsExecuting"],
       ExecutionStatus: json["ExecutionStatus"],
+      LastExecutionContainsData: json["LastExecutionContainsData"],
     );
   }
 
@@ -72,6 +75,7 @@ class ReportScheduleModel {
         "LastExecutionDate": LastExecutionDate,
         "LastExecutionStartDateTime": LastExecutionStartDateTime,
         "IsExecuting": IsExecuting,
-        "ExecutionStatus": ExecutionStatus
+        "ExecutionStatus": ExecutionStatus,
+        "LastExecutionContainsData": LastExecutionContainsData,
       };
 }
