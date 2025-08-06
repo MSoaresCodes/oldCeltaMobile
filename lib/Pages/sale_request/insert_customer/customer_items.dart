@@ -28,6 +28,7 @@ class _CustomersItemsState extends State<CustomersItems> {
         CustomerModel? customer = saleRequestProvider
             .customers[widget.enterpriseCode.toString()]![index];
 
+        final hasBlock = customer.saleBlockadeModel?.Description != null;
         final allowRequest = customer.saleBlockadeModel?.AllowSaleRequest ??
             true; //if the bs is not enabled, must not treat this value. This is why I am returning true as default
 
@@ -95,13 +96,14 @@ class _CustomersItemsState extends State<CustomersItems> {
                       title: "Código personalizado",
                       subtitle: customer.PersonalizedCode.toString(),
                     ),
-                    if (!allowRequest)
+                    if (hasBlock)
                       Tooltip(
                           showDuration: const Duration(seconds: 3),
                           key: tooltipKey,
                           message:
                               '''Instrução: ${customer.saleBlockadeInstructionModel?.Description}
-Descrição: ${customer.saleBlockadeModel?.Description}''',
+Descrição: ${customer.saleBlockadeModel?.Description}
+${allowRequest ? "Permite pedido de venda" : "Não permite pedido de venda"}''',
                           child: TextButton.icon(
                             style: TextButton.styleFrom(
                               foregroundColor: Colors.red,
