@@ -133,7 +133,7 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                       children: [
                         if (enterpriseProvider.bsDate
                                 ?.isAfter(DateTime(2025, 8, 1)) ==
-                            true) //TODO fix this date, because is not working until this selected day
+                            true)
                           Expanded(
                             flex: 30,
                             child: WighableProductsButton(
