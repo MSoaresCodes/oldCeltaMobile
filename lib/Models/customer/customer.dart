@@ -6,4 +6,6 @@ export './customer_register_cep.dart';
 export './customer_register_covenant_model.dart';
 export './customer_register_customer_covenant_model.dart';
 export './customer_model.dart';
+export './customer_sale_blockade_instruction_model.dart';
+export './customer_sale_blockade_model.dart';
 export './customer_telephone_model.dart';

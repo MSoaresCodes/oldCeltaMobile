@@ -40,24 +40,9 @@ class CustomerRegisterProvider with ChangeNotifier {
           context: NavigatorKey.key.currentState!.context);
       return;
     }
-
-    _customer = CustomerModel(
-      Emails: [...oldCustomer?.Emails ?? [], emailController.text],
-      Name: customer?.Name,
-      Code: customer?.Code,
-      PersonalizedCode: customer?.PersonalizedCode,
-      ReducedName: customer?.ReducedName,
-      CpfCnpjNumber: customer?.CpfCnpjNumber,
-      RegistrationNumber: customer?.RegistrationNumber,
-      DateOfBirth: customer?.DateOfBirth,
-      SexType: customer?.SexType,
-      PersonType: customer?.PersonType,
-      Telephones: customer?.Telephones,
-      Addresses: customer?.Addresses,
-      selected: customer?.selected == true,
-      password: customer?.password,
-      CustomerCovenants: customer?.CustomerCovenants,
-    );
+    _customer = oldCustomer
+        ?.copyWith(Emails: [...oldCustomer.Emails ?? [], emailController.text]);
+    //TODO test change the email
 
     emailController.text = "";
 
@@ -84,28 +69,10 @@ class CustomerRegisterProvider with ChangeNotifier {
           context: NavigatorKey.key.currentState!.context);
       return false;
     }
-    final oldCustomer = _customer;
 
-    _customer = CustomerModel(
-      Telephones: [
-        ...oldCustomer?.Telephones ?? [],
-        newTelephone,
-      ],
-      Name: oldCustomer?.Name,
-      Code: oldCustomer?.Code,
-      PersonalizedCode: oldCustomer?.PersonalizedCode,
-      ReducedName: oldCustomer?.ReducedName,
-      CpfCnpjNumber: oldCustomer?.CpfCnpjNumber,
-      RegistrationNumber: oldCustomer?.RegistrationNumber,
-      DateOfBirth: oldCustomer?.DateOfBirth,
-      SexType: oldCustomer?.SexType,
-      PersonType: oldCustomer?.PersonType,
-      Emails: oldCustomer?.Emails,
-      Addresses: oldCustomer?.Addresses,
-      selected: oldCustomer?.selected == true,
-      password: oldCustomer?.password,
-      CustomerCovenants: oldCustomer?.CustomerCovenants,
-    );
+    _customer = _customer
+        ?.copyWith(Telephones: [..._customer?.Telephones ?? [], newTelephone]);
+    //TODO test change telephone
 
     notifyListeners();
 
@@ -116,23 +83,7 @@ class CustomerRegisterProvider with ChangeNotifier {
     final newEmails =
         customer?.Emails?.where((e) => e != customer?.Emails?[index]).toList();
 
-    _customer = CustomerModel(
-      Emails: newEmails,
-      Name: customer?.Name,
-      Code: customer?.Code,
-      PersonalizedCode: customer?.PersonalizedCode,
-      ReducedName: customer?.ReducedName,
-      CpfCnpjNumber: customer?.CpfCnpjNumber,
-      RegistrationNumber: customer?.RegistrationNumber,
-      DateOfBirth: customer?.DateOfBirth,
-      SexType: customer?.SexType,
-      PersonType: customer?.PersonType,
-      Telephones: customer?.Telephones,
-      Addresses: customer?.Addresses,
-      selected: customer?.selected == true,
-      password: customer?.password,
-      CustomerCovenants: customer?.CustomerCovenants,
-    );
+    _customer = _customer?.copyWith(Emails: newEmails); //TODO test this
     notifyListeners();
   }
 
@@ -268,62 +219,28 @@ class CustomerRegisterProvider with ChangeNotifier {
     required double limit,
   }) {
     final newCovenant = _selectedCovenant;
-    final oldCustomer = _customer;
-    _customer = CustomerModel(
-      CustomerCovenants: [
-        ..._customer?.CustomerCovenants ?? [],
-        CustomerCovenantModel(
-          covenant: CovenantModel(
-            Code: newCovenant?.Codigo_Convenio?.toInt(),
-            PersonalizedCode: newCovenant?.CodigoLegado_Convenio?.toString(),
-            Name: newCovenant?.Nome_Convenio,
-          ),
-          Matriculate: "99",
-          LimitOfPurchase: limit,
-          isSelected: true,
-        )
-      ],
-      Name: oldCustomer?.Name,
-      Code: oldCustomer?.Code,
-      PersonalizedCode: oldCustomer?.PersonalizedCode,
-      ReducedName: oldCustomer?.ReducedName,
-      CpfCnpjNumber: oldCustomer?.CpfCnpjNumber,
-      RegistrationNumber: oldCustomer?.RegistrationNumber,
-      DateOfBirth: oldCustomer?.DateOfBirth,
-      SexType: oldCustomer?.SexType,
-      PersonType: oldCustomer?.PersonType,
-      Emails: oldCustomer?.Emails,
-      Telephones: oldCustomer?.Telephones,
-      Addresses: oldCustomer?.Addresses,
-      selected: oldCustomer?.selected == true,
-      password: oldCustomer?.password,
-    );
+    _customer = _customer?.copyWith(CustomerCovenants: [
+      ..._customer?.CustomerCovenants ?? [],
+      CustomerCovenantModel(
+        covenant: CovenantModel(
+          Code: newCovenant?.Codigo_Convenio?.toInt(),
+          PersonalizedCode: newCovenant?.CodigoLegado_Convenio?.toString(),
+          Name: newCovenant?.Nome_Convenio,
+        ),
+        Matriculate: "99",
+        LimitOfPurchase: limit,
+        isSelected: true,
+      )
+    ]);
+    //TODO test this binding
 
     _selectedCovenant = null;
     notifyListeners();
   }
 
   void unbindCovenant(int index) {
-    final oldCustomer = _customer;
-    oldCustomer?.CustomerCovenants?.removeAt(index);
-
-    _customer = CustomerModel(
-      Name: oldCustomer?.Name,
-      Code: oldCustomer?.Code,
-      PersonalizedCode: oldCustomer?.PersonalizedCode,
-      ReducedName: oldCustomer?.ReducedName,
-      CpfCnpjNumber: oldCustomer?.CpfCnpjNumber,
-      RegistrationNumber: oldCustomer?.RegistrationNumber,
-      DateOfBirth: oldCustomer?.DateOfBirth,
-      SexType: oldCustomer?.SexType,
-      PersonType: oldCustomer?.PersonType,
-      Emails: oldCustomer?.Emails,
-      Telephones: oldCustomer?.Telephones,
-      Addresses: oldCustomer?.Addresses,
-      selected: oldCustomer?.selected == true,
-      password: oldCustomer?.password,
-      CustomerCovenants: oldCustomer?.CustomerCovenants,
-    );
+    _customer?.CustomerCovenants?.removeAt(index);
+//TODO test this
     notifyListeners();
   }
 
@@ -360,53 +277,18 @@ class CustomerRegisterProvider with ChangeNotifier {
       return false;
     }
 
-    final oldCustomer = _customer;
-
-    _customer = CustomerModel(
-      Addresses: [
-        ...oldCustomer?.Addresses ?? [],
-        address,
-      ],
-      Name: oldCustomer?.Name ?? "",
-      Code: oldCustomer?.Code,
-      PersonalizedCode: oldCustomer?.PersonalizedCode,
-      ReducedName: oldCustomer?.ReducedName,
-      CpfCnpjNumber: oldCustomer?.CpfCnpjNumber ?? "",
-      RegistrationNumber: oldCustomer?.RegistrationNumber,
-      DateOfBirth: oldCustomer?.DateOfBirth,
-      SexType: oldCustomer?.SexType ?? "M",
-      PersonType: oldCustomer?.PersonType ?? "M",
-      Emails: oldCustomer?.Emails,
-      Telephones: oldCustomer?.Telephones,
-      selected: oldCustomer?.selected == true,
-      CustomerCovenants: oldCustomer?.CustomerCovenants,
-      password: oldCustomer?.password,
-    );
+    _customer = _customer?.copyWith(Addresses: [
+      ..._customer?.Addresses ?? [],
+      address,
+    ]);
+//TODO test this
     notifyListeners();
     return true;
   }
 
   void removeAddress(int index) {
-    final oldCustomer = _customer;
-    oldCustomer?.Addresses?.removeAt(index);
-    _customer = CustomerModel(
-      Addresses: oldCustomer?.Addresses,
-      Name: customer?.Name,
-      Code: customer?.Code,
-      PersonalizedCode: customer?.PersonalizedCode,
-      ReducedName: customer?.ReducedName,
-      CpfCnpjNumber: customer?.CpfCnpjNumber,
-      RegistrationNumber: customer?.RegistrationNumber,
-      DateOfBirth: customer?.DateOfBirth,
-      SexType: customer?.SexType,
-      PersonType: customer?.PersonType,
-      Emails: customer?.Emails,
-      Telephones: customer?.Telephones,
-      selected: customer?.selected == true,
-      password: customer?.password,
-      CustomerCovenants: customer?.CustomerCovenants,
-    );
-
+    _customer?.Addresses?.removeAt(index);
+    //TODO test this
     notifyListeners();
   }
 
@@ -419,24 +301,16 @@ class CustomerRegisterProvider with ChangeNotifier {
     required String? password,
     required String? registrationNumber,
   }) {
-    final oldCustomer = _customer;
-    _customer = CustomerModel(
+    _customer = _customer?.copyWith(
       CpfCnpjNumber: cpfCnpj,
       Name: name,
       SexType: sexType,
       ReducedName: reducedName,
       DateOfBirth: birthDate?.toIso8601String(),
       password: password,
-      Addresses: oldCustomer?.Addresses,
-      Code: oldCustomer?.Code,
-      PersonalizedCode: oldCustomer?.PersonalizedCode,
       RegistrationNumber: registrationNumber,
-      PersonType: oldCustomer?.PersonType ?? "F",
-      Emails: oldCustomer?.Emails,
-      Telephones: oldCustomer?.Telephones,
-      selected: oldCustomer?.selected == true,
-      CustomerCovenants: oldCustomer?.CustomerCovenants,
     );
+    //TODO test this
     notifyListeners();
   }
 

@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import '../models.dart';
 
 class CustomerModel {
@@ -16,6 +17,8 @@ class CustomerModel {
   final List<AddressModel>? Addresses;
   bool selected;
   final String? password;
+  final CustomerSaleBlockadeInstructionModel? saleBlockadeInstructionModel;
+  final CustomerSaleBlockadeModel? saleBlockadeModel;
 // "Covenants": null
 
   CustomerModel({
@@ -34,6 +37,8 @@ class CustomerModel {
     required this.selected,
     required this.password,
     required this.CustomerCovenants,
+    required this.saleBlockadeInstructionModel,
+    required this.saleBlockadeModel,
   });
 
   factory CustomerModel.fromJson(Map json) => CustomerModel(
@@ -69,6 +74,13 @@ class CustomerModel {
                 .map((e) => CustomerCovenantModel.fromJson(e))
                 .cast<CustomerCovenantModel>()
                 .toList(),
+        saleBlockadeInstructionModel: json["SaleBlockadeInstruction"] == null
+            ? null
+            : CustomerSaleBlockadeInstructionModel.fromMap(
+                json["SaleBlockadeInstruction"]),
+        saleBlockadeModel: json["SaleBlockade"] == null
+            ? null
+            : CustomerSaleBlockadeModel.fromMap(json["SaleBlockade"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -87,5 +99,48 @@ class CustomerModel {
         "selected": selected,
         "password": password,
         "CustomerCovenants": CustomerCovenants?.map((e) => e.toJson()).toList(),
+        "SaleBlockadeInstruction": saleBlockadeInstructionModel?.toJson(),
+        "SaleBlockade": saleBlockadeModel?.toJson(),
       };
+
+  CustomerModel copyWith({
+    int? Code,
+    String? PersonalizedCode,
+    String? Name,
+    String? ReducedName,
+    String? CpfCnpjNumber,
+    String? RegistrationNumber,
+    String? DateOfBirth,
+    String? SexType,
+    String? PersonType,
+    List<String>? Emails,
+    List<CustomerTelephoneModel>? Telephones,
+    List<CustomerCovenantModel>? CustomerCovenants,
+    List<AddressModel>? Addresses,
+    bool? selected,
+    String? password,
+    CustomerSaleBlockadeInstructionModel? saleBlockadeInstructionModel,
+    CustomerSaleBlockadeModel? saleBlockadeModel,
+  }) {
+    return CustomerModel(
+      Code: Code ?? this.Code,
+      PersonalizedCode: PersonalizedCode ?? this.PersonalizedCode,
+      Name: Name ?? this.Name,
+      ReducedName: ReducedName ?? this.ReducedName,
+      CpfCnpjNumber: CpfCnpjNumber ?? this.CpfCnpjNumber,
+      RegistrationNumber: RegistrationNumber ?? this.RegistrationNumber,
+      DateOfBirth: DateOfBirth ?? this.DateOfBirth,
+      SexType: SexType ?? this.SexType,
+      PersonType: PersonType ?? this.PersonType,
+      Emails: Emails ?? this.Emails,
+      Telephones: Telephones ?? this.Telephones,
+      CustomerCovenants: CustomerCovenants ?? this.CustomerCovenants,
+      Addresses: Addresses ?? this.Addresses,
+      selected: selected ?? this.selected,
+      password: password ?? this.password,
+      saleBlockadeInstructionModel:
+          saleBlockadeInstructionModel ?? this.saleBlockadeInstructionModel,
+      saleBlockadeModel: saleBlockadeModel ?? this.saleBlockadeModel,
+    );
+  }
 }
