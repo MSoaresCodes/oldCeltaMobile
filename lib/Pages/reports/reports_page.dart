@@ -118,12 +118,22 @@ class _ReportsPageState extends State<ReportsPage> {
                                       title: "Relatório",
                                       subtitle:
                                           reportSchedule.ReportModelName!),
-                                  if (reportSchedule.LastExecutionDate != null)
+                                  if (reportSchedule.LastExecutionDate !=
+                                          null &&
+                                      reportSchedule.IsExecuting != true)
                                     TitleAndSubtitle.titleAndSubtitle(
-                                        title: "Últ. execução",
-                                        subtitle: DateFormat('dd/MM/yyyy HH:mm')
-                                            .format(reportSchedule
-                                                .LastExecutionDate!)),
+                                      title: "Últ. execução",
+                                      subtitle: DateFormat('dd/MM/yyyy HH:mm')
+                                          .format(reportSchedule
+                                              .LastExecutionDate!),
+                                    ),
+                                  if (reportSchedule.IsExecuting == true)
+                                    TitleAndSubtitle.titleAndSubtitle(
+                                      // title: "Últ. execução",
+                                      subtitle:
+                                          "O relatório está sendo executado",
+                                      subtitleColor: Colors.green,
+                                    ),
                                   if (reportSchedule
                                           .LastExecutionStartDateTime !=
                                       null)
@@ -140,8 +150,8 @@ class _ReportsPageState extends State<ReportsPage> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                if (reportSchedule.LastExecutionDate !=
-                                    null) ...[
+                                if (reportSchedule.LastExecutionContainsData ==
+                                    true) ...[
                                   PdfButton(
                                     reportSchedule: reportSchedule,
                                     alreadyDownloadedPdf: alreadyDownloadedPdf,
@@ -151,7 +161,19 @@ class _ReportsPageState extends State<ReportsPage> {
                                     alreadyDownloadedXlsx:
                                         alreadyDownloadedXlsx,
                                   ),
-                                ],
+                                ] else
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    child: Text(
+                                      reportSchedule.LastExecutionDate != null
+                                          ? "Relatório SEM DADOS para exibir"
+                                          : "Relatório NÃO EXECUTADO ainda",
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+                                        fontStyle: FontStyle.italic,
+                                      ),
+                                    ),
+                                  ),
                                 ExecuteButton(reportSchedule: reportSchedule),
                               ],
                             ),
