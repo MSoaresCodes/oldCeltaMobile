@@ -42,7 +42,6 @@ class CustomerRegisterProvider with ChangeNotifier {
     }
     _customer = oldCustomer
         ?.copyWith(Emails: [...oldCustomer.Emails ?? [], emailController.text]);
-    //TODO test change the email
 
     emailController.text = "";
 
@@ -72,7 +71,6 @@ class CustomerRegisterProvider with ChangeNotifier {
 
     _customer = _customer
         ?.copyWith(Telephones: [..._customer?.Telephones ?? [], newTelephone]);
-    //TODO test change telephone
 
     notifyListeners();
 
@@ -83,7 +81,7 @@ class CustomerRegisterProvider with ChangeNotifier {
     final newEmails =
         customer?.Emails?.where((e) => e != customer?.Emails?[index]).toList();
 
-    _customer = _customer?.copyWith(Emails: newEmails); //TODO test this
+    _customer = _customer?.copyWith(Emails: newEmails);
     notifyListeners();
   }
 
@@ -98,20 +96,20 @@ class CustomerRegisterProvider with ChangeNotifier {
     required String? password,
   }) {
     Map<String, dynamic> _jsonInsertCustomer = {
-      "Name": customer?.Name,
-      "ReducedName": customer?.ReducedName,
-      "CpfCnpjNumber": customer?.CpfCnpjNumber,
+      "Name": _customer?.Name,
+      "ReducedName": _customer?.ReducedName,
+      "CpfCnpjNumber": _customer?.CpfCnpjNumber,
       "Password": password,
-      "SexType": customer?.SexType == "Masculino" ? "M" : "F",
-      "PersonType": customer?.CpfCnpjNumber?.length == 11 ? "F" : "J",
-      "RegistrationNumber": customer?.RegistrationNumber,
-      "Emails": customer?.Emails,
-      "Telephones": customer?.Telephones?.map((e) => e.toJson()).toList(),
-      "Addresses": customer?.Addresses?.map((e) => e.toJson()).toList(),
+      "SexType": _customer?.SexType == "Masculino" ? "M" : "F",
+      "PersonType": _customer?.CpfCnpjNumber?.length == 11 ? "F" : "J",
+      "RegistrationNumber": _customer?.RegistrationNumber,
+      "Emails": _customer?.Emails,
+      "Telephones": _customer?.Telephones?.map((e) => e.toJson()).toList(),
+      "Addresses": _customer?.Addresses?.map((e) => e.toJson()).toList(),
       // "Covenants": null,
     };
-    if ((customer?.CustomerCovenants?.length ?? 0) > 0) {
-      _jsonInsertCustomer["CustomerCovenants"] = customer?.CustomerCovenants!
+    if ((_customer?.CustomerCovenants?.length ?? 0) > 0) {
+      _jsonInsertCustomer["CustomerCovenants"] = _customer?.CustomerCovenants!
           .map(
             (e) => CustomerRegisterCustomerCovenantModel(
               Code: e.covenant!.Code!.toInt(),
@@ -121,7 +119,7 @@ class CustomerRegisterProvider with ChangeNotifier {
           )
           .toList();
     }
-    if (customer?.DateOfBirth != null) {
+    if (_customer?.DateOfBirth != null) {
       _jsonInsertCustomer["DateOfBirth"] = DateFormat("yyyy-MM-dd'T'HH:mm:ss.")
           .parse(customer!.DateOfBirth!)
           .toString();
@@ -232,15 +230,16 @@ class CustomerRegisterProvider with ChangeNotifier {
         isSelected: true,
       )
     ]);
-    //TODO test this binding
 
     _selectedCovenant = null;
     notifyListeners();
   }
 
   void unbindCovenant(int index) {
-    _customer?.CustomerCovenants?.removeAt(index);
-//TODO test this
+    final oldCustomer = _customer;
+    oldCustomer?.CustomerCovenants?.removeAt(index);
+
+    _customer = oldCustomer;
     notifyListeners();
   }
 
@@ -281,14 +280,13 @@ class CustomerRegisterProvider with ChangeNotifier {
       ..._customer?.Addresses ?? [],
       address,
     ]);
-//TODO test this
     notifyListeners();
     return true;
   }
 
   void removeAddress(int index) {
     _customer?.Addresses?.removeAt(index);
-    //TODO test this
+
     notifyListeners();
   }
 
@@ -310,7 +308,6 @@ class CustomerRegisterProvider with ChangeNotifier {
       password: password,
       RegistrationNumber: registrationNumber,
     );
-    //TODO test this
     notifyListeners();
   }
 
