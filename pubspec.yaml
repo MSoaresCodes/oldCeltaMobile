@@ -3,7 +3,7 @@ description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 2.9.3+0
+version: 2.9.4+0
 
 environment:
   sdk: ">=2.18.0 <4.0.0"
@@ -80,7 +80,7 @@ msix_config:
   display_name: Celta Mobile
   publisher_display_name: Celta Ware
   identity_name: CeltaWare.Celtamobile
-  msix_version: 1.0.6.0
+  msix_version: 1.0.7.0
   logo_path: "dev_assets/CeltaMobileLogo.png"
   publisher: CN=9FD149D3-E81E-4537-8E61-2C8B386258B5
   store: true
@@ -105,7 +105,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - lib/assets/Images/
-    
+
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -128,13 +128,13 @@ flutter:
       fonts:
         - asset: lib/assets/Fonts/BebasNeue/BebasNeue-Regular.ttf
   #         weight: 700
-        # - asset: fonts/Schyler-Italic.ttf
-        #   style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
-  #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/custom-fonts/#from-packages
+# - asset: fonts/Schyler-Italic.ttf
+#   style: italic
+#   - family: Trajan Pro
+#     fonts:
+#       - asset: fonts/TrajanPro.ttf
+#       - asset: fonts/TrajanPro_Bold.ttf
+#         weight: 700
+#
+# For details regarding fonts from package dependencies,
+# see https://flutter.dev/custom-fonts/#from-packages
