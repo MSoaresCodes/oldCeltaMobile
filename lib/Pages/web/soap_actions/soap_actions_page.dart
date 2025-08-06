@@ -18,10 +18,7 @@ class _SoapActionsPageState extends State<SoapActionsPage> {
     WebProvider webProvider = Provider.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        leading: const Text(""),
-        title: const Text("TOTAL DE REQUISIÇÕES"),
-      ),
+      appBar: AppBar(title: const Text("TOTAL DE REQUISIÇÕES")),
       body: webProvider.enterprisesNames.isEmpty
           ? Center(
               child: TextButton(

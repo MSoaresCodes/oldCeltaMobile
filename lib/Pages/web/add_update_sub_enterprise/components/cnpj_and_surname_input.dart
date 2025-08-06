@@ -34,65 +34,55 @@ class CnpjAndSurnameInput extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: TextFormField(
-                  controller: cnpjController,
-                  focusNode: cnpjFocusNode,
-                  enabled: selectedSubEnterprise == null,
-                  validator: (value) {
-                    if (value != null &&
-                        webProvider.indexOfSelectedEnterprise != -1 &&
-                        webProvider
-                                .enterprises[
-                                    webProvider.indexOfSelectedEnterprise]
-                                .subEnterprises!
-                                .indexWhere((e) => e.cnpj == value.toInt()) !=
-                            -1) {
-                      return "CNPJ já adicionado";
-                    } else if (selectedSubEnterprise != null) {
-                      return null;
-                    }
-                    return FormFieldValidations.cpfOrCnpj(value);
-                  },
-                  onFieldSubmitted: (value) async {
-                    if (value.isEmpty) {
-                      Future.delayed(Duration.zero, () {
-                        cnpjFocusNode.requestFocus();
-                      });
-                    } else {
-                      surnameFocusNode.requestFocus();
-                    }
-                  },
-                  decoration: FormFieldDecoration.decoration(
-                    context: context,
-                    hintText: "Somente números",
-                    labelText: "CNPJ",
-                  ),
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: TextFormField(
-                  controller: surnameController,
-                  focusNode: surnameFocusNode,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Campo obrigatório";
-                    }
-                    return null;
-                  },
-                  onFieldSubmitted: (value) {},
-                  decoration: FormFieldDecoration.decoration(
-                    context: context,
-                    hintText: "Apelido",
-                    labelText: "Apelido",
-                  ),
-                ),
-              ),
-            ],
+          TextFormField(
+            controller: cnpjController,
+            focusNode: cnpjFocusNode,
+            enabled: selectedSubEnterprise == null,
+            validator: (value) {
+              if (value != null &&
+                  webProvider.indexOfSelectedEnterprise != -1 &&
+                  webProvider.enterprises[webProvider.indexOfSelectedEnterprise]
+                          .subEnterprises!
+                          .indexWhere((e) => e.cnpj == value.toInt()) !=
+                      -1) {
+                return "CNPJ já adicionado";
+              } else if (selectedSubEnterprise != null) {
+                return null;
+              }
+              return FormFieldValidations.cpfOrCnpj(value);
+            },
+            onFieldSubmitted: (value) async {
+              if (value.isEmpty) {
+                Future.delayed(Duration.zero, () {
+                  cnpjFocusNode.requestFocus();
+                });
+              } else {
+                surnameFocusNode.requestFocus();
+              }
+            },
+            decoration: FormFieldDecoration.decoration(
+              context: context,
+              hintText: "Somente números",
+              labelText: "CNPJ",
+            ),
           ),
+          const SizedBox(height: 8),
+          TextFormField(
+            controller: surnameController,
+            focusNode: surnameFocusNode,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Campo obrigatório";
+              }
+              return null;
+            },
+            onFieldSubmitted: (value) {},
+            decoration: FormFieldDecoration.decoration(
+              context: context,
+              hintText: "Apelido",
+              labelText: "Apelido",
+            ),
+          )
         ],
       ),
     );
