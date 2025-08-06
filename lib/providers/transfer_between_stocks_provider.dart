@@ -280,6 +280,10 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     required int enterpriseCode,
   }) async {
     try {
+      if (quantity <= 0) {
+        return false;
+      }
+
       int equalProductIndex = _productsLots.indexWhere(
         (e) =>
             e.product.productCode == product.productCode &&

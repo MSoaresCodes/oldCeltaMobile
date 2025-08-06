@@ -39,6 +39,7 @@ class _AddProductInLotState extends State<AddProductInLot> {
   Future<void> _addProductInLot({
     required TransferBetweenStocksProvider transferBetweenStocksProvider,
     required ConfigurationsProvider configurationsProvider,
+    required BuildContext context,
   }) async {
     transferBetweenStocksProvider.validateDropdowns();
     if (transferBetweenStocksProvider.errorSelectedJustification != null ||
@@ -58,6 +59,7 @@ class _AddProductInLotState extends State<AddProductInLot> {
 
     widget.quantityController.clear();
     widget.onSuccess();
+    FocusScope.of(context).unfocus();
 
     if (configurationsProvider.autoScan?.value == true) {
       await widget.getProductsWithCamera();
@@ -87,6 +89,7 @@ class _AddProductInLotState extends State<AddProductInLot> {
                     transferBetweenStocksProvider:
                         transferBetweenStocksProvider,
                     configurationsProvider: configurationsProvider,
+                    context: context,
                   );
                 },
                 onChanged: (value) {
@@ -120,6 +123,7 @@ class _AddProductInLotState extends State<AddProductInLot> {
                 await _addProductInLot(
                   transferBetweenStocksProvider: transferBetweenStocksProvider,
                   configurationsProvider: configurationsProvider,
+                  context: context,
                 );
               },
               child: Row(
