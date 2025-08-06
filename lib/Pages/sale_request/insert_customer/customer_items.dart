@@ -8,10 +8,7 @@ import 'insert_customer.dart';
 
 class CustomersItems extends StatefulWidget {
   final int enterpriseCode;
-  const CustomersItems({
-    required this.enterpriseCode,
-    Key? key,
-  }) : super(key: key);
+  const CustomersItems({required this.enterpriseCode, super.key});
 
   @override
   State<CustomersItems> createState() => _CustomersItemsState();
@@ -20,10 +17,7 @@ class CustomersItems extends StatefulWidget {
 class _CustomersItemsState extends State<CustomersItems> {
   @override
   Widget build(BuildContext context) {
-    SaleRequestProvider saleRequestProvider = Provider.of(
-      context,
-      listen: true,
-    );
+    SaleRequestProvider saleRequestProvider = Provider.of(context);
 
     return ListView.builder(
       shrinkWrap: true,
@@ -33,6 +27,11 @@ class _CustomersItemsState extends State<CustomersItems> {
       itemBuilder: (context, index) {
         CustomerModel? customer = saleRequestProvider
             .customers[widget.enterpriseCode.toString()]![index];
+
+        final allowRequest = customer.saleBlockadeModel?.AllowSaleRequest ??
+            true; //if the bs is not enabled, must not treat this value. This is why I am returning true as default
+
+        final tooltipKey = GlobalKey<TooltipState>();
         if (customer.Code == 1) {
           return Card(
             child: CheckboxListTile(
@@ -57,7 +56,9 @@ class _CustomersItemsState extends State<CustomersItems> {
           child: Column(
             children: [
               CheckboxListTile(
+                enabled: allowRequest,
                 value: customer.selected,
+                visualDensity: VisualDensity.compact,
                 activeColor: Theme.of(context).colorScheme.primary,
                 onChanged: saleRequestProvider.isLoadingCustomer
                     ? null
@@ -94,6 +95,26 @@ class _CustomersItemsState extends State<CustomersItems> {
                       title: "Código personalizado",
                       subtitle: customer.PersonalizedCode.toString(),
                     ),
+                    if (!allowRequest)
+                      Tooltip(
+                          showDuration: const Duration(seconds: 3),
+                          key: tooltipKey,
+                          message:
+                              '''Instrução: ${customer.saleBlockadeInstructionModel?.Description}
+Descrição: ${customer.saleBlockadeModel?.Description}''',
+                          child: TextButton.icon(
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.red,
+                            ),
+                            icon: const Icon(Icons.info),
+                            label: const Text("Cliente bloqueado"),
+                            onPressed: () {
+                              tooltipKey.currentState?.ensureTooltipVisible();
+                              Future.delayed(const Duration(seconds: 3), () {
+                                tooltipKey.currentState?.setState(() {});
+                              });
+                            },
+                          ))
                   ],
                 ),
               ),

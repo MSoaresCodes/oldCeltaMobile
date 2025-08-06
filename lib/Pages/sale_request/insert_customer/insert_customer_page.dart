@@ -9,10 +9,7 @@ import 'insert_customer.dart';
 
 class InsertCustomerPage extends StatefulWidget {
   final int enterpriseCode;
-  const InsertCustomerPage({
-    required this.enterpriseCode,
-    Key? key,
-  }) : super(key: key);
+  const InsertCustomerPage({required this.enterpriseCode, super.key});
 
   @override
   State<InsertCustomerPage> createState() => _InsertCustomerPageState();
