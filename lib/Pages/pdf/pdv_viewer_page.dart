@@ -22,28 +22,20 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
 
   @override
   void initState() {
-    //hide status bar
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: [SystemUiOverlay.bottom]);
 
     super.initState();
-
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
-    ]);
 
     _pdfController = PdfViewerController();
   }
 
   @override
   void dispose() {
-    //enable status bar
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     _searchTextController.dispose();
     _pdfController.dispose();
 
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     _searchResult.removeListener(_searchResultListener);
     super.dispose();
   }
@@ -51,7 +43,6 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
   void _toggleSearchUI() {
     setState(() {
       if (_isSearchVisible) {
-        // If closing the search, clear the results and text.
         _searchResult.clear();
         _searchTextController.clear();
       }
@@ -65,29 +56,21 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
     }
   }
 
-  /// Executes the text search.
   Future<void> _performSearch() async {
     final String searchText = _searchTextController.text;
 
     if (searchText.isEmpty) {
-      // Clear previous search if the new search text is empty.
       setState(() {
         _searchResult.clear();
       });
       return;
     }
 
-    // This is the core search function from the controller.
     _searchResult = _pdfController.searchText(
       searchText,
-      // searchOption: TextSearchOption.caseSensitive, // Or .none for case-insensitive
     );
 
     _searchResult.addListener(_searchResultListener);
-
-    // if (_searchResult.totalInstanceCount > 0) {
-    //   _searchResult.nextInstance();
-    // }
   }
 
   @override
@@ -137,16 +120,12 @@ class AppBarWithTitle extends StatelessWidget implements PreferredSizeWidget {
 
     Future<void> _sharePdf() async {
       try {
-        // Create an XFile object directly from the byte data in memory.
-        // This is more efficient than saving to a temporary file first.
-
         final pdfFile = XFile.fromData(
           pdfViewerProvider.pdfBytes!,
           name: pdfViewerProvider.fileName!,
           mimeType: 'application/pdf',
         );
 
-        // Use Share.shareXFiles to open the native share dialog.
         await SharePlus.instance.share(
           ShareParams(
             files: [pdfFile],
@@ -211,12 +190,10 @@ class _SearchTextAppBarState extends State<SearchTextAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      // An icon to close the search UI.
       leading: IconButton(
         icon: const Icon(Icons.close),
         onPressed: widget.toggleSearchUI,
       ),
-      // The text field for search input.
       title: TextField(
         controller: widget.searchTextController,
         autofocus: true,
@@ -226,28 +203,23 @@ class _SearchTextAppBarState extends State<SearchTextAppBar> {
           hintStyle: TextStyle(color: Colors.white60),
           border: InputBorder.none,
         ),
-        // Perform search when the user submits.
         onSubmitted: (_) => widget.performSearch(),
       ),
       actions: [
-        // Button to execute the search.
         IconButton(
           icon: const Icon(Icons.search),
           onPressed: widget.performSearch,
           tooltip: 'Pesquisar',
         ),
-        // Button to go to the previous match.
         IconButton(
           icon: const Icon(Icons.keyboard_arrow_up),
           onPressed: () {
-            // Check if there are matches before navigating.
             if (widget.searchResult.totalInstanceCount > 0) {
               widget.searchResult.previousInstance();
             }
           },
           tooltip: 'Anterior',
         ),
-        // Button to go to the next match.
         IconButton(
           icon: const Icon(Icons.keyboard_arrow_down),
           onPressed: () {
