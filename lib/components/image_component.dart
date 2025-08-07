@@ -11,6 +11,7 @@ class ImageComponent {
     bool? isNew,
     bool? onlyForValidateModule,
     void Function()? onTap,
+    int? freeDays, //TODO manually add free days here
   }) {
     return InkWell(
       onTap: onTap ??
@@ -54,6 +55,31 @@ class ImageComponent {
                       fontFamily: 'OpenSans',
                       fontWeight: FontWeight.bold,
                       fontSize: 12,
+                    ),
+                  ),
+                ),
+              ),
+            if (freeDays != null)
+              Positioned(
+                top: 0,
+                right: 0,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topRight: Radius.circular(10),
+                    bottomLeft: Radius.circular(10),
+                  ),
+                  child: Container(
+                    color: Colors.black54,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Text(
+                        "$freeDays dias grátis".toUpperCase(),
+                        style: const TextStyle(
+                          fontSize: 10,
+                          color: Colors.lightGreenAccent,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
                 ),
