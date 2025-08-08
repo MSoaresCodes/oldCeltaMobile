@@ -1,6 +1,5 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../utils/utils.dart';
 
@@ -10,11 +9,25 @@ class PdfViewerProvider with ChangeNotifier {
   String? _fileName;
   String? get fileName => _fileName;
 
-  void openPdfViewerPage(Uint8List pdfBytes, String fileName) {
+  Future<void> openPdfViewerPage(Uint8List pdfBytes, String fileName) async {
     _pdfBytes = pdfBytes;
     _fileName = fileName;
     final context = NavigatorKey.key.currentState!.context;
 
-    Navigator.of(context).pushNamed(APPROUTES.PDF_VIEWER);
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+
+    final closed = await Navigator.of(context).pushNamed(APPROUTES.PDF_VIEWER);
+
+    if (closed == true) {
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ]);
+    }
   }
 }

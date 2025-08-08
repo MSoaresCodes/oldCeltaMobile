@@ -117,6 +117,7 @@ class AppBarWithTitle extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final PdfViewerProvider pdfViewerProvider = Provider.of(context);
+    final theme = Theme.of(context);
 
     Future<void> _sharePdf() async {
       try {
@@ -149,6 +150,12 @@ class AppBarWithTitle extends StatelessWidget implements PreferredSizeWidget {
     }
 
     return AppBar(
+      leading: IconButton(
+        icon: Icon(theme.platform == TargetPlatform.iOS
+            ? Icons.arrow_back_ios
+            : Icons.arrow_back),
+        onPressed: () => Navigator.of(context).pop(true),
+      ),
       title: FittedBox(child: Text(fileName)),
       actions: [
         IconButton(
