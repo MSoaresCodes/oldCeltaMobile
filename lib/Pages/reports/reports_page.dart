@@ -104,9 +104,12 @@ class _ReportsPageState extends State<ReportsPage> {
                               padding: const EdgeInsets.all(8.0),
                               child: Column(
                                 children: [
-                                  TitleAndSubtitle.titleAndSubtitle(
+                                  if (reportSchedule.Name != null &&
+                                      reportSchedule.Name!.isNotEmpty)
+                                    TitleAndSubtitle.titleAndSubtitle(
                                       title: "Nome",
-                                      subtitle: reportSchedule.Name!),
+                                      subtitle: reportSchedule.Name!,
+                                    ),
                                   TitleAndSubtitle.titleAndSubtitle(
                                       title: "Categoria",
                                       subtitle: reportSchedule.CategoryName!),
