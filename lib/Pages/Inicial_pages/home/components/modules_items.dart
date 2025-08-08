@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../api/api.dart';
@@ -23,6 +22,9 @@ class ModulesItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final reportsFreeUntilDate = DateTime(2025, 9, 23);
+    final now = DateTime.now();
+
     return GridView.count(
       crossAxisCount: returnSize(context), // define o número de colunas
       childAspectRatio: 1.7, // define a proporção de largura/altura dos itens
@@ -30,15 +32,17 @@ class ModulesItems extends StatelessWidget {
       crossAxisSpacing: 0.0,
       shrinkWrap: true,
       children: [
-        if (kDebugMode) //TODO remove this in the future
-          ImageComponent.image(
-            imagePath: 'lib/assets/Images/reports.png',
-            routine: 'Relatórios'.toUpperCase(),
-            context: context,
-            isNew: true,
-            onlyForValidateModule: true,
-            nextRoute: APPROUTES.REPORTS,
-          ),
+        ImageComponent.image(
+          freeDays: now.isBefore(reportsFreeUntilDate)
+              ? now.difference(reportsFreeUntilDate).inDays.abs()
+              : null,
+          imagePath: 'lib/assets/Images/reports.png',
+          routine: 'Relatórios'.toUpperCase(),
+          context: context,
+          isNew: true,
+          onlyForValidateModule: true,
+          nextRoute: APPROUTES.REPORTS,
+        ),
         ImageComponent.image(
           imagePath: 'lib/assets/Images/adjustPrice.png',
           routine: 'Alteração de preços'.toUpperCase(),

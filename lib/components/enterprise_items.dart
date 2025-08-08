@@ -63,6 +63,9 @@ class EnterpriseItems extends StatelessWidget {
       } else if (nextPageRoute == APPROUTES.RECEIPT) {
         return moduleIsEnabled(Modules.receipt, subEnterprise);
       } else if (nextPageRoute == APPROUTES.REPORTS) {
+        if (DateTime.now().isBefore(DateTime(2025, 9, 23))) {
+          return true;
+        }
         return moduleIsEnabled(Modules.reports, subEnterprise);
       } else if (nextPageRoute == APPROUTES.TRANSFER_BETWEEN_STOCK) {
         return moduleIsEnabled(Modules.transferBetweenStocks, subEnterprise);
@@ -74,7 +77,7 @@ class EnterpriseItems extends StatelessWidget {
 
   bool _hasMinimumVersion(EnterpriseProvider enterpriseProvider) {
     if (nextPageRoute == APPROUTES.REPORTS) {
-      return enterpriseProvider.bsDate?.isAfter(DateTime(2025, 07, 30)) == true;
+      return enterpriseProvider.bsDate?.isAfter(DateTime(2025, 8, 7)) == true;
     } else if (nextPageRoute == APPROUTES.TRANSFER_BETWEEN_STOCK) {
       return enterpriseProvider.bsDate?.isAfter(DateTime(2025, 07, 29)) == true;
     }

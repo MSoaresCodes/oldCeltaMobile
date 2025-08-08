@@ -11,7 +11,7 @@ class ImageComponent {
     bool? isNew,
     bool? onlyForValidateModule,
     void Function()? onTap,
-    int? freeDays, //TODO manually add free days here
+    int? freeDays,
   }) {
     return InkWell(
       onTap: onTap ??
