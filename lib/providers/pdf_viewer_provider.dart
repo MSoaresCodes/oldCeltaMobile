@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../api/api.dart';
 import '../utils/utils.dart';
 
 class PdfViewerProvider with ChangeNotifier {
@@ -10,6 +11,8 @@ class PdfViewerProvider with ChangeNotifier {
   String? get fileName => _fileName;
 
   Future<void> openPdfViewerPage(Uint8List pdfBytes, String fileName) async {
+    FirebaseHelper.addSoapCallInFirebase(FirebaseCallEnum.reports);
+
     _pdfBytes = pdfBytes;
     _fileName = fileName;
     final context = NavigatorKey.key.currentState!.context;

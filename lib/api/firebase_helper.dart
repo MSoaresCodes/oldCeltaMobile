@@ -35,6 +35,7 @@ enum FirebaseCallEnum {
   priceConferenceGetProductOrSendToPrint,
   receiptEntryQuantity,
   receiptLiberate,
+  reports,
   researchPricesInsertPrice,
   saleRequestSave,
   transferBetweenPackageConfirmAdjust,
