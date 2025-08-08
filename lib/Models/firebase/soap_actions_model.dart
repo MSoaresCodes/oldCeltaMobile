@@ -16,6 +16,7 @@ class SoapActionsModel {
   final int? customerRegister;
   final int? buyRequestSave;
   final int? researchPricesInsertPrice;
+  final int? reports;
 
   SoapActionsModel({
     required this.documentId,
@@ -35,6 +36,7 @@ class SoapActionsModel {
     required this.customerRegister,
     required this.buyRequestSave,
     required this.researchPricesInsertPrice,
+    required this.reports,
   });
 
   Map<String, dynamic> toJson() => {
@@ -58,6 +60,7 @@ class SoapActionsModel {
         "customerRegister": customerRegister,
         "buyRequestSave": buyRequestSave,
         "researchPricesInsertPrice": researchPricesInsertPrice,
+        "reports": reports,
       };
 
   static int? _sumValueIfHas(Map<String, dynamic>? request) {
@@ -107,5 +110,6 @@ class SoapActionsModel {
         buyRequestSave: _sumValueIfHas(json["buyRequestSave"]),
         researchPricesInsertPrice:
             _sumValueIfHas(json["researchPricesInsertPrice"]),
+        reports: _sumValueIfHas(json["reports"]),
       );
 }

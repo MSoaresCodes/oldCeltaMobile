@@ -65,6 +65,7 @@ class WebProvider with ChangeNotifier {
     int customerRegister = 0;
     int buyRequestSave = 0;
     int researchPricesInsertPrice = 0;
+    int reports = 0;
 
     for (var monthData in monthsData) {
       if (monthData.adjustSalePrice != null) {
@@ -112,12 +113,16 @@ class WebProvider with ChangeNotifier {
       if (monthData.researchPricesInsertPrice != null) {
         researchPricesInsertPrice += monthData.researchPricesInsertPrice!;
       }
+      if (monthData.reports != null) {
+        reports += monthData.reports!;
+      }
     }
 
     return SoapActionsModel(
       documentId: enterpriseName,
       datesUsed: [],
       users: [],
+      reports: reports == 0 ? null : reports,
       adjustSalePrice: adjustSalePrice == 0 ? null : adjustSalePrice,
       productsConference: productsConference == 0 ? null : productsConference,
       adjustStockConfirmQuantity:
@@ -326,6 +331,8 @@ class WebProvider with ChangeNotifier {
           .first;
 
       totalRequests += clientData.adjustStockConfirmQuantity ?? 0;
+      totalRequests += clientData.adjustSalePrice ?? 0;
+      totalRequests += clientData.productsConference ?? 0;
       totalRequests += clientData.priceConferenceGetProductOrSendToPrint ?? 0;
       totalRequests += clientData.inventoryEntryQuantity ?? 0;
       totalRequests += clientData.receiptEntryQuantity ?? 0;
@@ -337,6 +344,7 @@ class WebProvider with ChangeNotifier {
       totalRequests += clientData.customerRegister ?? 0;
       totalRequests += clientData.buyRequestSave ?? 0;
       totalRequests += clientData.researchPricesInsertPrice ?? 0;
+      totalRequests += clientData.reports ?? 0;
     }
 
     return totalRequests;
