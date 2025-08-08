@@ -325,8 +325,6 @@ class FirebaseHelper {
       final value = await PrefsInstance.getString(PrefsKeys.usersInformations);
 
       if (value.isNotEmpty) {
-        UserData.alreadyInsertedUsersInformations = true;
-
         final userInformations = UserInformationsModel.fromJson(
           json.decode(value),
         );
@@ -334,7 +332,7 @@ class FirebaseHelper {
             .dateOfLastUpdatedInFirebase
             .difference(DateTime.now())
             .inDays;
-        if (diferenceBetweenAtualDateAndLastUpdated <= 7) {
+        if (diferenceBetweenAtualDateAndLastUpdated <= 3) {
           return;
         }
       }
@@ -355,11 +353,7 @@ class FirebaseHelper {
         );
 
         await _clientsCollection.doc(result.docs.first.id).set(
-          {
-            "usersInformations": FieldValue.arrayUnion([
-              userInformations.toJson(),
-            ]),
-          },
+          {UserData.userName: userInformations.toJson()},
           SetOptions(merge: true),
         );
 
