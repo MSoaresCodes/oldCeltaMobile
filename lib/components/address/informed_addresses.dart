@@ -96,10 +96,9 @@ class InformedsAddresses extends StatelessWidget {
                     ElevatedButton(
                       style: const ButtonStyle(
                         backgroundColor: WidgetStatePropertyAll(Colors.red),
-                        minimumSize:
-                            WidgetStatePropertyAll(Size(100, 30)),
-                        maximumSize: WidgetStatePropertyAll(
-                            Size(double.infinity, 30)),
+                        minimumSize: WidgetStatePropertyAll(Size(100, 30)),
+                        maximumSize:
+                            WidgetStatePropertyAll(Size(double.infinity, 30)),
                       ),
                       onPressed: () {
                         ShowAlertDialog.show(

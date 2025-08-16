@@ -299,15 +299,37 @@ class CustomerRegisterProvider with ChangeNotifier {
     required String? password,
     required String? registrationNumber,
   }) {
-    _customer = _customer?.copyWith(
-      CpfCnpjNumber: cpfCnpj,
-      Name: name,
-      SexType: sexType,
-      ReducedName: reducedName,
-      DateOfBirth: birthDate?.toIso8601String(),
-      password: password,
-      RegistrationNumber: registrationNumber,
-    );
+    if (_customer != null) {
+      _customer = _customer?.copyWith(
+        CpfCnpjNumber: cpfCnpj,
+        Name: name,
+        SexType: sexType,
+        ReducedName: reducedName,
+        DateOfBirth: birthDate?.toIso8601String(),
+        password: password,
+        RegistrationNumber: registrationNumber,
+      );
+    } else {
+      _customer = CustomerModel(
+        CpfCnpjNumber: cpfCnpj,
+        Name: name,
+        SexType: sexType,
+        ReducedName: reducedName,
+        DateOfBirth: birthDate?.toIso8601String(),
+        password: password,
+        RegistrationNumber: registrationNumber,
+        Code: null,
+        PersonalizedCode: null,
+        PersonType: null,
+        Emails: null,
+        Telephones: null,
+        Addresses: null,
+        selected: false,
+        CustomerCovenants: null,
+        saleBlockadeInstructionModel: null,
+        saleBlockadeModel: null,
+      );
+    }
     notifyListeners();
   }
 

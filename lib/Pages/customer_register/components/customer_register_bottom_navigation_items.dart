@@ -51,7 +51,7 @@ class CustomerRegisterBottomNavigationItems extends StatelessWidget {
     final bool personIsValid =
         customerRegisterProvider.customer?.Name != null &&
             customerRegisterProvider.customer?.CpfCnpjNumber != null &&
-            customerRegisterProvider.customer?.PersonType != null;
+            customerRegisterProvider.customer?.SexType != null;
 
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
