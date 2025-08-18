@@ -6,9 +6,9 @@ import 'package:flutter/foundation.dart';
 import '../models.dart';
 
 class SaleRequestCartModel {
-  final List<GetProductJsonModel> cartProducts;
+  final List<GetProductJsonModel>? cartProducts;
   final CustomerModel? selectedCustomer;
-  final String lastSaleRequestSaved;
+  final String? lastSaleRequestSaved;
   final String enterpriseCode;
 
   SaleRequestCartModel({
@@ -34,7 +34,7 @@ class SaleRequestCartModel {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'cartProducts': cartProducts.map((x) => x.toJson()).toList(),
+      'cartProducts': cartProducts?.map((x) => x.toJson()).toList(),
       'selectedCustomer': selectedCustomer?.toJson(),
       'lastSaleRequestSaved': lastSaleRequestSaved,
       'enterpriseCode': enterpriseCode,

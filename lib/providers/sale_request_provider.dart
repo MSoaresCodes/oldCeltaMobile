@@ -1028,13 +1028,12 @@ class SaleRequestProvider with ChangeNotifier {
           _lastSaleRequestSaved = "Último pedido salvo: " + match.group(1)!;
           await PrefsInstance.setObject(
             prefsKeys: PrefsKeys.lastSavedSaleRequest,
-            object: {
-              "products": _cartProducts[enterpriseCode]
-                  ?.map((e) => e.toJson())
-                  .toList(),
-              "customers": selectedCustomer?.toJson(),
-              "requestCode": _lastSaleRequestSaved,
-            },
+            object: SaleRequestCartModel(
+              cartProducts: _cartProducts[enterpriseCode],
+              selectedCustomer: selectedCustomer,
+              lastSaleRequestSaved: _lastSaleRequestSaved,
+              enterpriseCode: enterpriseCode,
+            ).toJson(),
           );
         } else {
           //print("Nenhum conteúdo entre parênteses encontrado.");
