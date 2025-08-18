@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../providers/providers.dart';
@@ -19,15 +20,39 @@ class LastSaleRequestSaved extends StatelessWidget {
           ? null
           : Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(
-                "Último pedido: " + lastSaleRequestSaved,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.primary,
-                  fontStyle: FontStyle.italic,
-                  fontFamily: "OpenSans",
-                ),
+              child: Column(
+                children: [
+                  Text(
+                    "Último pedido: " + lastSaleRequestSaved,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.primary,
+                      fontStyle: FontStyle.italic,
+                      fontFamily: "OpenSans",
+                    ),
+                  ),
+                  if (kDebugMode) //TODO remove when is implemented
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        IconButton(
+                          onPressed: () {}, //TODO implement
+                          icon: Icon(
+                            Icons.picture_as_pdf_rounded,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {}, //TODO implement
+                          icon: Icon(
+                            Icons.print,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                      ],
+                    ),
+                ],
               ),
             ),
     );
