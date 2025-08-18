@@ -15,6 +15,7 @@ enum PrefsKeys {
   lastSavedSaleRequest,
   mySoaps,
   notifications,
+  saleRequestLastSavedCart,
   searchCustomerByPersonalizedCode,
   searchProductByPersonalizedCode,
   showMessageToUseCameraInWebVersion,

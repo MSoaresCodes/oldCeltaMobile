@@ -11,23 +11,22 @@ class LastSaleRequestSaved extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final lastSaleRequestSaved =
+        saleRequestProvider.lastSaleRequestSaved?.lastSaleRequestSaved;
     return Container(
       width: double.infinity,
-      child: saleRequestProvider.lastSaleRequestSaved == ""
+      child: lastSaleRequestSaved == null || lastSaleRequestSaved == ""
           ? null
           : Padding(
               padding: const EdgeInsets.all(8.0),
-              child: FittedBox(
-                child: Text(
-                  saleRequestProvider.lastSaleRequestSaved,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.primary,
-                    fontStyle: FontStyle.italic,
-                    fontFamily: "OpenSans",
-                  ),
+              child: Text(
+                "Último pedido: " + lastSaleRequestSaved,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.primary,
+                  fontStyle: FontStyle.italic,
+                  fontFamily: "OpenSans",
                 ),
               ),
             ),

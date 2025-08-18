@@ -52,8 +52,11 @@ class SaleRequestProvider with ChangeNotifier {
   bool _isLoadingProcessCart = false;
   get isLoadingProcessCart => _isLoadingProcessCart;
 
-  String _lastSaleRequestSaved = "";
-  String get lastSaleRequestSaved => _lastSaleRequestSaved;
+  SaleRequestCartModel? _lastSaleRequestSaved;
+  SaleRequestCartModel? get lastSaleRequestSaved => _lastSaleRequestSaved;
+
+  SaleRequestCartModel? _currentCart;
+  SaleRequestCartModel? get currentCart => _currentCart;
 
   bool _userCanChangePrices = false;
   bool get userCanChangePrices => _userCanChangePrices;
@@ -1025,15 +1028,16 @@ class SaleRequestProvider with ChangeNotifier {
             .responseAsString); // Encontrar o primeiro match na string
 
         if (match != null) {
-          _lastSaleRequestSaved = "Último pedido salvo: " + match.group(1)!;
+          _lastSaleRequestSaved = SaleRequestCartModel(
+            cartProducts: _cartProducts[enterpriseCode],
+            selectedCustomer: selectedCustomer,
+            lastSaleRequestSaved: match.group(1)!,
+            enterpriseCode: enterpriseCode,
+          );
+
           await PrefsInstance.setObject(
-            prefsKeys: PrefsKeys.lastSavedSaleRequest,
-            object: SaleRequestCartModel(
-              cartProducts: _cartProducts[enterpriseCode],
-              selectedCustomer: selectedCustomer,
-              lastSaleRequestSaved: _lastSaleRequestSaved,
-              enterpriseCode: enterpriseCode,
-            ).toJson(),
+            prefsKeys: PrefsKeys.saleRequestLastSavedCart,
+            object: _lastSaleRequestSaved?.toJson(),
           );
         } else {
           //print("Nenhum conteúdo entre parênteses encontrado.");
