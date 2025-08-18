@@ -21,7 +21,7 @@ class GetProductJsonModel {
   String? storageAreaAddress;
   String? balanceLabelType;
   double? balanceLabelQuantity;
-  late bool pendantPrintLabel;
+  bool? pendantPrintLabel;
   double? operationalCost;
   double? replacementCost;
   double? replacementCostMidle;
@@ -43,17 +43,16 @@ class GetProductJsonModel {
   double? valueTyped = 0;
   double quantity = 0;
 
-  String? IncrementPercentageOrValue; //vem somente quando processa o carrinho
-  double? IncrementValue; //vem somente quando processa o carrinho
-  String? DiscountPercentageOrValue; //vem somente quando processa o carrinho
-  double? DiscountValue; //vem somente quando processa o carrinho
-  String?
-      AutomaticDiscountPercentageOrValue; //vem somente quando processa o carrinho
-  double? AutomaticDiscountValue; //vem somente quando processa o carrinho
-  double? TotalLiquid; //vem somente quando processa o carrinho
-  String? DiscountDescription; //vem somente quando processa o carrinho
-  String? ExpectedDeliveryDate; //vem somente quando processa o carrinho
-  String? Observations; //vem somente quando processa o carrinho
+  String? IncrementPercentageOrValue;
+  double? IncrementValue;
+  String? DiscountPercentageOrValue;
+  double? DiscountValue;
+  String? AutomaticDiscountPercentageOrValue;
+  double? AutomaticDiscountValue;
+  double? TotalLiquid;
+  String? DiscountDescription;
+  String? ExpectedDeliveryDate;
+  String? Observations;
 
   GetProductJsonModel({
     required this.enterpriseCode,
@@ -308,4 +307,121 @@ class GetProductJsonModel {
         "ExpectedDeliveryDate": this.ExpectedDeliveryDate,
         "Observations": this.Observations,
       };
+
+  GetProductJsonModel copyWith({
+    int? enterpriseCode,
+    int? productCode,
+    int? productPackingCode,
+    String? plu,
+    String? name,
+    String? packingQuantity,
+    double? value,
+    double? retailPracticedPrice,
+    double? retailSalePrice,
+    double? retailOfferPrice,
+    double? wholePracticedPrice,
+    double? wholeSalePrice,
+    double? wholeOfferPrice,
+    double? eCommercePracticedPrice,
+    double? eCommerceSalePrice,
+    double? eCommerceOfferPrice,
+    double? minimumWholeQuantity,
+    String? storageAreaAddress,
+    String? balanceLabelType,
+    double? balanceLabelQuantity,
+    bool? pendantPrintLabel,
+    double? operationalCost,
+    double? replacementCost,
+    double? replacementCostMidle,
+    double? liquidCost,
+    double? liquidCostMidle,
+    double? realCost,
+    double? realLiquidCost,
+    double? fiscalCost,
+    double? fiscalLiquidCost,
+    bool? markUpdateClassInAdjustSalePriceIndividual,
+    bool? inClass,
+    bool? isFatherOfGrate,
+    bool? alterationPriceForAllPackings,
+    bool? isChildOfGrate,
+    List<StockByEnterpriseAssociatedsModel>? stockByEnterpriseAssociateds,
+    List<StocksModel>? stocks,
+    List<LastBuyEntranceModel>? lastBuyEntrance,
+    PriceCostModel? priceCost,
+    double? valueTyped,
+    double? quantity,
+    String? IncrementPercentageOrValue,
+    double? IncrementValue,
+    String? DiscountPercentageOrValue,
+    double? DiscountValue,
+    String? AutomaticDiscountPercentageOrValue,
+    double? AutomaticDiscountValue,
+    double? TotalLiquid,
+    String? DiscountDescription,
+    String? ExpectedDeliveryDate,
+    String? Observations,
+  }) {
+    return GetProductJsonModel(
+      enterpriseCode: enterpriseCode ?? this.enterpriseCode,
+      productCode: productCode ?? this.productCode,
+      productPackingCode: productPackingCode ?? this.productPackingCode,
+      plu: plu ?? this.plu,
+      name: name ?? this.name,
+      packingQuantity: packingQuantity ?? this.packingQuantity,
+      value: value ?? this.value,
+      retailPracticedPrice: retailPracticedPrice ?? this.retailPracticedPrice,
+      retailSalePrice: retailSalePrice ?? this.retailSalePrice,
+      retailOfferPrice: retailOfferPrice ?? this.retailOfferPrice,
+      wholePracticedPrice: wholePracticedPrice ?? this.wholePracticedPrice,
+      wholeSalePrice: wholeSalePrice ?? this.wholeSalePrice,
+      wholeOfferPrice: wholeOfferPrice ?? this.wholeOfferPrice,
+      eCommercePracticedPrice:
+          eCommercePracticedPrice ?? this.eCommercePracticedPrice,
+      eCommerceSalePrice: eCommerceSalePrice ?? this.eCommerceSalePrice,
+      eCommerceOfferPrice: eCommerceOfferPrice ?? this.eCommerceOfferPrice,
+      minimumWholeQuantity: minimumWholeQuantity ?? this.minimumWholeQuantity,
+      storageAreaAddress: storageAreaAddress ?? this.storageAreaAddress,
+      balanceLabelType: balanceLabelType ?? this.balanceLabelType,
+      balanceLabelQuantity: balanceLabelQuantity ?? this.balanceLabelQuantity,
+      pendantPrintLabel: pendantPrintLabel ?? this.pendantPrintLabel,
+      operationalCost: operationalCost ?? this.operationalCost,
+      replacementCost: replacementCost ?? this.replacementCost,
+      replacementCostMidle: replacementCostMidle ?? this.replacementCostMidle,
+      liquidCost: liquidCost ?? this.liquidCost,
+      liquidCostMidle: liquidCostMidle ?? this.liquidCostMidle,
+      realCost: realCost ?? this.realCost,
+      realLiquidCost: realLiquidCost ?? this.realLiquidCost,
+      fiscalCost: fiscalCost ?? this.fiscalCost,
+      fiscalLiquidCost: fiscalLiquidCost ?? this.fiscalLiquidCost,
+      markUpdateClassInAdjustSalePriceIndividual:
+          markUpdateClassInAdjustSalePriceIndividual ??
+              this.markUpdateClassInAdjustSalePriceIndividual,
+      inClass: inClass ?? this.inClass,
+      isFatherOfGrate: isFatherOfGrate ?? this.isFatherOfGrate,
+      alterationPriceForAllPackings:
+          alterationPriceForAllPackings ?? this.alterationPriceForAllPackings,
+      isChildOfGrate: isChildOfGrate ?? this.isChildOfGrate,
+      stockByEnterpriseAssociateds:
+          stockByEnterpriseAssociateds ?? this.stockByEnterpriseAssociateds,
+      stocks: stocks ?? this.stocks,
+      lastBuyEntrance: lastBuyEntrance ?? this.lastBuyEntrance,
+      priceCost: priceCost ?? this.priceCost,
+      valueTyped: valueTyped ?? this.valueTyped,
+      quantity: quantity ?? this.quantity,
+      IncrementPercentageOrValue:
+          IncrementPercentageOrValue ?? this.IncrementPercentageOrValue,
+      IncrementValue: IncrementValue ?? this.IncrementValue,
+      DiscountPercentageOrValue:
+          DiscountPercentageOrValue ?? this.DiscountPercentageOrValue,
+      DiscountValue: DiscountValue ?? this.DiscountValue,
+      AutomaticDiscountPercentageOrValue: AutomaticDiscountPercentageOrValue ??
+          this.AutomaticDiscountPercentageOrValue,
+      AutomaticDiscountValue:
+          AutomaticDiscountValue ?? this.AutomaticDiscountValue,
+      TotalLiquid: TotalLiquid ?? this.TotalLiquid,
+      DiscountDescription: DiscountDescription ?? this.DiscountDescription,
+      ExpectedDeliveryDate: ExpectedDeliveryDate ?? this.ExpectedDeliveryDate,
+      Observations: Observations ?? this.Observations,
+    );
+  }
 }

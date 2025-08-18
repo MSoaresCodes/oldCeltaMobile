@@ -65,7 +65,7 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
                       controllerText: _consultProductController.text,
                       context: context,
                     );
-    
+
                     //não estava funcionando passar o productsCount como parâmetro
                     //para o "SearchProductWithEanPluOrNameWidget" para apagar o
                     //textEditingController após a consulta dos produtos se encontrar
@@ -95,20 +95,18 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
                       shrinkWrap: true,
                       itemCount: priceConferenceProvider.products.length,
                       itemBuilder: (context, index) {
-                        final product =
-                            priceConferenceProvider.products[index];
-    
+                        final product = priceConferenceProvider.products[index];
+
                         return ProductItem(
                           enterpriseCode: enterprise.Code,
                           product: priceConferenceProvider.products[index],
                           showCosts: true,
                           showLastBuyEntrance: true,
-                          componentAfterProductInformations:
-                              SendToPrintButton(
+                          componentAfterProductInformations: SendToPrintButton(
                             internalEnterpriseCode: enterprise.Code,
                             index: index,
                             productPackingCode: product.productPackingCode!,
-                            etiquetaPendente: product.pendantPrintLabel,
+                            etiquetaPendente: product.pendantPrintLabel == true,
                           ),
                         );
                       },

@@ -118,7 +118,7 @@ class PriceConferenceProvider with ChangeNotifier {
       FirebaseCallEnum.priceConferenceGetProductOrSendToPrint,
     );
 
-    bool newValue = !_products[index].pendantPrintLabel;
+    bool newValue = !(_products[index].pendantPrintLabel ?? false);
 
     try {
       await SoapRequest.soapPost(
@@ -136,7 +136,7 @@ class PriceConferenceProvider with ChangeNotifier {
 
       if (_errorSendToPrint == "") {
         _products[index].pendantPrintLabel =
-            !_products[index].pendantPrintLabel;
+            !(_products[index].pendantPrintLabel ?? false);
       }
       //como deu certo a marcação/desmarcação, precisa atualizar na lista local se está marcado ou não
     } catch (e) {
