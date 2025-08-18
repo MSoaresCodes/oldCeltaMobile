@@ -39,7 +39,7 @@ class SaleRequestProvider with ChangeNotifier {
   List<GetProductJsonModel> _products = [];
   List<GetProductJsonModel> get products => [..._products];
   int get productsCount => _products.length;
-  var removedProduct;
+  GetProductJsonModel? removedProduct;
   int? indexOfRemovedProduct;
 
   String _errorMessageSaveSaleRequest = "";
@@ -519,7 +519,7 @@ class SaleRequestProvider with ChangeNotifier {
 
   restoreProductRemoved(String enterpriseCode) async {
     _cartProducts[enterpriseCode]!
-        .insert(indexOfRemovedProduct!, removedProduct);
+        .insert(indexOfRemovedProduct!, removedProduct!);
 
     await _updateCartInDatabase();
     notifyListeners();
