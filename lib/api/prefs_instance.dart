@@ -12,6 +12,7 @@ enum PrefsKeys {
   customers,
   enterpriseName,
   hasUnreadNotifications,
+  lastSavedSaleRequest,
   mySoaps,
   notifications,
   searchCustomerByPersonalizedCode,

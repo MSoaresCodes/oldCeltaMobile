@@ -101,17 +101,16 @@ class SaleRequestProvider with ChangeNotifier {
     return null;
   }
 
-  int? getSelectedCustomerCode(String enterpriseCode) {
-    int customerCode = -1;
+  CustomerModel? getSelectedCustomer(String enterpriseCode) {
     if (_customers[enterpriseCode] != null) {
       final customerIndex =
           _customers[enterpriseCode]!.indexWhere((e) => e.selected == true);
       if (customerIndex != -1) {
-        return _customers[enterpriseCode]![customerIndex].Code;
+        return _customers[enterpriseCode]![customerIndex];
       }
     }
 
-    return customerCode;
+    return null;
   }
 
   Map<String, List<GetProductJsonModel>> _cartProducts = {};
@@ -637,7 +636,7 @@ class SaleRequestProvider with ChangeNotifier {
         "EnterpriseCode": enterpriseCode,
         "RequestTypeCode": requestTypeCode,
         "CovenantCode": getSelectedCovenantCode(enterpriseCode.toString()) ?? 0,
-        "CustomerCode": getSelectedCustomerCode(enterpriseCode.toString()) ?? 0,
+        "CustomerCode": getSelectedCustomer(enterpriseCode.toString()) ?? 0,
         "Products": processCartItems,
       }
           //   // 'SellerCode: 1,' //não possui opção para consulta de vendedor no aplicativo. Ele retorna o código de acordo com o funcionário vinculado ao usuário logado, por isso não precisa enviar essa informação. O próprio backend vai verificar qual é o vendedor vinculado ao usuário e retornar o código dele
@@ -979,6 +978,8 @@ class SaleRequestProvider with ChangeNotifier {
       FirebaseCallEnum.saleRequestSave,
     );
     try {
+      final selectedCustomer = getSelectedCustomer(enterpriseCode);
+
       final encodedJson = json.encode(
         SaleRequestProcessCartModel(
           crossId: UserData.crossIdentity,
@@ -987,7 +988,7 @@ class SaleRequestProvider with ChangeNotifier {
           SellerCode:
               0, //já vincula o vendedor se tiver um funcionário que é vendedor vinculado ao usuário
           CovenantCode: getSelectedCovenantCode(enterpriseCode) ?? 0,
-          CustomerCode: getSelectedCustomerCode(enterpriseCode) ?? 0,
+          CustomerCode: selectedCustomer?.Code ?? 0,
           Instructions: instructionsController.text,
           Observations: observationsController.text,
           Products: _cartProducts[enterpriseCode]!
@@ -1025,6 +1026,16 @@ class SaleRequestProvider with ChangeNotifier {
 
         if (match != null) {
           _lastSaleRequestSaved = "Último pedido salvo: " + match.group(1)!;
+          await PrefsInstance.setObject(
+            prefsKeys: PrefsKeys.lastSavedSaleRequest,
+            object: {
+              "products": _cartProducts[enterpriseCode]
+                  ?.map((e) => e.toJson())
+                  .toList(),
+              "customers": selectedCustomer?.toJson(),
+              "requestCode": _lastSaleRequestSaved,
+            },
+          );
         } else {
           //print("Nenhum conteúdo entre parênteses encontrado.");
         }

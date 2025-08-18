@@ -24,8 +24,9 @@ class SaveSaleRequestInformationsAndButton extends StatelessWidget {
       SaleRequestProvider saleRequestProvider) {
     productsCount =
         saleRequestProvider.cartProductsCount(enterpriseCode.toString());
-    customerCode =
-        saleRequestProvider.getSelectedCustomerCode(enterpriseCode.toString());
+    customerCode = saleRequestProvider
+        .getSelectedCustomer(enterpriseCode.toString())
+        ?.Code;
   }
 
   String textButtonMessage(SaleRequestProvider saleRequestProvider) {
