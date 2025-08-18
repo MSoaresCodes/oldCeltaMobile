@@ -1137,4 +1137,14 @@ class SaleRequestProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> restoreLastSavedSaleRequest() async {
+    await PrefsInstance.getString(PrefsKeys.saleRequestLastSavedCart)
+        .then((value) {
+      if (value.isNotEmpty) {
+        _lastSaleRequestSaved =
+            SaleRequestCartModel.fromJson(jsonDecode(value));
+      }
+    });
+  }
 }

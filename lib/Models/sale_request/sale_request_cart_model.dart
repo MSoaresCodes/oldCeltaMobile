@@ -44,7 +44,7 @@ class SaleRequestCartModel {
   factory SaleRequestCartModel.fromMap(Map<String, dynamic> map) {
     return SaleRequestCartModel(
       cartProducts: List<GetProductJsonModel>.from(
-        (map['cartProducts'] as List<int>).map<GetProductJsonModel>(
+        (map['cartProducts'] as List).map<GetProductJsonModel>(
           (x) => GetProductJsonModel.fromJson(x as Map<String, dynamic>),
         ),
       ),

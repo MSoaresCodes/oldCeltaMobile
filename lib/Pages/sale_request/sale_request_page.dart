@@ -94,6 +94,7 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
 
     await saleRequestProvider.restoreProducts(enterprise.Code.toString());
     await saleRequestProvider.restorecustomers(enterprise.Code.toString());
+    await saleRequestProvider.restoreLastSavedSaleRequest();
 
     int customersCount =
         saleRequestProvider.customersCount(enterprise.Code.toString());
@@ -152,7 +153,8 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
                 ),
               ),
               actions: [
-                if (_selectedIndex == _pages.length - 1) const ClearAllDataButton(),
+                if (_selectedIndex == _pages.length - 1)
+                  const ClearAllDataButton(),
                 if (_selectedIndex < (_pages.length - 1))
                   CartBadge(changeSelectedIndex: (index) {
                     setState(() {
