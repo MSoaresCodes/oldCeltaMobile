@@ -50,7 +50,8 @@ class InsertUpdateProductItem extends StatelessWidget {
                     productIndex: productIndex,
                   ),
                   TitleAndSubtitle.titleAndSubtitle(
-                    subtitle: "${product.Product!.Name} - (${product.Product?.PackingQuantity})",
+                    subtitle:
+                        "${product.Product!.name} - (${product.Product?.packingQuantity})",
                     otherWidget: IconButton(
                       onPressed: () {
                         ShowAlertDialog.show(
@@ -70,7 +71,7 @@ class InsertUpdateProductItem extends StatelessWidget {
                   ),
                   TitleAndSubtitle.titleAndSubtitle(
                     title: "PLU",
-                    subtitle: product.Product!.PLU,
+                    subtitle: product.Product!.plu,
                     otherWidget: Padding(
                       padding: const EdgeInsets.only(right: 8),
                       child: TextButton.icon(

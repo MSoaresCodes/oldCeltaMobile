@@ -78,7 +78,7 @@ class BuyQuotationProvider with ChangeNotifier {
       List<BuyQuotationProductsModel> productWithCorrectIsInsertingValue =
           _productsWithNewValues.map((e) {
         int? indexProductInBuyQuotation = _selectedBuyQuotation?.Products
-            ?.indexWhere((x) => x.Product?.PLU == e.Product?.PLU);
+            ?.indexWhere((x) => x.Product?.plu == e.Product?.plu);
 
         return BuyQuotationProductsModel.fromJson(
           e.toJson(
@@ -144,9 +144,8 @@ class BuyQuotationProvider with ChangeNotifier {
         ShowSnackbarMessage.show(
           message: "Alteração realizada com sucesso",
           context: NavigatorKey.key.currentContext!,
-          backgroundColor: Theme.of(NavigatorKey.key.currentContext!)
-              .colorScheme
-              .primary,
+          backgroundColor:
+              Theme.of(NavigatorKey.key.currentContext!).colorScheme.primary,
         );
         return true;
       }
@@ -431,7 +430,9 @@ class BuyQuotationProvider with ChangeNotifier {
           return enterpriseProvider.enterprises.firstWhere(
             (e) =>
                 e.CnpjNumber.toString() ==
-                buyQuotationEnterprise.enterprise.CnpjNumber?.toInt().toString(),
+                buyQuotationEnterprise.enterprise.CnpjNumber
+                    ?.toInt()
+                    .toString(),
           );
         }).toList();
 
@@ -566,10 +567,11 @@ class BuyQuotationProvider with ChangeNotifier {
   }) async {
     products.forEach((product) {
       if (_productsWithNewValues
-          .map((e) => e.Product?.PLU)
+          .map((e) => e.Product?.plu)
           .contains(product.plu)) {
         ShowSnackbarMessage.show(
-          message: "O produto ${product.name} de PLU (${product.plu}) já foi adicionado",
+          message:
+              "O produto ${product.name} de PLU (${product.plu}) já foi adicionado",
           context: NavigatorKey.key.currentState!.context,
         );
         return;
@@ -584,44 +586,7 @@ class BuyQuotationProvider with ChangeNotifier {
         0,
         BuyQuotationProductsModel(
           Code: 0,
-          Product: ProductModel(
-            EnterpriseCode: product.enterpriseCode,
-            ProductCode: product.productCode,
-            ProductPackingCode: product.productPackingCode,
-            PLU: product.plu,
-            Name: product.name,
-            PackingQuantity: product.packingQuantity,
-            PendantPrintLabel: product.pendantPrintLabel,
-            AlterationPriceForAllPackings:
-                product.alterationPriceForAllPackings,
-            IsFatherOfGrate: product.isFatherOfGrate,
-            IsChildOfGrate: product.isChildOfGrate,
-            InClass: product.inClass,
-            MarkUpdateClassInAdjustSalePriceIndividual:
-                product.markUpdateClassInAdjustSalePriceIndividual,
-            Value: product.value,
-            BalanceLabelQuantity: product.balanceLabelQuantity,
-            RetailPracticedPrice: product.retailPracticedPrice,
-            RetailSalePrice: product.retailSalePrice,
-            RetailOfferPrice: product.retailOfferPrice,
-            WholePracticedPrice: product.wholePracticedPrice,
-            WholeSalePrice: product.wholeSalePrice,
-            WholeOfferPrice: product.wholeOfferPrice,
-            ECommercePracticedPrice: product.eCommercePracticedPrice,
-            ECommerceSalePrice: product.eCommerceSalePrice,
-            ECommerceOfferPrice: product.eCommerceOfferPrice,
-            MinimumWholeQuantity: product.minimumWholeQuantity,
-            OperationalCost: product.operationalCost,
-            ReplacementCost: product.replacementCost,
-            ReplacementCostMidle: product.replacementCostMidle,
-            LiquidCost: product.liquidCost,
-            LiquidCostMidle: product.liquidCostMidle,
-            RealCost: product.realCost,
-            RealLiquidCost: product.realLiquidCost,
-            FiscalCost: product.fiscalCost,
-            FiscalLiquidCost: product.fiscalLiquidCost,
-            PriceCost: product.priceCost?.LiquidCost,
-          ),
+          Product: product,
           ProductEnterprises: enterpriseCodes
               .map(
                 (e) => ProductEnterprise(
