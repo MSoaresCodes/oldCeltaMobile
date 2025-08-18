@@ -32,55 +32,55 @@ class Costs extends StatelessWidget implements MoreInformationWidget {
         ),
         TitleAndSubtitle.titleAndSubtitle(
           subtitle: ConvertString.convertToBRL(
-            product.fiscalCost,
+            product.fiscalCost ?? 0,
           ),
           title: "Fiscal",
         ),
         TitleAndSubtitle.titleAndSubtitle(
           subtitle: ConvertString.convertToBRL(
-            product.fiscalLiquidCost,
+            product.fiscalLiquidCost ?? 0,
           ),
           title: "Fiscal líquido",
         ),
         TitleAndSubtitle.titleAndSubtitle(
           subtitle: ConvertString.convertToBRL(
-            product.liquidCost,
+            product.liquidCost ?? 0,
           ),
           title: "Líquido",
         ),
         TitleAndSubtitle.titleAndSubtitle(
           subtitle: ConvertString.convertToBRL(
-            product.liquidCostMidle,
+            product.liquidCostMidle ?? 0,
           ),
           title: "Líquido médio",
         ),
         TitleAndSubtitle.titleAndSubtitle(
           subtitle: ConvertString.convertToBRL(
-            product.operationalCost,
+            product.operationalCost ?? 0,
           ),
           title: "Operacional",
         ),
         TitleAndSubtitle.titleAndSubtitle(
           subtitle: ConvertString.convertToBRL(
-            product.realCost,
+            product.realCost ?? 0,
           ),
           title: "Real",
         ),
         TitleAndSubtitle.titleAndSubtitle(
           subtitle: ConvertString.convertToBRL(
-            product.realLiquidCost,
+            product.realLiquidCost ?? 0,
           ),
           title: "Real líquido",
         ),
         TitleAndSubtitle.titleAndSubtitle(
           subtitle: ConvertString.convertToBRL(
-            product.replacementCost,
+            product.replacementCost ?? 0,
           ),
           title: "Reposição",
         ),
         TitleAndSubtitle.titleAndSubtitle(
           subtitle: ConvertString.convertToBRL(
-            product.replacementCostMidle,
+            product.replacementCostMidle ?? 0,
           ),
           title: "Reposição médio",
         ),

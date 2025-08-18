@@ -52,23 +52,39 @@ class InsertUpdateProductItem extends StatelessWidget {
                   TitleAndSubtitle.titleAndSubtitle(
                     subtitle:
                         "${product.Product!.name} - (${product.Product?.packingQuantity})",
-                    otherWidget: IconButton(
-                      onPressed: () {
-                        ShowAlertDialog.show(
-                          context: context,
-                          title: "Remover produto?",
-                          function: () async {
-                            buyQuotationProvider
-                                .removeProductWithNewValue(productIndex);
+                    otherWidget: Column(
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            ShowAlertDialog.show(
+                              context: context,
+                              title: "Remover produto?",
+                              function: () async {
+                                buyQuotationProvider
+                                    .removeProductWithNewValue(productIndex);
+                              },
+                            );
                           },
-                        );
-                      },
-                      icon: const Icon(
-                        Icons.delete,
-                        color: Colors.red,
-                      ),
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+                  if (product.Product != null)
+                    OpenDialogProductInformations(
+                      product: product.Product!,
+                      pages: [
+                        // Prices(product: product.Product!),
+                        Stocks(product: product.Product!),
+                        StockAddress(product: product.Product!),
+                        // LastBuyEntrance(product: product.Product!),
+                        // Costs(product: product.Product!),
+                        // Margins(product: product.Product!),
+                      ],
+                    ),
                   TitleAndSubtitle.titleAndSubtitle(
                     title: "PLU",
                     subtitle: product.Product!.plu,
