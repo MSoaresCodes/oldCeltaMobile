@@ -326,7 +326,7 @@ class SaleRequestProvider with ChangeNotifier {
       enterpriseCode: enterpriseCode,
     );
 
-    GetProductJsonModel cartProductsModel = GetProductJsonModel(
+    GetProductJsonModel cartProductsModel = product.copyWith(
       productPackingCode: product.productPackingCode!,
       name: product.name!,
       quantity: quantity,
@@ -336,8 +336,6 @@ class SaleRequestProvider with ChangeNotifier {
       DiscountPercentageOrValue: product.DiscountPercentageOrValue ?? "R\$",
       DiscountValue: product.DiscountValue ?? 0,
       // expectedDeliveryDate: "\"${DateTime.now().toString()}\"",
-      productCode: product.productCode!,
-      plu: product.plu!,
       packingQuantity: product.packingQuantity ?? "0",
       retailPracticedPrice: product.retailPracticedPrice ?? 0,
       retailSalePrice: product.retailSalePrice ?? 0,
@@ -349,35 +347,9 @@ class SaleRequestProvider with ChangeNotifier {
       eCommerceSalePrice: product.eCommerceSalePrice ?? 0,
       eCommerceOfferPrice: product.eCommerceOfferPrice ?? 0,
       minimumWholeQuantity: product.minimumWholeQuantity ?? 0,
-      storageAreaAddress: product.storageAreaAddress,
-      stockByEnterpriseAssociateds: product.stockByEnterpriseAssociateds,
-      alterationPriceForAllPackings: product.alterationPriceForAllPackings,
-      balanceLabelQuantity: product.balanceLabelQuantity,
-      balanceLabelType: product.balanceLabelType,
-      enterpriseCode: product.enterpriseCode,
-      fiscalCost: product.fiscalCost,
-      fiscalLiquidCost: product.fiscalLiquidCost,
-      inClass: product.inClass,
-      isChildOfGrate: product.isChildOfGrate,
-      isFatherOfGrate: product.isFatherOfGrate,
-      lastBuyEntrance: product.lastBuyEntrance,
-      liquidCost: product.liquidCost,
-      liquidCostMidle: product.liquidCostMidle,
-      markUpdateClassInAdjustSalePriceIndividual:
-          product.markUpdateClassInAdjustSalePriceIndividual,
-      operationalCost: product.operationalCost,
-      pendantPrintLabel: product.pendantPrintLabel,
-      priceCost: product.priceCost,
-      realCost: product.realCost,
-      realLiquidCost: product.realLiquidCost,
-      replacementCost: product.replacementCost,
-      replacementCostMidle: product.replacementCostMidle,
-      stocks: product.stocks,
       AutomaticDiscountPercentageOrValue:
           product.AutomaticDiscountPercentageOrValue ?? "R\$",
       AutomaticDiscountValue: product.AutomaticDiscountValue ?? 0,
-      TotalLiquid: product.TotalLiquid,
-      valueTyped: product.valueTyped,
     );
 
     if (alreadyContainsProduct(
