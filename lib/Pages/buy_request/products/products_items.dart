@@ -172,11 +172,13 @@ class _ProductsItemsState extends State<ProductsItems> {
                   ProductItem(
                     enterpriseCode: product.enterpriseCode,
                     product: product,
-                    showWholeInformations: false,
                     showMargins: true,
-                    showCosts: false,
-                    showPrice: false,
+                    showStocks: true,
+                    showAddress: true,
+                    showCosts: true,
                     showLastBuyEntrance: true,
+                    showWholeInformations: false,
+                    showPrice: false,
                     componentBeforeProductInformations:
                         TitleAndSubtitle.titleAndSubtitle(
                       fontSize: 20,
