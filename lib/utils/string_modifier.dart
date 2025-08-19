@@ -73,6 +73,13 @@ extension StringModifier on String {
   }
 
   String? formatPackingQuantity() {
+    final doubleValue = this.toDouble();
+    bool? isInt = doubleValue >= 1 && doubleValue % 1 == 0.0;
+
+    if (isInt == true) {
+      return (this.toInt() % 2).toString();
+    }
+
     String? packingQuantity = this.replaceAll(RegExp(r'.0000'), '');
 
     if (packingQuantity.endsWith("000") == true) {

@@ -47,8 +47,8 @@ class ProductItem extends StatelessWidget {
                   componentBeforeProductInformations!,
                 TitleAndSubtitle.titleAndSubtitle(
                   title: "Produto",
-                  subtitle: product.name.toString() +
-                      " (${product.packingQuantity?.formatPackingQuantity()})",
+                  subtitle: product.name.toString().trimRight() +
+                      " (${product.packingQuantity})",
                 ),
                 Row(
                   children: [
