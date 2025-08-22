@@ -272,6 +272,25 @@ class SoapHelper {
         typeOfResult: "GetProductResult",
       );
 
+      if (SoapRequestResponse.responseAsString == "") {
+        await SoapRequest.soapPost(
+          parameters: {
+            "crossIdentity": UserData.crossIdentity,
+            "searchTypeInt": getWeighableProducts //produtos pesáveis
+                ? 20
+                : isSearchAllCountedProducts
+                    ? 19
+                    : getSearchTypeInt(configurationsProvider),
+            "searchValue": searchValue,
+            "grDocCode": docCode,
+          },
+          typeOfResponse: "GetProductResponse",
+          SOAPAction: "GetProduct",
+          serviceASMX: "CeltaGoodsReceivingService.asmx",
+          typeOfResult: "GetProductResult",
+        );
+      }
+
       if (SoapRequestResponse.errorMessage != "") {
         throw Exception();
       }
