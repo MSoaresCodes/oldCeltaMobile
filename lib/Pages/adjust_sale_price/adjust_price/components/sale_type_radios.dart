@@ -46,7 +46,10 @@ class _SaleTypeRadiosState extends State<SaleTypeRadios> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        Row(children: generateRadios(adjustSalePriceProvider))
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: generateRadios(adjustSalePriceProvider),
+        )
       ],
     );
   }
@@ -60,7 +63,7 @@ class _SaleTypeRadiosState extends State<SaleTypeRadios> {
         adjustSalePriceProvider.updateSelectedSaleType(i);
       }
       radios.add(
-        Expanded(
+        Flexible(
           child: InkWell(
             onTap: () {
               adjustSalePriceProvider.updateSelectedSaleType(i);
@@ -68,28 +71,29 @@ class _SaleTypeRadiosState extends State<SaleTypeRadios> {
                 groupValue = i;
               });
             },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Radio(
-                  value: i,
-                  groupValue: groupValue,
-                  onChanged: (value) {
-                    adjustSalePriceProvider.updateSelectedSaleType(i);
-                    setState(() {
-                      groupValue = value;
-                    });
-                  },
-                  visualDensity: VisualDensity.compact,
-                ),
-                Flexible(
-                  child: Text(
-                    adjustSalePriceProvider.saleTypes[i].saleTypeName.name,
-                    style: const TextStyle(fontWeight: FontWeight.w400),
-                    textAlign: TextAlign.start,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: RadioGroup(
+                groupValue: groupValue,
+                onChanged: (value) {
+                  adjustSalePriceProvider.updateSelectedSaleType(i);
+                  setState(() {
+                    groupValue = value;
+                  });
+                },
+                child: FittedBox(
+                  child: Row(
+                    children: [
+                      Text(
+                        adjustSalePriceProvider.saleTypes[i].saleTypeName.name,
+                        style: const TextStyle(fontWeight: FontWeight.w400),
+                        textAlign: TextAlign.start,
+                      ),
+                      Radio(value: i),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
           ),
         ),

@@ -88,8 +88,7 @@ class _LoginPageState extends State<LoginPage>
                                 .pushNamed(APPROUTES.WEB_LOGIN);
                           },
                           child: Container(
-                            transform: Matrix4.rotationZ(-8 * pi / 180)
-                              ..translate(-10.0),
+                            transform: Matrix4.rotationZ(-8 * pi / 180),
                             padding: const EdgeInsets.symmetric(
                               vertical: 10,
                               horizontal: 30,

@@ -187,7 +187,9 @@ class FirebaseHelper {
   }
 
   static Future<void> _initNotifications() async {
-    if (kIsWeb || PlatformPlus.platform.isWindowsNative) {
+    if (kIsWeb ||
+        PlatformPlus.platform.isWindowsNative ||
+        PlatformPlus.platform.isMacOSNative) {
       return;
     }
     final settings = await _firebaseMessaging.requestPermission(

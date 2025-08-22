@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:platform_plus/platform_plus.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../api/api.dart';
@@ -30,6 +31,9 @@ class _MyDrawerState extends State<MyDrawer> {
   }
 
   Future<void> updatePermissionStatus() async {
+    if (PlatformPlus.platform.isMacOSNative) {
+      return;
+    }
     permissionStatus = await Permission.notification.status;
     setState(() {});
     debugPrint(permissionStatus.toString());

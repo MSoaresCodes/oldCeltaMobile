@@ -48,7 +48,7 @@ class BuyersDropDown extends StatelessWidget {
           child: Card(
             child: DropdownButtonFormField<BuyerModel>(
               key: dropdownKey,
-              value: itemValue(),
+              initialValue: itemValue(),
               disabledHint: Center(child: Text(disabledHintText)),
               decoration: const InputDecoration(
                 border: InputBorder.none,

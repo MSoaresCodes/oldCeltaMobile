@@ -20,7 +20,7 @@ class SexType extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: DropdownButtonFormField<dynamic>(
-        value: selectedSexDropDown?.value,
+        initialValue: selectedSexDropDown?.value,
         focusNode: sexTypeFocusNode,
         disabledHint: const Center(child: Text("Sexo")),
         isExpanded: true,

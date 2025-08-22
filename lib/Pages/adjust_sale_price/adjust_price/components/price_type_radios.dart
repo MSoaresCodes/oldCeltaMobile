@@ -50,8 +50,7 @@ class _PriceTypeRadiosState extends State<PriceTypeRadios> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Radio(
-                  value: i,
+                RadioGroup(
                   groupValue: groupValue,
                   onChanged: (value) {
                     adjustSalePriceProvider.updateSelectedPriceType(i);
@@ -59,12 +58,15 @@ class _PriceTypeRadiosState extends State<PriceTypeRadios> {
                       groupValue = value;
                     });
                   },
-                  visualDensity: VisualDensity.compact,
-                ),
-                Flexible(
-                  child: Text(
-                    adjustSalePriceProvider.priceTypes[i].priceTypeName.name,
-                    style: const TextStyle(fontWeight: FontWeight.w400),
+                  child: Row(
+                    children: [
+                      Text(
+                        adjustSalePriceProvider
+                            .priceTypes[i].priceTypeName.name,
+                        style: const TextStyle(fontWeight: FontWeight.w400),
+                      ),
+                      Radio(value: i),
+                    ],
                   ),
                 ),
               ],

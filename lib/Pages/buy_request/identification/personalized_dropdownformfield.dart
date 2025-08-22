@@ -34,7 +34,7 @@ class _PersonalizedDropdownFormfieldState
     return DropdownButtonFormField<dynamic>(
       // isDense: false,
       key: widget.dropdownKey,
-      value: widget.value,
+      initialValue: widget.value,
       disabledHint: widget.isLoading
           ? Row(
               mainAxisAlignment: MainAxisAlignment.center,

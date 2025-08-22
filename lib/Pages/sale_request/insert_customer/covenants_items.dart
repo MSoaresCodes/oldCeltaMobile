@@ -105,12 +105,9 @@ class _CovenantsItemsState extends State<CovenantsItems> {
                             : Colors.black,
                         fontWeight: FontWeight.bold),
                   ),
-                  leading: Radio(
-                    focusColor: Colors.red,
-                    activeColor: Theme.of(context).colorScheme.primary,
-                    value: index,
+                  leading: RadioGroup(
                     groupValue: _selectedIndex,
-                    toggleable: true,
+                    child: Radio(value: index),
                     onChanged: (int? value) {
                       saleRequestProvider.updateSelectedCovenant(
                         enterpriseCode: widget.enterpriseCode,

@@ -20,7 +20,7 @@ class StateDropDown extends StatelessWidget {
 
     return DropdownButtonFormField<dynamic>(
       focusNode: stateFocusNode,
-      value: selectedState.value,
+      initialValue: selectedState.value,
       isExpanded: true,
       hint: Center(
         child: Text(

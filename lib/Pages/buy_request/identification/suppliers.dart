@@ -106,52 +106,58 @@ class _SuplliersState extends State<Suplliers> {
           itemBuilder: (context, index) {
             SupplierModel supplier = buyRequestProvider.suppliers[index];
 
-            return Card(
-              child: RadioListTile(
-                selected: supplier.CnpjCpfNumber ==
-                    buyRequestProvider.selectedSupplier?.CnpjCpfNumber,
-                groupValue: _groupValue,
-                value: index,
-                visualDensity: const VisualDensity(
-                  horizontal: VisualDensity.minimumDensity,
-                  vertical: VisualDensity.minimumDensity,
-                ),
-                onChanged: (int? value) {
-                  updateSelectedSupplier(
-                    value: value,
-                    buyRequestProvider: buyRequestProvider,
-                    supplier: supplier,
-                  );
-                },
-                subtitle: Column(
-                  children: [
-                    TitleAndSubtitle.titleAndSubtitle(
-                      title: "Código",
-                      subtitle: supplier.Code.toString(),
+            return InkWell(
+              onTap: () {
+                updateSelectedSupplier(
+                  value: index,
+                  buyRequestProvider: buyRequestProvider,
+                  supplier: supplier,
+                );
+              },
+              child: Card(
+                child: RadioGroup(
+                  groupValue: _groupValue,
+                  onChanged: (int? value) {
+                    updateSelectedSupplier(
+                      value: value,
+                      buyRequestProvider: buyRequestProvider,
+                      supplier: supplier,
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        TitleAndSubtitle.titleAndSubtitle(
+                          title: "Código",
+                          subtitle: supplier.Code.toString(),
+                          otherWidget: Radio(value: index),
+                        ),
+                        TitleAndSubtitle.titleAndSubtitle(
+                          title: "Nome",
+                          subtitle: supplier.Name,
+                        ),
+                        TitleAndSubtitle.titleAndSubtitle(
+                          title: "Nome fantasia",
+                          subtitle: supplier.FantasizesName,
+                        ),
+                        TitleAndSubtitle.titleAndSubtitle(
+                          title: "CPF/CNPJ",
+                          subtitle: supplier.CnpjCpfNumber,
+                        ),
+                        TitleAndSubtitle.titleAndSubtitle(
+                          title: "Tipo de comércio",
+                          subtitle: supplier.SupplierType,
+                        ),
+                        if (supplier.Addresses != null)
+                          Text(supplier.Addresses.toString()),
+                        if (supplier.Telephones != null)
+                          Text(supplier.Telephones.toString()),
+                        if (supplier.Emails != null)
+                          Text(supplier.Emails.toString()),
+                      ],
                     ),
-                    TitleAndSubtitle.titleAndSubtitle(
-                      title: "Nome",
-                      subtitle: supplier.Name,
-                    ),
-                    TitleAndSubtitle.titleAndSubtitle(
-                      title: "Nome fantasia",
-                      subtitle: supplier.FantasizesName,
-                    ),
-                    TitleAndSubtitle.titleAndSubtitle(
-                      title: "CPF/CNPJ",
-                      subtitle: supplier.CnpjCpfNumber,
-                    ),
-                    TitleAndSubtitle.titleAndSubtitle(
-                      title: "Tipo de comércio",
-                      subtitle: supplier.SupplierType,
-                    ),
-                    if (supplier.Addresses != null)
-                      Text(supplier.Addresses.toString()),
-                    if (supplier.Telephones != null)
-                      Text(supplier.Telephones.toString()),
-                    if (supplier.Emails != null)
-                      Text(supplier.Emails.toString()),
-                  ],
+                  ),
                 ),
               ),
             );

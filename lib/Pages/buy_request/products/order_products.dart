@@ -7,8 +7,7 @@ class OrderProducts extends StatefulWidget {
   const OrderProducts({Key? key}) : super(key: key);
 
   @override
-  State<OrderProducts> createState() =>
-      _OrderProductsState();
+  State<OrderProducts> createState() => _OrderProductsState();
 }
 
 class _OrderProductsState extends State<OrderProducts> {
@@ -93,23 +92,34 @@ class _OrderProductsState extends State<OrderProducts> {
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: radioList.length,
                 itemBuilder: (context, index) {
-                  return RadioListTile(
-                    dense: true,
-                    selected: radioList[index].selected,
-                    groupValue: _groupValue,
-                    subtitle: Text(radioList[index].name),
-                    value: index,
-                    visualDensity: const VisualDensity(
-                      horizontal: VisualDensity.minimumDensity,
-                      vertical: VisualDensity.minimumDensity,
-                    ),
-                    onChanged: (int? value) {
+                  return InkWell(
+                    onTap: () {
                       setState(() {
                         radioList[index].selected = !radioList[index].selected;
-                        _groupValue = value;
+                        _groupValue = index;
                         radioList[index].sort();
                       });
                     },
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 4),
+                      child: RadioGroup(
+                        groupValue: _groupValue,
+                        child: Row(
+                          children: [
+                            Expanded(child: Text(radioList[index].name)),
+                            Radio(value: index),
+                          ],
+                        ),
+                        onChanged: (int? value) {
+                          setState(() {
+                            radioList[index].selected =
+                                !radioList[index].selected;
+                            _groupValue = value;
+                            radioList[index].sort();
+                          });
+                        },
+                      ),
+                    ),
                   );
                 }),
           ),

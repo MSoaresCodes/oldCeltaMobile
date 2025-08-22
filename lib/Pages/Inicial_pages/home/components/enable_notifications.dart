@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:platform_plus/platform_plus.dart';
 
 class EnableNotifications extends StatefulWidget {
   final PermissionStatus? permissionStatus;
@@ -47,7 +48,8 @@ class _EnableNotificationsState extends State<EnableNotifications>
 
   @override
   Widget build(BuildContext context) {
-    return widget.permissionStatus?.isGranted == true
+    return widget.permissionStatus?.isGranted == true ||
+            PlatformPlus.platform.isMacOSNative
         ? Container()
         : Container(
             margin: const EdgeInsets.symmetric(horizontal: 12),
