@@ -63,7 +63,7 @@ class _SaleTypeRadiosState extends State<SaleTypeRadios> {
         adjustSalePriceProvider.updateSelectedSaleType(i);
       }
       radios.add(
-        Flexible(
+        Expanded(
           child: InkWell(
             onTap: () {
               adjustSalePriceProvider.updateSelectedSaleType(i);
@@ -71,28 +71,25 @@ class _SaleTypeRadiosState extends State<SaleTypeRadios> {
                 groupValue = i;
               });
             },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: RadioGroup(
-                groupValue: groupValue,
-                onChanged: (value) {
-                  adjustSalePriceProvider.updateSelectedSaleType(i);
-                  setState(() {
-                    groupValue = value;
-                  });
-                },
-                child: FittedBox(
-                  child: Row(
-                    children: [
-                      Text(
-                        adjustSalePriceProvider.saleTypes[i].saleTypeName.name,
-                        style: const TextStyle(fontWeight: FontWeight.w400),
-                        textAlign: TextAlign.start,
-                      ),
-                      Radio(value: i),
-                    ],
+            child: RadioGroup(
+              groupValue: groupValue,
+              onChanged: (value) {
+                adjustSalePriceProvider.updateSelectedSaleType(i);
+                setState(() {
+                  groupValue = value;
+                });
+              },
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      adjustSalePriceProvider.saleTypes[i].saleTypeName.name,
+                      style: const TextStyle(fontWeight: FontWeight.w400),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
-                ),
+                  Radio(value: i),
+                ],
               ),
             ),
           ),
