@@ -58,6 +58,9 @@ dependencies:
   syncfusion_flutter_pdfviewer: ^30.1.40
   permission_handler: ^12.0.1
   pdf: ^3.11.3
+  printing: ^5.14.2
+  esc_pos_utils_plus: ^2.0.4
+  flutter_esc_pos_network: ^1.0.3
 
 icons_launcher:
   image_path: "dev_assets/CeltaMobileLogo.png"

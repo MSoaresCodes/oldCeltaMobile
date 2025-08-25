@@ -59,7 +59,12 @@ class LastSaleRequestSaved extends StatelessWidget {
                           ),
                         ),
                         IconButton(
-                          onPressed: () {}, //TODO implement
+                          onPressed: () {
+                            ReceiptPdfGenerator.printReceiptDirectly(
+                              saleRequestProvider.lastSaleRequestSaved!,
+                              saleRequestProvider,
+                            );
+                          }, //TODO implement
                           icon: Icon(
                             Icons.print,
                             color: Theme.of(context).colorScheme.primary,
