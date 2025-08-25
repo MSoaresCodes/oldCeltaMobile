@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:celta_inventario/utils/utils.dart';
 import 'package:flutter_esc_pos_network/flutter_esc_pos_network.dart';
 import 'package:esc_pos_utils_plus/esc_pos_utils_plus.dart';
 import 'package:intl/intl.dart';
@@ -10,6 +11,18 @@ import '../../../providers/providers.dart';
 
 class ReceiptPdfGenerator {
   ReceiptPdfGenerator._();
+
+  static double _getItemLiquidValue(
+    GetProductJsonModel product,
+    SaleRequestProvider saleRequestProvider,
+  ) {
+    return (product.value! * product.quantity) -
+        (saleRequestProvider.getProductDiscount(product) ?? 0);
+  }
+
+  static double _getItemGrossValue(GetProductJsonModel product) {
+    return (product.value! * product.quantity);
+  }
 
   static Future<void> printReceiptDirectly(
     SaleRequestCartModel saleRequest,
@@ -43,93 +56,105 @@ class ReceiptPdfGenerator {
     bytes += generator.text(
         "Impresso em " + DateFormat('dd/MM/yyyy HH:mm').format(DateTime.now()),
         styles: const PosStyles(align: PosAlign.center));
+    bytes += generator.text(
+        'Cliente: ${saleRequest.selectedCustomer?.Name ?? "N/A"}',
+        styles: const PosStyles(align: PosAlign.left));
+    bytes += generator.text('Usuario: ${UserData.userName}',
+        styles: const PosStyles(align: PosAlign.left));
     bytes += generator.hr();
 
     // Products section
+    double totalDiscount = 0;
+    double totalLiquid = 0;
+    double totalGross = 0;
+
     if (saleRequest.cartProducts != null) {
       for (final product in saleRequest.cartProducts!) {
-        final productSubtotal = (product.quantity) * (product.value ?? 0);
-        final discount = saleRequestProvider.getProductDiscount(product);
+        final productDiscount =
+            saleRequestProvider.getProductDiscount(product) ?? 0;
+        final itemLiquidValue =
+            _getItemLiquidValue(product, saleRequestProvider);
+        final itemGrossValue = _getItemGrossValue(product);
+
+        totalDiscount += productDiscount;
+        totalLiquid += itemLiquidValue;
+        totalGross += itemGrossValue;
 
         // Product Name and Total
         bytes += generator.row([
           PosColumn(
-            textEncoded: latin1.encode(product.name ?? 'N/A'),
-            width: 8,
+            textEncoded: latin1.encode("(${product.plu}) ${product.name}"),
+            width: 12,
             styles: const PosStyles(bold: true),
-          ),
-          PosColumn(
-            textEncoded: latin1.encode(_formatCurrency(productSubtotal)),
-            width: 4,
-            styles: const PosStyles(align: PosAlign.right),
           ),
         ]);
 
         // Quantity and Price details
+
         bytes += generator.row([
           PosColumn(
-            textEncoded: latin1.encode(
-                '  ${product.quantity.toStringAsFixed(0)} un x ${_formatCurrency(product.value)}'),
-            width: 12,
+            text: "",
+            width: 2,
+            styles: const PosStyles(align: PosAlign.right),
+          ),
+          PosColumn(
+            text: product.quantity.toString().toBrazilianNumber(),
+            width: 3,
+            styles: const PosStyles(align: PosAlign.center),
+          ),
+          PosColumn(
+            text: "x",
+            width: 1,
+            styles: const PosStyles(align: PosAlign.center),
+          ),
+          PosColumn(
+            text: product.value.toString().toBrazilianNumber(),
+            width: 2,
+            styles: const PosStyles(align: PosAlign.center),
+          ),
+          PosColumn(
+            text: "=",
+            width: 1,
+            styles: const PosStyles(align: PosAlign.center),
+          ),
+          PosColumn(
+            text: itemGrossValue.toString().toBrazilianNumber(),
+            width: 3,
+            styles: const PosStyles(align: PosAlign.right),
           ),
         ]);
-
-        // Discount if it exists
-        if ((discount ?? 0) > 0) {
-          bytes += generator.row([
-            PosColumn(
-              textEncoded: latin1.encode('  Desconto'),
-              width: 6,
-            ),
-            PosColumn(
-                textEncoded: latin1.encode('- ${_formatCurrency(discount)}'),
-                width: 6,
-                styles: const PosStyles(align: PosAlign.right)),
-          ]);
-        }
       }
     }
 
     bytes += generator.hr();
 
-    // Totals Section
-    final double totalBruto = saleRequest.cartProducts
-            ?.map((p) => (p.quantity) * (p.value ?? 0))
-            .fold(0, (prev, curr) => prev ?? 0 + curr) ??
-        0;
-    final double totalDiscount = saleRequest.cartProducts
-            ?.map((p) => saleRequestProvider.getProductDiscount(p))
-            .fold(0, (prev, curr) => prev ?? 0 + (curr ?? 0)) ??
-        0;
-    final double totalLiquid = totalBruto - totalDiscount;
-
     bytes += generator.row([
       PosColumn(
-        textEncoded: latin1.encode('Subtotal'),
+        textEncoded: latin1.encode('Subtotal R\$'),
         width: 6,
       ),
       PosColumn(
-          textEncoded: latin1.encode(_formatCurrency(totalBruto)),
+          text: totalGross.toStringAsFixed(2),
           width: 6,
           styles: const PosStyles(align: PosAlign.right)),
     ]);
     bytes += generator.row([
       PosColumn(
-        textEncoded: latin1.encode('Descontos'),
+        textEncoded: latin1.encode('Total descontos R\$'),
         width: 6,
       ),
       PosColumn(
-          textEncoded: latin1.encode(_formatCurrency(totalDiscount)),
+          text: totalDiscount.toStringAsFixed(2),
           width: 6,
           styles: const PosStyles(align: PosAlign.right)),
     ]);
     bytes += generator.row([
       PosColumn(
-          textEncoded: latin1.encode('TOTAL'),
+          textEncoded: latin1.encode('TOTAL R\$ '),
           width: 6,
           styles: const PosStyles(bold: true, height: PosTextSize.size2)),
       PosColumn(
-        textEncoded: latin1.encode(_formatCurrency(totalLiquid)),
+        text: totalLiquid.toStringAsFixed(2),
         width: 6,
         styles: const PosStyles(
           align: PosAlign.right,
@@ -144,15 +169,7 @@ class ReceiptPdfGenerator {
     bytes += generator.cut();
 
     // Send the commands to the printer
-    printer.printTicket(bytes);
-    printer.disconnect();
-  }
-
-// You still need your _formatCurrency helper function
-  static String _formatCurrency(double? value) {
-    if (value == null) return 'R\$ 0,00';
-    final format =
-        NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$', decimalDigits: 2);
-    return format.format(value);
+    await printer.printTicket(bytes);
+    await printer.disconnect();
   }
 }
