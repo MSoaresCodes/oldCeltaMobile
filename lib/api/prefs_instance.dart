@@ -41,6 +41,7 @@ class PrefsInstance {
     await _prefs.remove(PrefsKeys.notifications.name);
     await _prefs.remove(PrefsKeys.showMessageToUseCameraInWebVersion.name);
     await _prefs.remove(PrefsKeys.userIdentity.name);
+    await _prefs.remove(PrefsKeys.saleRequestLastSavedCart.name);
     await _prefs.remove(PrefsKeys.transferBetweenStocksProductslots.name);
     await _prefs.remove(PrefsKeys.transferCart.name);
     await _prefs.remove(PrefsKeys.usersInformations.name);
