@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../providers/providers.dart';
+import 'cart_details.dart';
 
 class LastSaleRequestSaved extends StatelessWidget {
   final SaleRequestProvider saleRequestProvider;
@@ -14,6 +16,8 @@ class LastSaleRequestSaved extends StatelessWidget {
   Widget build(BuildContext context) {
     final lastSaleRequestSaved =
         saleRequestProvider.lastSaleRequestSaved?.lastSaleRequestSaved;
+    final pdfViewerProvider = Provider.of<PdfViewerProvider>(context);
+
     return Container(
       width: double.infinity,
       child: lastSaleRequestSaved == null || lastSaleRequestSaved == ""
@@ -32,12 +36,23 @@ class LastSaleRequestSaved extends StatelessWidget {
                       fontFamily: "OpenSans",
                     ),
                   ),
-                  if (kDebugMode) //TODO remove when is implemented
+                  if (kDebugMode &&
+                      saleRequestProvider.lastSaleRequestSaved !=
+                          null) //TODO remove when is implemented
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         IconButton(
-                          onPressed: () {}, //TODO implement
+                          onPressed: () async {
+                            final pdf = await SaleRequestPdfGenerator.generate(
+                              saleRequestProvider.lastSaleRequestSaved!,
+                            );
+
+                            pdfViewerProvider.openPdfViewerPage(
+                                pdf,
+                                saleRequestProvider.lastSaleRequestSaved!
+                                    .lastSaleRequestSaved!);
+                          },
                           icon: Icon(
                             Icons.picture_as_pdf_rounded,
                             color: Theme.of(context).colorScheme.primary,

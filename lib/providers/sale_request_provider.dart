@@ -1029,7 +1029,7 @@ class SaleRequestProvider with ChangeNotifier {
 
         if (match != null) {
           _lastSaleRequestSaved = SaleRequestCartModel(
-            cartProducts: _cartProducts[enterpriseCode],
+            cartProducts: [..._cartProducts[enterpriseCode]!],
             selectedCustomer: selectedCustomer,
             lastSaleRequestSaved: match.group(1)!,
             enterpriseCode: enterpriseCode,
