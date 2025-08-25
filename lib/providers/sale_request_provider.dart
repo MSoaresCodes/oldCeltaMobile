@@ -1033,6 +1033,8 @@ class SaleRequestProvider with ChangeNotifier {
             selectedCustomer: selectedCustomer,
             lastSaleRequestSaved: match.group(1)!,
             enterpriseCode: enterpriseCode,
+            instructions: instructionsController.text,
+            observations: observationsController.text,
           );
 
           await PrefsInstance.setObject(

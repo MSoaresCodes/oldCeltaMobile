@@ -10,25 +10,32 @@ class SaleRequestCartModel {
   final CustomerModel? selectedCustomer;
   final String? lastSaleRequestSaved;
   final String enterpriseCode;
+  final String? observations;
+  final String? instructions;
 
   SaleRequestCartModel({
     required this.cartProducts,
     required this.selectedCustomer,
     required this.lastSaleRequestSaved,
     required this.enterpriseCode,
+    required this.observations,
+    required this.instructions,
   });
 
-  SaleRequestCartModel copyWith({
-    List<GetProductJsonModel>? cartProducts,
-    CustomerModel? selectedCustomer,
-    String? lastSaleRequestSaved,
-    String? enterpriseCode,
-  }) {
+  SaleRequestCartModel copyWith(
+      {List<GetProductJsonModel>? cartProducts,
+      CustomerModel? selectedCustomer,
+      String? lastSaleRequestSaved,
+      String? enterpriseCode,
+      String? observations,
+      String? instructions}) {
     return SaleRequestCartModel(
       cartProducts: cartProducts ?? this.cartProducts,
       selectedCustomer: selectedCustomer ?? this.selectedCustomer,
       lastSaleRequestSaved: lastSaleRequestSaved ?? this.lastSaleRequestSaved,
       enterpriseCode: enterpriseCode ?? this.enterpriseCode,
+      observations: observations ?? this.observations,
+      instructions: instructions ?? this.observations,
     );
   }
 
@@ -38,6 +45,8 @@ class SaleRequestCartModel {
       'selectedCustomer': selectedCustomer?.toJson(),
       'lastSaleRequestSaved': lastSaleRequestSaved,
       'enterpriseCode': enterpriseCode,
+      'observations': observations,
+      'instructions': instructions,
     };
   }
 
@@ -54,6 +63,8 @@ class SaleRequestCartModel {
           : null,
       lastSaleRequestSaved: map['lastSaleRequestSaved'] as String,
       enterpriseCode: map['enterpriseCode'] as String,
+      observations: map['observations'] as String,
+      instructions: map['instructions'] as String,
     );
   }
 
@@ -64,7 +75,7 @@ class SaleRequestCartModel {
 
   @override
   String toString() {
-    return 'SaleRequestCartModel(cartProducts: $cartProducts, selectedCustomer: $selectedCustomer, lastSaleRequestSaved: $lastSaleRequestSaved, enterpriseCode: $enterpriseCode)';
+    return 'SaleRequestCartModel(cartProducts: $cartProducts, selectedCustomer: $selectedCustomer, lastSaleRequestSaved: $lastSaleRequestSaved, enterpriseCode: $enterpriseCode, observations: $observations, instructions: $instructions)';
   }
 
   @override
@@ -74,6 +85,8 @@ class SaleRequestCartModel {
     return listEquals(other.cartProducts, cartProducts) &&
         other.selectedCustomer == selectedCustomer &&
         other.lastSaleRequestSaved == lastSaleRequestSaved &&
+        other.observations == observations &&
+        other.instructions == instructions &&
         other.enterpriseCode == enterpriseCode;
   }
 
@@ -82,6 +95,8 @@ class SaleRequestCartModel {
     return cartProducts.hashCode ^
         selectedCustomer.hashCode ^
         lastSaleRequestSaved.hashCode ^
+        observations.hashCode ^
+        instructions.hashCode ^
         enterpriseCode.hashCode;
   }
 }
