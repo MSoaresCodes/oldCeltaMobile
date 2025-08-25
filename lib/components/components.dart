@@ -5,6 +5,7 @@ export './form_field/form_field.dart';
 export './product/product.dart';
 export './add_or_subtract_button.dart';
 export './add_subtract_or_anull_widget.dart';
+export './default_modal_page.dart';
 export './enterprise_items.dart';
 export './error_message.dart';
 export './image_component.dart';
