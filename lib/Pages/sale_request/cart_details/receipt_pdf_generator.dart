@@ -27,10 +27,10 @@ class ReceiptPdfGenerator {
   static Future<void> printReceiptDirectly(
     SaleRequestCartModel saleRequest,
     SaleRequestProvider saleRequestProvider,
+    String ip,
   ) async {
     // ⬇️ HERE is where you put the printer's IP address and port.
-    final printer = PrinterNetworkManager('192.168.100.70',
-        port: 9100); //TODO add printer ip as parameter
+    final printer = PrinterNetworkManager(ip, port: 9100);
 
     // Connect to the printer. The `timeout` is in milliseconds.
     final PosPrintResult res =
@@ -172,5 +172,6 @@ class ReceiptPdfGenerator {
     // Send the commands to the printer
     await printer.printTicket(bytes);
     await printer.disconnect();
+    //TODO put inside a try catch and show success or error message
   }
 }

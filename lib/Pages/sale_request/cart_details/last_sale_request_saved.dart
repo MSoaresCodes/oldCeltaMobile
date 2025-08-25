@@ -2,10 +2,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../components/components.dart';
 import '../../../providers/providers.dart';
 import 'cart_details.dart';
 
-class LastSaleRequestSaved extends StatelessWidget {
+class LastSaleRequestSaved extends StatefulWidget {
   final SaleRequestProvider saleRequestProvider;
   const LastSaleRequestSaved({
     required this.saleRequestProvider,
@@ -13,9 +14,23 @@ class LastSaleRequestSaved extends StatelessWidget {
   });
 
   @override
+  State<LastSaleRequestSaved> createState() => _LastSaleRequestSavedState();
+}
+
+class _LastSaleRequestSavedState extends State<LastSaleRequestSaved> {
+  final ipController = TextEditingController();
+  final ipFormKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    super.dispose();
+    ipController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final lastSaleRequestSaved =
-        saleRequestProvider.lastSaleRequestSaved?.lastSaleRequestSaved;
+        widget.saleRequestProvider.lastSaleRequestSaved?.lastSaleRequestSaved;
     final pdfViewerProvider = Provider.of<PdfViewerProvider>(context);
 
     return Container(
@@ -37,7 +52,7 @@ class LastSaleRequestSaved extends StatelessWidget {
                     ),
                   ),
                   if (kDebugMode &&
-                      saleRequestProvider.lastSaleRequestSaved !=
+                      widget.saleRequestProvider.lastSaleRequestSaved !=
                           null) //TODO remove when is implemented
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -45,12 +60,12 @@ class LastSaleRequestSaved extends StatelessWidget {
                         IconButton(
                           onPressed: () async {
                             final pdf = await SaleRequestPdfGenerator.generate(
-                              saleRequestProvider.lastSaleRequestSaved!,
+                              widget.saleRequestProvider.lastSaleRequestSaved!,
                             );
 
                             pdfViewerProvider.openPdfViewerPage(
                                 pdf,
-                                saleRequestProvider.lastSaleRequestSaved!
+                                widget.saleRequestProvider.lastSaleRequestSaved!
                                     .lastSaleRequestSaved!);
                           },
                           icon: Icon(
@@ -60,9 +75,74 @@ class LastSaleRequestSaved extends StatelessWidget {
                         ),
                         IconButton(
                           onPressed: () {
-                            ReceiptPdfGenerator.printReceiptDirectly(
-                              saleRequestProvider.lastSaleRequestSaved!,
-                              saleRequestProvider,
+                            ShowAlertDialog.show(
+                              context: context,
+                              title: "Impressão do pedido",
+                              cancelMessage: "Cancelar",
+                              confirmMessage: "Imprimir",
+                              closeAutomaticallyOnConfirm: false,
+                              canCloseClickingOut: false,
+                              content: Column(
+                                children: [
+                                  const Text(
+                                      "Para imprimir o pedido, precisa haver uma impressora compartilhada na mesma rede que o celular está conectado e você deve informar o IP da impressora no campo abaixo"),
+                                  const SizedBox(height: 16),
+                                  Form(
+                                    key: ipFormKey,
+                                    child: TextFormField(
+                                      controller: ipController,
+                                      decoration:
+                                          FormFieldDecoration.decoration(
+                                        context: context,
+                                        labelText: "IP",
+                                        hintText: "IP",
+                                      ),
+                                      keyboardType:
+                                          const TextInputType.numberWithOptions(
+                                              decimal: true),
+                                      validator: (value) {
+                                        //TODO save this IP locally when succeeds
+                                        if (value == null ||
+                                            value.trim().isEmpty) {
+                                          return 'Por favor, escreva o IP';
+                                        }
+
+                                        final parts = value.split('.');
+
+                                        if (parts.length != 4) {
+                                          return 'O IP não está válido';
+                                        }
+
+                                        for (final part in parts) {
+                                          final number = int.tryParse(part);
+
+                                          if (number == null) {
+                                            return 'O IP não está válido';
+                                          } else if (number < 0 ||
+                                              number > 255) {
+                                            return 'O IP não está válido';
+                                          }
+                                        }
+
+                                        return null;
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              function: () async {
+                                if (ipFormKey.currentState?.validate() !=
+                                    true) {
+                                  return;
+                                }
+                                await ReceiptPdfGenerator.printReceiptDirectly(
+                                  widget.saleRequestProvider
+                                      .lastSaleRequestSaved!,
+                                  widget.saleRequestProvider,
+                                  ipController.text,
+                                );
+                                Navigator.of(context).pop();
+                              },
                             );
                           }, //TODO implement
                           icon: Icon(
