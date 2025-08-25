@@ -29,7 +29,8 @@ class ReceiptPdfGenerator {
     SaleRequestProvider saleRequestProvider,
   ) async {
     // ⬇️ HERE is where you put the printer's IP address and port.
-    final printer = PrinterNetworkManager('192.168.100.70', port: 9100);
+    final printer = PrinterNetworkManager('192.168.100.70',
+        port: 9100); //TODO add printer ip as parameter
 
     // Connect to the printer. The `timeout` is in milliseconds.
     final PosPrintResult res =
