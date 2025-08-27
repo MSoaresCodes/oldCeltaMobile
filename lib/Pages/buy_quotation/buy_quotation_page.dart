@@ -88,39 +88,38 @@ class _BuyQuotationPageState extends State<BuyQuotationPage> {
             ),
             body: Padding(
               padding: const EdgeInsets.all(3),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    TextButton.icon(
-                      icon: const Icon(Icons.add),
-                      label: const FittedBox(
-                        child: Text(
-                          "Cadastrar cotação",
-                        ),
+              child: CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: Center(
+                      child: TextButton.icon(
+                        icon: const Icon(Icons.add),
+                        label: const Text("Cadastrar cotação"),
+                        iconAlignment: IconAlignment.end,
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(
+                            APPROUTES.BUY_QUOTATION_INSERT_UPDATE,
+                            arguments: {
+                              "enterprise": enterprise,
+                              "isInserting": true,
+                            },
+                          );
+                        },
                       ),
-                      iconAlignment: IconAlignment.end,
-                      onPressed: () {
-                        Navigator.of(context).pushNamed(
-                          APPROUTES.BUY_QUOTATION_INSERT_UPDATE,
-                          arguments: {
-                            "enterprise": enterprise,
-                            "isInserting": true,
-                          },
-                        );
-                      },
                     ),
-                    // FilterOrAddCotationsButtons(
-                    //   updateShowFilterOptions: updateShowFilterOptions,
-                    //   showFilterOptions: showFilterOptions,
-                    //   enterprise: enterprise,
-                    // ),
-                    const Divider(),
-                    // if (showFilterOptions)
-                    //   AllFiltersOptions(enterprise: enterprise),
-                    BuyQuotationsItems(enterprise: enterprise),
-                  ],
-                ),
+                  ),
+
+                  // FilterOrAddCotationsButtons(
+                  //   updateShowFilterOptions: updateShowFilterOptions,
+                  //   showFilterOptions: showFilterOptions,
+                  //   enterprise: enterprise,
+                  // ),
+                  const SliverToBoxAdapter(child: Divider()),
+
+                  // if (showFilterOptions)
+                  //   AllFiltersOptions(enterprise: enterprise),
+                  BuyQuotationsItems(enterprise: enterprise),
+                ],
               ),
             ),
           ),

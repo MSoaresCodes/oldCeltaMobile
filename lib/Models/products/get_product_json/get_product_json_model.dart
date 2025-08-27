@@ -183,7 +183,11 @@ class GetProductJsonModel {
           .map<LastBuyEntranceModel>((e) => LastBuyEntranceModel.fromJson(e))
           .toList();
     } else if (json['LastBuyEntrance'] != null) {
-      return [LastBuyEntranceModel.fromJson(json['LastBuyEntrance'])];
+      return json['LastBuyEntrance'] == null
+          ? null
+          : (json['LastBuyEntrance'] as List)
+              .map((e) => LastBuyEntranceModel.fromJson(e))
+              .toList();
     } else {
       return null;
     }
@@ -253,7 +257,7 @@ class GetProductJsonModel {
 
   Map<String, dynamic> toJson() => {
         'EnterpriseCode': this.enterpriseCode,
-        'PriceCost': this.priceCost,
+        'PriceCost': this.priceCost?.toJson(),
         'IsChildOfGrate': this.isChildOfGrate,
         'ProductCode': this.productCode,
         'ProductPackingCode': this.productPackingCode,
@@ -294,7 +298,8 @@ class GetProductJsonModel {
         'StockByEnterpriseAssociateds':
             this.stockByEnterpriseAssociateds?.map((v) => v.toJson()).toList(),
         'Stocks': this.stocks?.map((v) => v.toJson()).toList(),
-        'LastBuyEntrance': this.lastBuyEntrance,
+        'LastBuyEntrance':
+            this.lastBuyEntrance?.map((e) => e.toJson()).toList(),
         "IncrementPercentageOrValue": this.IncrementPercentageOrValue,
         "IncrementValue": this.IncrementValue ?? 0,
         "DiscountPercentageOrValue": this.DiscountPercentageOrValue,
