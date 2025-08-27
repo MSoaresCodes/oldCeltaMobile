@@ -14,7 +14,7 @@ export './price_conference_provider.dart';
 export 'expedition_conference_provider.dart';
 export './reports_provider.dart';
 export './receipt_provider.dart';
-export './sale_request_provider.dart';
+export 'sale_request/sale_request.dart';
 export './research_prices_provider.dart';
 export './transfer_between_package_provider_SemImplementacaoAinda.dart';
 export './transfer_between_stocks_provider.dart';

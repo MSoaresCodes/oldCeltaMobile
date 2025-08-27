@@ -3,14 +3,14 @@ import 'dart:convert';
 import 'package:cpf_cnpj_validator/cpf_validator.dart';
 import 'package:flutter/material.dart';
 
-import '../api/api.dart';
-import '../components/components.dart';
-import '../Models/models.dart';
+import '../../api/api.dart';
+import '../../components/components.dart';
+import '../../Models/models.dart';
 
-import '../utils/utils.dart';
-import './providers.dart';
+import '../../utils/utils.dart';
+import '../providers.dart';
 
-class SaleRequestProvider with ChangeNotifier {
+class SaleRequestProvider with ChangeNotifier implements ReceiptPdfGenerator {
   bool _isLoadingRequests = false;
   bool get isLoadingRequests => _isLoadingRequests;
   String _errorMessageRequests = "";
@@ -57,6 +57,9 @@ class SaleRequestProvider with ChangeNotifier {
 
   SaleRequestCartModel? _currentCart;
   SaleRequestCartModel? get currentCart => _currentCart;
+
+  bool _isPrinting = false;
+  bool get isPrinting => _isPrinting;
 
   bool _userCanChangePrices = false;
   bool get userCanChangePrices => _userCanChangePrices;
@@ -1148,5 +1151,20 @@ class SaleRequestProvider with ChangeNotifier {
             SaleRequestCartModel.fromJson(jsonDecode(value));
       }
     });
+  }
+
+  Future<void> printPdf(BuildContext context, String ip) async {
+    _isPrinting = true;
+    notifyListeners();
+
+    await ReceiptPdfGenerator.printReceiptDirectly(
+      _lastSaleRequestSaved!,
+      this,
+      ip,
+      context,
+    );
+
+    _isPrinting = false;
+    notifyListeners();
   }
 }

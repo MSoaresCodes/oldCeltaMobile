@@ -182,6 +182,7 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
         loadingWidget(saleRequestProvider.isLoadingSaveSaleRequest),
         loadingWidget(saleRequestProvider.isLoadingCustomer),
         loadingWidget(saleRequestProvider.isLoadingProducts),
+        loadingWidget(saleRequestProvider.isPrinting),
       ],
     );
   }

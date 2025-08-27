@@ -87,7 +87,7 @@ class _LastSaleRequestSavedState extends State<LastSaleRequestSaved> {
                               title: "Impressão do pedido",
                               cancelMessage: "Cancelar",
                               confirmMessage: "Imprimir",
-                              closeAutomaticallyOnConfirm: true,
+                              // closeAutomaticallyOnConfirm: false,
                               canCloseClickingOut: false,
                               content: Column(
                                 children: [
@@ -143,18 +143,11 @@ class _LastSaleRequestSavedState extends State<LastSaleRequestSaved> {
                                     true) {
                                   return;
                                 }
-                                bool updated = await ReceiptPdfGenerator
-                                    .printReceiptDirectly(
-                                  widget.saleRequestProvider
-                                      .lastSaleRequestSaved!,
-                                  widget.saleRequestProvider,
-                                  ipController.text,
-                                  context,
-                                );
 
-                                if (updated) {
-                                  Navigator.of(context).pop();
-                                }
+                                await widget.saleRequestProvider.printPdf(
+                                  context,
+                                  ipController.text,
+                                );
                               },
                             );
                           }, //TODO implement

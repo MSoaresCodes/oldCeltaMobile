@@ -8,11 +8,9 @@ import 'package:intl/intl.dart';
 
 import '../../../Models/models.dart';
 import '../../../components/components.dart';
-import '../../../providers/providers.dart';
+import '../sale_request_provider.dart';
 
-class ReceiptPdfGenerator {
-  ReceiptPdfGenerator._();
-
+abstract class ReceiptPdfGenerator {
   static double _getItemLiquidValue(
     GetProductJsonModel product,
     SaleRequestProvider saleRequestProvider,
@@ -25,7 +23,7 @@ class ReceiptPdfGenerator {
     return (product.value! * product.quantity);
   }
 
-  static Future<bool> printReceiptDirectly(
+  static Future<void> printReceiptDirectly(
     SaleRequestCartModel saleRequest,
     SaleRequestProvider saleRequestProvider,
     String ip,
@@ -164,10 +162,8 @@ class ReceiptPdfGenerator {
 
       await printer.printTicket(bytes);
       await printer.disconnect();
-      return true;
     } catch (e) {
       ShowSnackbarMessage.show(message: e.toString(), context: context);
-      return false;
     }
   }
 }

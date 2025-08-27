@@ -5,7 +5,6 @@ export './last_sale_request_saved.dart';
 export './observations_and_instructions_fields.dart';
 export './product_informations.dart';
 export './quantitys_and_prices.dart';
-export './receipt_pdf_generator.dart';
 export './sale_request_pdf_generator.dart';
 export './save_sale_request_informations_and_button.dart';
 export './update_quantity_price_or_discount.dart';
