@@ -19,12 +19,14 @@ class LastSaleRequestSaved extends StatefulWidget {
 
 class _LastSaleRequestSavedState extends State<LastSaleRequestSaved> {
   final ipController = TextEditingController();
+  final ipFocusNode = FocusNode();
   final ipFormKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
     super.dispose();
     ipController.dispose();
+    ipFocusNode.dispose();
   }
 
   @override
@@ -75,6 +77,11 @@ class _LastSaleRequestSavedState extends State<LastSaleRequestSaved> {
                         ),
                         IconButton(
                           onPressed: () {
+                            Future.delayed(const Duration(milliseconds: 100),
+                                () {
+                              ipFocusNode.requestFocus();
+                            });
+
                             ShowAlertDialog.show(
                               context: context,
                               title: "Impressão do pedido",
@@ -90,6 +97,7 @@ class _LastSaleRequestSavedState extends State<LastSaleRequestSaved> {
                                   Form(
                                     key: ipFormKey,
                                     child: TextFormField(
+                                      focusNode: ipFocusNode,
                                       controller: ipController,
                                       decoration:
                                           FormFieldDecoration.decoration(
@@ -99,7 +107,7 @@ class _LastSaleRequestSavedState extends State<LastSaleRequestSaved> {
                                       ),
                                       keyboardType:
                                           const TextInputType.numberWithOptions(
-                                              decimal: true),
+                                              signed: true),
                                       validator: (value) {
                                         //TODO save this IP locally when succeeds
                                         if (value == null ||
