@@ -11,12 +11,16 @@ class CartDetailsPage extends StatefulWidget {
   final bool keyboardIsOpen;
   final TextEditingController observationsController;
   final TextEditingController instructionsController;
+  final TextEditingController ipController;
+  final FocusNode ipFocusNode;
   const CartDetailsPage({
     required this.enterpriseCode,
     required this.requestTypeCode,
     required this.keyboardIsOpen,
     required this.observationsController,
     required this.instructionsController,
+    required this.ipController,
+    required this.ipFocusNode,
     Key? key,
   }) : super(key: key);
 
@@ -65,7 +69,10 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
                 CartItems(
                   enterpriseCode: widget.enterpriseCode,
                 ),
-                LastSaleRequestSaved(saleRequestProvider: saleRequestProvider),
+                LastSaleRequestSaved(
+                  ipController: widget.ipController,
+                  ipFocusNode: widget.ipFocusNode,
+                ),
               ],
             ),
           ),

@@ -1157,6 +1157,11 @@ class SaleRequestProvider with ChangeNotifier implements ReceiptPdfGenerator {
     _isPrinting = true;
     notifyListeners();
 
+    await PrefsInstance.setString(
+      prefsKeys: PrefsKeys.ipPrintSaleRequest,
+      value: ip,
+    );
+
     await ReceiptPdfGenerator.printReceiptDirectly(
       _lastSaleRequestSaved!,
       this,

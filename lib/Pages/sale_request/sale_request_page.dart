@@ -20,6 +20,8 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
   int _selectedIndex = 0;
   final observationsController = TextEditingController();
   final instructionsController = TextEditingController();
+  final ipController = TextEditingController();
+  final ipFocusNode = FocusNode();
 
   static const List appBarTitles = [
     "Inserir produtos",
@@ -45,6 +47,8 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
     super.dispose();
     observationsController.dispose();
     instructionsController.dispose();
+    ipController.dispose();
+    ipFocusNode.dispose();
   }
 
   @override
@@ -57,6 +61,9 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
             Provider.of(context, listen: false);
         SaleRequestProvider saleRequestProvider =
             Provider.of(context, listen: false);
+        ipController.text = await PrefsInstance.getString(
+          PrefsKeys.ipPrintSaleRequest,
+        );
         await cleanSaleRequestBecauseVersionIncompatible();
         await saleRequestProvider.verifyUserCanChangePrices(enterpriseProvider);
         setState(() {});
@@ -136,6 +143,8 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
         keyboardIsOpen: MediaQuery.of(context).viewInsets.bottom == 0,
         observationsController: observationsController,
         instructionsController: instructionsController,
+        ipFocusNode: ipFocusNode,
+        ipController: ipController,
       ),
     ];
     return Stack(

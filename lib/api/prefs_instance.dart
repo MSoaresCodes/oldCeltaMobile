@@ -12,6 +12,7 @@ enum PrefsKeys {
   customers,
   enterpriseName,
   hasUnreadNotifications,
+  ipPrintSaleRequest,
   lastSavedSaleRequest,
   mySoaps,
   notifications,
@@ -38,6 +39,7 @@ class PrefsInstance {
     await _prefs.remove(PrefsKeys.cart.name);
     await _prefs.remove(PrefsKeys.customers.name);
     await _prefs.remove(PrefsKeys.hasUnreadNotifications.name);
+    await _prefs.remove(PrefsKeys.ipPrintSaleRequest.name);
     await _prefs.remove(PrefsKeys.notifications.name);
     await _prefs.remove(PrefsKeys.showMessageToUseCameraInWebVersion.name);
     await _prefs.remove(PrefsKeys.userIdentity.name);

@@ -2,14 +2,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../components/components.dart';
 import '../../../providers/providers.dart';
 import 'cart_details.dart';
 
 class LastSaleRequestSaved extends StatefulWidget {
-  final SaleRequestProvider saleRequestProvider;
+  final TextEditingController ipController;
+  final FocusNode ipFocusNode;
   const LastSaleRequestSaved({
-    required this.saleRequestProvider,
+    required this.ipController,
+    required this.ipFocusNode,
     super.key,
   });
 
@@ -18,21 +19,14 @@ class LastSaleRequestSaved extends StatefulWidget {
 }
 
 class _LastSaleRequestSavedState extends State<LastSaleRequestSaved> {
-  final ipController = TextEditingController();
-  final ipFocusNode = FocusNode();
   final ipFormKey = GlobalKey<FormState>();
 
   @override
-  void dispose() {
-    super.dispose();
-    ipController.dispose();
-    ipFocusNode.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final saleRequestProvider = Provider.of<SaleRequestProvider>(context);
     final lastSaleRequestSaved =
-        widget.saleRequestProvider.lastSaleRequestSaved?.lastSaleRequestSaved;
+        saleRequestProvider.lastSaleRequestSaved?.lastSaleRequestSaved;
+
     final pdfViewerProvider = Provider.of<PdfViewerProvider>(context);
 
     return Container(
@@ -54,7 +48,7 @@ class _LastSaleRequestSavedState extends State<LastSaleRequestSaved> {
                     ),
                   ),
                   if (kDebugMode &&
-                      widget.saleRequestProvider.lastSaleRequestSaved !=
+                      saleRequestProvider.lastSaleRequestSaved !=
                           null) //TODO remove when is implemented
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -62,12 +56,12 @@ class _LastSaleRequestSavedState extends State<LastSaleRequestSaved> {
                         IconButton(
                           onPressed: () async {
                             final pdf = await SaleRequestPdfGenerator.generate(
-                              widget.saleRequestProvider.lastSaleRequestSaved!,
+                              saleRequestProvider.lastSaleRequestSaved!,
                             );
 
                             pdfViewerProvider.openPdfViewerPage(
                                 pdf,
-                                widget.saleRequestProvider.lastSaleRequestSaved!
+                                saleRequestProvider.lastSaleRequestSaved!
                                     .lastSaleRequestSaved!);
                           },
                           icon: Icon(
@@ -75,86 +69,9 @@ class _LastSaleRequestSavedState extends State<LastSaleRequestSaved> {
                             color: Theme.of(context).colorScheme.primary,
                           ),
                         ),
-                        IconButton(
-                          onPressed: () {
-                            Future.delayed(const Duration(milliseconds: 100),
-                                () {
-                              ipFocusNode.requestFocus();
-                            });
-
-                            ShowAlertDialog.show(
-                              context: context,
-                              title: "Impressão do pedido",
-                              cancelMessage: "Cancelar",
-                              confirmMessage: "Imprimir",
-                              // closeAutomaticallyOnConfirm: false,
-                              canCloseClickingOut: false,
-                              content: Column(
-                                children: [
-                                  const Text(
-                                      "Para imprimir o pedido, precisa haver uma impressora compartilhada na mesma rede que o celular está conectado e você deve informar o IP da impressora no campo abaixo"),
-                                  const SizedBox(height: 16),
-                                  Form(
-                                    key: ipFormKey,
-                                    child: TextFormField(
-                                      focusNode: ipFocusNode,
-                                      controller: ipController,
-                                      decoration:
-                                          FormFieldDecoration.decoration(
-                                        context: context,
-                                        labelText: "IP",
-                                        hintText: "IP",
-                                      ),
-                                      keyboardType:
-                                          const TextInputType.numberWithOptions(
-                                              signed: true),
-                                      validator: (value) {
-                                        //TODO save this IP locally when succeeds
-                                        if (value == null ||
-                                            value.trim().isEmpty) {
-                                          return 'Por favor, escreva o IP';
-                                        }
-
-                                        final parts = value.split('.');
-
-                                        if (parts.length != 4) {
-                                          return 'O IP não está válido';
-                                        }
-
-                                        for (final part in parts) {
-                                          final number = int.tryParse(part);
-
-                                          if (number == null) {
-                                            return 'O IP não está válido';
-                                          } else if (number < 0 ||
-                                              number > 255) {
-                                            return 'O IP não está válido';
-                                          }
-                                        }
-
-                                        return null;
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              function: () async {
-                                if (ipFormKey.currentState?.validate() !=
-                                    true) {
-                                  return;
-                                }
-
-                                await widget.saleRequestProvider.printPdf(
-                                  context,
-                                  ipController.text,
-                                );
-                              },
-                            );
-                          }, //TODO implement
-                          icon: Icon(
-                            Icons.print,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
+                        PrintSaleRequestButton(
+                          ipFocusNode: widget.ipFocusNode,
+                          ipController: widget.ipController,
                         ),
                       ],
                     ),

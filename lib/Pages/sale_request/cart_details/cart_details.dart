@@ -3,6 +3,7 @@ export './cart_items.dart';
 export './clear_cart.dart';
 export './last_sale_request_saved.dart';
 export './observations_and_instructions_fields.dart';
+export './print_sale_request_button.dart';
 export './product_informations.dart';
 export './quantitys_and_prices.dart';
 export './sale_request_pdf_generator.dart';
