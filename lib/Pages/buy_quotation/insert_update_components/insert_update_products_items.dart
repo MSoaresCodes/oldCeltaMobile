@@ -10,10 +10,14 @@ class InsertUpdateProductsItems extends StatefulWidget {
   final EnterpriseModel enterprise;
   final List<Map<int, TextEditingController>> controllers;
   final List<Map<int, FocusNode>> focusNodes;
+  final int? selectedProductIndex;
+  final void Function(int index) updateSelectedProductIndex;
   const InsertUpdateProductsItems({
     required this.enterprise,
     required this.controllers,
     required this.focusNodes,
+    required this.selectedProductIndex,
+    required this.updateSelectedProductIndex,
     super.key,
   });
 
@@ -23,7 +27,6 @@ class InsertUpdateProductsItems extends StatefulWidget {
 }
 
 class _InsertUpdateProductsItemsState extends State<InsertUpdateProductsItems> {
-  int? selectedProductIndex;
   final searchProductController = TextEditingController();
   final searchFocusNode = FocusNode();
 
@@ -34,76 +37,33 @@ class _InsertUpdateProductsItemsState extends State<InsertUpdateProductsItems> {
     searchFocusNode.dispose();
   }
 
-  void updateSelectedIndex({
-    required int productIndex,
-    required BuyQuotationProvider buyQuotationProvider,
-  }) {
-    if (selectedProductIndex == productIndex) {
-      setState(() {
-        selectedProductIndex = null;
-      });
-    } else {
-      setState(() {
-        selectedProductIndex = productIndex;
-        updateControllersQuantity(
-          productIndex: productIndex,
-          buyQuotationProvider: buyQuotationProvider,
-          controllers: widget.controllers,
-        );
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     BuyQuotationProvider buyQuotationProvider = Provider.of(context);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text("Produtos" +
-            " (${buyQuotationProvider.productsWithNewValues.length})"),
-        SearchProducts(
-          searchProductController: searchProductController,
-          enterprise: widget.enterprise,
-          searchFocusNode: searchFocusNode,
-          cleanSelectedIndex: () {
-            setState(() {
-              selectedProductIndex = null;
-            });
-          },
-        ),
-        if (buyQuotationProvider.productsWithNewValues.length == 0)
-          const Text("Não há produtos na cotação"),
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: buyQuotationProvider.productsWithNewValues.length,
-          itemBuilder: (context, productIndex) {
-            final product =
-                buyQuotationProvider.productsWithNewValues[productIndex];
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        childCount: buyQuotationProvider.productsWithNewValues.length,
+        (context, index) {
+          final product = buyQuotationProvider.productsWithNewValues[index];
 
-            return InsertUpdateProductItem(
-              productIndex: productIndex,
-              selectedProductIndex: selectedProductIndex,
-              updateSelectedIndex: buyQuotationProvider.allEnterprises
-                      .where((e) => e.isSelected)
-                      .isEmpty
-                  ? null
-                  : () {
-                      updateSelectedIndex(
-                        productIndex: productIndex,
-                        buyQuotationProvider: buyQuotationProvider,
-                      );
-                      widget.focusNodes[0].values.first.requestFocus();
-                    },
-              product: product,
-              controllers: widget.controllers,
-              focusNodes: widget.focusNodes,
-            );
-          },
-        ),
-      ],
+          return InsertUpdateProductItem(
+            productIndex: index,
+            selectedProductIndex: widget.selectedProductIndex,
+            updateSelectedIndex: buyQuotationProvider.allEnterprises
+                    .where((e) => e.isSelected)
+                    .isEmpty
+                ? null
+                : () {
+                    widget.updateSelectedProductIndex(index);
+                    widget.focusNodes[0].values.first.requestFocus();
+                  },
+            product: product,
+            controllers: widget.controllers,
+            focusNodes: widget.focusNodes,
+          );
+        },
+      ),
     );
   }
 }

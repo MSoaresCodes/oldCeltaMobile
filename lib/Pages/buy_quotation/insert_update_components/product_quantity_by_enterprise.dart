@@ -20,6 +20,7 @@ class ProductQuantityByEnterprise extends StatelessWidget {
     BuyQuotationProvider buyQuotationProvider = Provider.of(context);
 
     return ListView.builder(
+      padding: const EdgeInsets.all(0),
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemCount: product.ProductEnterprises?.length,

@@ -29,58 +29,54 @@ class InsertUpdateProductItem extends StatelessWidget {
 
     return InkWell(
       onTap: updateSelectedIndex,
-      child: Column(
-        children: [
-          ProductItem(
-            product: product.Product!,
-            showAddress: true,
-            showPrice: false,
-            showWholeInformations: false,
-            enterpriseCode: null,
-            componentBeforeProductInformations: ProductQuantityByEnterprise(
-              product: product,
-              productIndex: productIndex,
-            ),
-            componentAfterProductInformations: Column(
+      child: ProductItem(
+        product: product.Product!,
+        showAddress: true,
+        showPrice: false,
+        showWholeInformations: false,
+        enterpriseCode: null,
+        componentBeforeProductInformations: ProductQuantityByEnterprise(
+          product: product,
+          productIndex: productIndex,
+        ),
+        componentAfterProductInformations: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        ShowAlertDialog.show(
-                          context: context,
-                          title: "Remover produto?",
-                          function: () async {
-                            buyQuotationProvider
-                                .removeProductWithNewValue(productIndex);
-                          },
-                        );
+                IconButton(
+                  onPressed: () {
+                    ShowAlertDialog.show(
+                      context: context,
+                      title: "Remover produto?",
+                      function: () async {
+                        buyQuotationProvider
+                            .removeProductWithNewValue(productIndex);
                       },
-                      icon: const Icon(
-                        Icons.delete,
-                        color: Colors.red,
-                      ),
-                    ),
-                    Icon(
-                      selectedProductIndex == productIndex
-                          ? Icons.arrow_drop_up
-                          : Icons.arrow_drop_down,
-                      color: Theme.of(context).colorScheme.primary,
-                    )
-                  ],
-                ),
-                if (selectedProductIndex == productIndex)
-                  UpdateQuantity(
-                    controllers: controllers,
-                    focusNodes: focusNodes,
-                    updateSelectedIndex: updateSelectedIndex,
-                    productIndex: productIndex,
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.delete,
+                    color: Colors.red,
                   ),
+                ),
+                Icon(
+                  selectedProductIndex == productIndex
+                      ? Icons.arrow_drop_up
+                      : Icons.arrow_drop_down,
+                  color: Theme.of(context).colorScheme.primary,
+                )
               ],
             ),
-          ),
-        ],
+            if (selectedProductIndex == productIndex)
+              UpdateQuantity(
+                controllers: controllers,
+                focusNodes: focusNodes,
+                updateSelectedIndex: updateSelectedIndex,
+                productIndex: productIndex,
+              ),
+          ],
+        ),
       ),
     );
   }

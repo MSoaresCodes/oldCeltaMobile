@@ -17,9 +17,12 @@ class InsertUpdateBuyQuotationPage extends StatefulWidget {
 class _InsertUpdateBuyQuotationPageState
     extends State<InsertUpdateBuyQuotationPage> {
   final observationsController = TextEditingController();
+  final searchProductController = TextEditingController();
   final observationsFocusNode = FocusNode();
+  final searchFocusNode = FocusNode();
   List<Map<int, TextEditingController>> controllers = [];
   List<Map<int, FocusNode>> focusNodes = [];
+  int? selectedProductIndex;
 
   @override
   void initState() {
@@ -54,6 +57,36 @@ class _InsertUpdateBuyQuotationPageState
     });
   }
 
+  @override
+  dispose() {
+    super.dispose();
+    observationsController.dispose();
+    searchProductController.dispose();
+    observationsFocusNode.dispose();
+    searchFocusNode.dispose();
+    disposeControllersAndFocusNodes();
+  }
+
+  void updateSelectedProductIndex({
+    required int index,
+    required BuyQuotationProvider buyQuotationProvider,
+  }) {
+    if (selectedProductIndex == index) {
+      setState(() {
+        selectedProductIndex = null;
+      });
+    } else {
+      setState(() {
+        selectedProductIndex = index;
+        updateControllersQuantity(
+          productIndex: index,
+          buyQuotationProvider: buyQuotationProvider,
+          controllers: controllers,
+        );
+      });
+    }
+  }
+
   void createControllersAndFocusNode(
       BuyQuotationProvider buyQuotationProvider) {
     if (buyQuotationProvider.allEnterprises.isEmpty == true) {
@@ -75,14 +108,6 @@ class _InsertUpdateBuyQuotationPageState
     for (var focusNode in focusNodes) {
       focusNode.values.first.dispose();
     }
-  }
-
-  @override
-  dispose() {
-    super.dispose();
-    observationsController.dispose();
-    observationsFocusNode.dispose();
-    disposeControllersAndFocusNodes();
   }
 
   Future<void> loadCompleteBuyQuotation() async {
@@ -123,6 +148,7 @@ class _InsertUpdateBuyQuotationPageState
       children: [
         Scaffold(
           appBar: AppBar(
+            //TODO use sliverappbar to be better see the top
             leading: IconButton(
               onPressed: () {
                 ShowAlertDialog.show(
@@ -148,39 +174,64 @@ class _InsertUpdateBuyQuotationPageState
               ),
             ],
           ),
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  if (buyQuotationProvider.errorMessage != "")
-                    TextButton(
+          body: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: CustomScrollView(
+              slivers: [
+                if (buyQuotationProvider.errorMessage != "")
+                  SliverToBoxAdapter(
+                    child: TextButton(
                       onPressed: () async {
                         await loadCompleteBuyQuotation();
                       },
                       child: const Text("Pesquisar novamente"),
                     ),
-                  Column(
-                    children: [
-                      SimpleInformations(
-                        isInserting: isInserting,
-                        observationsController: observationsController,
-                        observationsFocusNode: observationsFocusNode,
-                      ),
-                      const Divider(),
-                      const Enterprises(),
-                      const Divider(),
-                      if (enterprise != null)
-                        InsertUpdateProductsItems(
-                          enterprise: enterprise,
-                          controllers: controllers,
-                          focusNodes: focusNodes,
-                        ),
-                    ],
+                  ),
+                SliverToBoxAdapter(
+                  child: SimpleInformations(
+                    isInserting: isInserting,
+                    observationsController: observationsController,
+                    observationsFocusNode: observationsFocusNode,
+                  ),
+                ),
+                const SliverToBoxAdapter(child: Divider()),
+                const SliverToBoxAdapter(child: Enterprises()),
+                const SliverToBoxAdapter(child: Divider()),
+                if (enterprise != null) ...[
+                  SliverToBoxAdapter(
+                    child: Text("Produtos" +
+                        " (${buyQuotationProvider.productsWithNewValues.length})"),
+                  ),
+                  SliverToBoxAdapter(
+                    child: SearchProducts(
+                      searchProductController: searchProductController,
+                      enterprise: enterprise,
+                      searchFocusNode: searchFocusNode,
+                      cleanSelectedIndex: () {
+                        setState(() {
+                          selectedProductIndex = null;
+                        });
+                      },
+                    ),
+                  ),
+                  if (buyQuotationProvider.productsWithNewValues.length == 0)
+                    const SliverToBoxAdapter(
+                        child: Text("Não há produtos na cotação")),
+                  //TODO add option to filter already added products when has more than 10 products
+                  InsertUpdateProductsItems(
+                    enterprise: enterprise,
+                    controllers: controllers,
+                    focusNodes: focusNodes,
+                    selectedProductIndex: selectedProductIndex,
+                    updateSelectedProductIndex: (index) {
+                      updateSelectedProductIndex(
+                        index: index,
+                        buyQuotationProvider: buyQuotationProvider,
+                      );
+                    },
                   ),
                 ],
-              ),
+              ],
             ),
           ),
         ),
