@@ -100,7 +100,7 @@ class PrintSaleRequestButton extends StatelessWidget {
             await onSubmit(saleRequestProvider, context);
           },
         );
-      }, //TODO implement
+      },
       icon: Icon(
         Icons.print,
         color: Theme.of(context).colorScheme.primary,

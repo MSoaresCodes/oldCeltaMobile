@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -47,9 +46,7 @@ class _LastSaleRequestSavedState extends State<LastSaleRequestSaved> {
                       fontFamily: "OpenSans",
                     ),
                   ),
-                  if (kDebugMode &&
-                      saleRequestProvider.lastSaleRequestSaved !=
-                          null) //TODO remove when is implemented
+                  if (saleRequestProvider.lastSaleRequestSaved != null)
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
