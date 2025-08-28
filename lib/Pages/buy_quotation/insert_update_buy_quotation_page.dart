@@ -18,6 +18,7 @@ class _InsertUpdateBuyQuotationPageState
     extends State<InsertUpdateBuyQuotationPage> {
   final observationsController = TextEditingController();
   final searchProductController = TextEditingController();
+  final filterAlreadySearchedProductController = TextEditingController();
   final observationsFocusNode = FocusNode();
   final searchFocusNode = FocusNode();
   List<Map<int, TextEditingController>> controllers = [];
@@ -62,6 +63,7 @@ class _InsertUpdateBuyQuotationPageState
     super.dispose();
     observationsController.dispose();
     searchProductController.dispose();
+    filterAlreadySearchedProductController.dispose();
     observationsFocusNode.dispose();
     searchFocusNode.dispose();
     disposeControllersAndFocusNodes();
@@ -148,7 +150,6 @@ class _InsertUpdateBuyQuotationPageState
       children: [
         Scaffold(
           appBar: AppBar(
-            //TODO use sliverappbar to be better see the top
             leading: IconButton(
               onPressed: () {
                 ShowAlertDialog.show(
@@ -217,11 +218,37 @@ class _InsertUpdateBuyQuotationPageState
                   if (buyQuotationProvider.productsWithNewValues.length == 0)
                     const SliverToBoxAdapter(
                         child: Text("Não há produtos na cotação")),
-                  //TODO add option to filter already added products when has more than 10 products
+                  if (buyQuotationProvider.productsWithNewValues.length > 5)
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: TextFormField(
+                          onChanged: (_) {
+                            setState(() {});
+                          },
+                          controller: filterAlreadySearchedProductController,
+                          decoration: FormFieldDecoration.decoration(
+                            context: context,
+                            hintText: "Filtrar produto já adicionado",
+                            labelText: "Filtrar produto já adicionado",
+                            prefixIcon: IconButton(
+                              onPressed:
+                                  filterAlreadySearchedProductController.clear,
+                              icon: const Icon(
+                                Icons.delete,
+                                color: Colors.red,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   InsertUpdateProductsItems(
                     enterprise: enterprise,
                     controllers: controllers,
                     focusNodes: focusNodes,
+                    filterAlreadySearchedProductController:
+                        filterAlreadySearchedProductController,
                     selectedProductIndex: selectedProductIndex,
                     updateSelectedProductIndex: (index) {
                       updateSelectedProductIndex(

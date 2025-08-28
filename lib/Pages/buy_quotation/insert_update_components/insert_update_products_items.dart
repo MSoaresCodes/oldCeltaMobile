@@ -11,12 +11,14 @@ class InsertUpdateProductsItems extends StatefulWidget {
   final List<Map<int, TextEditingController>> controllers;
   final List<Map<int, FocusNode>> focusNodes;
   final int? selectedProductIndex;
+  final TextEditingController filterAlreadySearchedProductController;
   final void Function(int index) updateSelectedProductIndex;
   const InsertUpdateProductsItems({
     required this.enterprise,
     required this.controllers,
     required this.focusNodes,
     required this.selectedProductIndex,
+    required this.filterAlreadySearchedProductController,
     required this.updateSelectedProductIndex,
     super.key,
   });
@@ -41,11 +43,33 @@ class _InsertUpdateProductsItemsState extends State<InsertUpdateProductsItems> {
   Widget build(BuildContext context) {
     BuyQuotationProvider buyQuotationProvider = Provider.of(context);
 
+    final searchText = widget.filterAlreadySearchedProductController.text;
+    List<BuyQuotationProductsModel> products =
+        buyQuotationProvider.productsWithNewValues;
+
+    if (searchText.isNotEmpty) {
+      bool isPlu =
+          int.tryParse(searchText.replaceAll(RegExp(r'-'), '')) != null;
+      if (isPlu) {
+        products = products
+            .where((e) => e.Product?.plu?.contains(searchText) == true)
+            .toList();
+      } else {
+        products = products
+            .where((e) =>
+                e.Product?.name
+                    ?.toLowerCase()
+                    .contains(searchText.toLowerCase()) ==
+                true)
+            .toList();
+      }
+    }
+
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-        childCount: buyQuotationProvider.productsWithNewValues.length,
+        childCount: products.length,
         (context, index) {
-          final product = buyQuotationProvider.productsWithNewValues[index];
+          final product = products[index];
 
           return InsertUpdateProductItem(
             productIndex: index,
