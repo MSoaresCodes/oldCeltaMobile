@@ -642,11 +642,10 @@ class SaleRequestProvider with ChangeNotifier implements ReceiptPdfGenerator {
         "EnterpriseCode": enterpriseCode,
         "RequestTypeCode": requestTypeCode,
         "CovenantCode": getSelectedCovenantCode(enterpriseCode.toString()) ?? 0,
-        "CustomerCode": getSelectedCustomer(enterpriseCode.toString()) ?? 0,
+        "CustomerCode":
+            getSelectedCustomer(enterpriseCode.toString())?.Code ?? 0,
         "Products": processCartItems,
-      }
-          //   // 'SellerCode: 1,' //não possui opção para consulta de vendedor no aplicativo. Ele retorna o código de acordo com o funcionário vinculado ao usuário logado, por isso não precisa enviar essa informação. O próprio backend vai verificar qual é o vendedor vinculado ao usuário e retornar o código dele
-          );
+      });
 
       await SoapRequest.soapPost(
         parameters: {
