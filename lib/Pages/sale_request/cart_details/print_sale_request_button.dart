@@ -35,6 +35,8 @@ class PrintSaleRequestButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final saleRequestProvider = Provider.of<SaleRequestProvider>(context);
+    final theme = Theme.of(context);
+    final isIOS = theme.platform == TargetPlatform.iOS;
 
     return IconButton(
       onPressed: () {
@@ -67,8 +69,10 @@ class PrintSaleRequestButton extends StatelessWidget {
                     labelText: "IP",
                     hintText: "IP",
                   ),
-                  keyboardType:
-                      const TextInputType.numberWithOptions(signed: true),
+                  keyboardType: TextInputType.numberWithOptions(
+                    signed: isIOS,
+                    decimal: !isIOS,
+                  ),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
                       return 'Por favor, escreva o IP';
@@ -101,10 +105,7 @@ class PrintSaleRequestButton extends StatelessWidget {
           },
         );
       },
-      icon: Icon(
-        Icons.print,
-        color: Theme.of(context).colorScheme.primary,
-      ),
+      icon: Icon(Icons.print, color: theme.colorScheme.primary),
     );
   }
 }
