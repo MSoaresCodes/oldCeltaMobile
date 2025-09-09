@@ -15,6 +15,7 @@ class ReceiptsPage extends StatefulWidget {
 
 class _ReceiptsPageState extends State<ReceiptsPage> {
   final observationsController = TextEditingController();
+  final filterDocumentController = TextEditingController();
   bool isLoaded = false;
   @override
   void didChangeDependencies() {
@@ -35,6 +36,7 @@ class _ReceiptsPageState extends State<ReceiptsPage> {
     super.dispose();
 
     observationsController.dispose();
+    filterDocumentController.dispose();
   }
 
   @override
@@ -85,8 +87,8 @@ class _ReceiptsPageState extends State<ReceiptsPage> {
                     Expanded(
                       child: ReceiptItems(
                         enterprise: enterprise,
-                        receiptProvider: receiptProvider,
                         observationsController: observationsController,
+                        filterDocumentController: filterDocumentController,
                       ),
                     ),
                 ],

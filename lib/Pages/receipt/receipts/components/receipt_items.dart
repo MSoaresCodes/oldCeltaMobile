@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
 
 import '../../../../Models/models.dart';
 import '../../../../providers/providers.dart';
@@ -7,13 +7,13 @@ import '../../../../components/components.dart';
 import 'components.dart';
 
 class ReceiptItems extends StatefulWidget {
-  final ReceiptProvider receiptProvider;
   final EnterpriseModel enterprise;
   final TextEditingController observationsController;
+  final TextEditingController filterDocumentController;
   const ReceiptItems({
-    required this.receiptProvider,
     required this.enterprise,
     required this.observationsController,
+    required this.filterDocumentController,
     Key? key,
   }) : super(key: key);
 
@@ -27,13 +27,50 @@ class _ReceiptItemsState extends State<ReceiptItems> {
 
   @override
   Widget build(BuildContext context) {
+    ReceiptProvider receiptProvider = Provider.of(context);
+    List<ReceiptModel> filteredReceipts = [
+      ...receiptProvider.receipts.where((e) =>
+          widget.filterDocumentController.text.isEmpty ||
+          e.Numero_ProcRecebDoc.contains(widget.filterDocumentController.text))
+    ];
+
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        if (filteredReceipts.length > 0)
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: false),
+              controller: widget.filterDocumentController,
+              onChanged: (_) {
+                setState(() {});
+              },
+              decoration: FormFieldDecoration.decoration(
+                context: context,
+                labelText: "Filtrar recebimento",
+                hintText: "Filtrar recebimento",
+                prefixIcon: const Icon(Icons.search),
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      widget.filterDocumentController.clear();
+                    });
+                  },
+                  icon: const Icon(
+                    Icons.delete,
+                    color: Colors.red,
+                  ),
+                ),
+              ),
+            ),
+          ),
         Expanded(
           child: ListView.builder(
-            itemCount: widget.receiptProvider.receiptCount,
+            itemCount: filteredReceipts.length,
             itemBuilder: (context, index) {
-              ReceiptModel receipt = widget.receiptProvider.receipts[index];
+              ReceiptModel receipt = filteredReceipts[index];
               return GestureDetector(
                 onTap: () {
                   selectedChangeObservationsIndex = -1;
