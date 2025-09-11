@@ -208,9 +208,11 @@ class FirebaseHelper {
     }
     String? fcmToken;
 
-    if (Platform.isAndroid || Platform.isIOS) {
+    if (Platform.isAndroid) {
       fcmToken = await _firebaseMessaging.getToken();
       //TODO test in iOS
+    } else if (Platform.isIOS) {
+      fcmToken = await _firebaseMessaging.getAPNSToken();
     }
     print("Token: $fcmToken"); //precisa usar esse token pra fazer testes de
     // mensagens pelo site do firebase
