@@ -16,13 +16,17 @@ class ImageComponent {
     return InkWell(
       onTap: onTap ??
           () {
-            Navigator.of(context).pushNamed(
-              APPROUTES.ENTERPRISE,
-              arguments: {
-                "nextRoute": nextRoute,
-                "onlyForValidateModule": onlyForValidateModule,
-              },
-            );
+            if (freeDays != null && freeDays > 0) {
+              Navigator.of(context).pushNamed(nextRoute);
+            } else {
+              Navigator.of(context).pushNamed(
+                APPROUTES.ENTERPRISE,
+                arguments: {
+                  "nextRoute": nextRoute,
+                  "onlyForValidateModule": onlyForValidateModule,
+                },
+              );
+            }
           },
       child: Card(
         child: Stack(

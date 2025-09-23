@@ -34,7 +34,7 @@ class ModulesItems extends StatelessWidget {
       children: [
         ImageComponent.image(
           freeDays: now.isBefore(reportsFreeUntilDate)
-              ? now.difference(reportsFreeUntilDate).inDays.abs()
+              ? now.difference(reportsFreeUntilDate).inDays.abs() + 1
               : null,
           imagePath: 'lib/assets/Images/reports.png',
           routine: 'Relatórios'.toUpperCase(),
