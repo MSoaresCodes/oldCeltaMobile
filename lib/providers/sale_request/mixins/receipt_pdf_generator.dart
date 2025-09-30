@@ -43,16 +43,18 @@ abstract class ReceiptPdfGenerator {
       final generator = Generator(PaperSize.mm80, profile);
       List<int> bytes = [];
 
-      bytes += generator.text('PEDIDO DE VENDA',
+      final lastFourNumbers = saleRequest.lastSaleRequestSaved?.substring(4);
+
+      bytes += generator.text('PEDIDO DE VENDA $lastFourNumbers',
           styles: const PosStyles(
               align: PosAlign.center, bold: true, height: PosTextSize.size2));
-      bytes += generator.text(
-          'Pedido: ${saleRequest.lastSaleRequestSaved ?? "N/A"}',
-          styles: const PosStyles(align: PosAlign.center));
       bytes += generator.text(
           "Impresso em " +
               DateFormat('dd/MM/yyyy HH:mm').format(DateTime.now()),
           styles: const PosStyles(align: PosAlign.center));
+      bytes += generator.text(
+          'Pedido: ${saleRequest.lastSaleRequestSaved ?? "N/A"}',
+          styles: const PosStyles(align: PosAlign.left));
       bytes += generator.text(
           'Cliente: ${saleRequest.selectedCustomer?.Name ?? "N/A"}',
           styles: const PosStyles(align: PosAlign.left));
