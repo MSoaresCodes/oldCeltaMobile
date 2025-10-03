@@ -39,6 +39,7 @@ class GetProductJsonModel {
   List<StockByEnterpriseAssociatedsModel>? stockByEnterpriseAssociateds;
   List<StocksModel>? stocks;
   List<LastBuyEntranceModel>? lastBuyEntrance;
+  List<String>? EANs;
   PriceCostModel? priceCost;
   double? valueTyped = 0;
   double quantity = 0;
@@ -106,6 +107,7 @@ class GetProductJsonModel {
     this.DiscountDescription,
     this.ExpectedDeliveryDate,
     this.Observations,
+    this.EANs,
   });
 
   factory GetProductJsonModel.fromJson(Map json) => GetProductJsonModel(
@@ -162,6 +164,7 @@ class GetProductJsonModel {
         AutomaticDiscountValue: json["AutomaticDiscountValue"] ?? 0,
         TotalLiquid: json["TotalLiquid"],
         DiscountDescription: json["DiscountDescription"],
+        EANs: (json["EANs"] as List?)?.map((e) => e.toString()).toList(),
         stockByEnterpriseAssociateds:
             json['StockByEnterpriseAssociateds'] == null
                 ? null
@@ -253,6 +256,7 @@ class GetProductJsonModel {
         alterationPriceForAllPackings: oldProduct.alterationPriceForAllPackings,
         isChildOfGrate: oldProduct.isChildOfGrate,
         priceCost: oldProduct.priceCost,
+        EANs: oldProduct.EANs,
       );
 
   Map<String, dynamic> toJson() => {
@@ -311,6 +315,7 @@ class GetProductJsonModel {
         "DiscountDescription": this.DiscountDescription,
         "ExpectedDeliveryDate": this.ExpectedDeliveryDate,
         "Observations": this.Observations,
+        "EANs": this.EANs,
       };
 
   GetProductJsonModel copyWith({
@@ -365,6 +370,7 @@ class GetProductJsonModel {
     String? DiscountDescription,
     String? ExpectedDeliveryDate,
     String? Observations,
+    List<String>? EANs,
   }) {
     return GetProductJsonModel(
       enterpriseCode: enterpriseCode ?? this.enterpriseCode,
@@ -427,6 +433,7 @@ class GetProductJsonModel {
       DiscountDescription: DiscountDescription ?? this.DiscountDescription,
       ExpectedDeliveryDate: ExpectedDeliveryDate ?? this.ExpectedDeliveryDate,
       Observations: Observations ?? this.Observations,
+      EANs: EANs ?? this.EANs,
     );
   }
 }
