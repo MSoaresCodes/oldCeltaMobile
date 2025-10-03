@@ -73,6 +73,8 @@ abstract class ReceiptPdfGenerator {
           final itemLiquidValue =
               _getItemLiquidValue(product, saleRequestProvider);
           final itemGrossValue = _getItemGrossValue(product);
+          final eans = product.EANs ?? [];
+          final eanOrPlu = eans.isNotEmpty ? eans.first : product.plu;
 
           totalDiscount += productDiscount;
           totalLiquid += itemLiquidValue;
@@ -80,7 +82,7 @@ abstract class ReceiptPdfGenerator {
 
           bytes += generator.row([
             PosColumn(
-              textEncoded: latin1.encode("(${product.plu}) ${product.name}"),
+              textEncoded: latin1.encode("(${eanOrPlu}) ${product.name}"),
               width: 12,
               styles: const PosStyles(bold: true),
             ),
