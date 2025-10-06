@@ -43,7 +43,7 @@ abstract class ReceiptPdfGenerator {
       final generator = Generator(PaperSize.mm80, profile);
       List<int> bytes = [];
 
-      final lastFourNumbers = saleRequest.lastSaleRequestSaved?.substring(4);
+      final lastFourNumbers = saleRequest.lastSaleRequestSaved?.substring(8);
 
       bytes += generator.text('PEDIDO DE VENDA $lastFourNumbers',
           styles: const PosStyles(
