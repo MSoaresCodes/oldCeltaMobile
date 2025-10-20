@@ -107,10 +107,17 @@ void updateControllersQuantity({
     //a quantidade de controllers é criado de acordo com a quantidade de empresas selecionadas
     final enterprise = buyQuotationProvider.allEnterprises[x];
 
-    final productQuantity = buyQuotationProvider
+    final quantityIndex = buyQuotationProvider
         .productsWithNewValues[productIndex].ProductEnterprises!
-        .where((e) => e.EnterpriseCode == enterprise.Code)
-        .first
+        .indexWhere((e) => e.EnterpriseCode == enterprise.Code);
+
+    if (quantityIndex == -1) {
+      return;
+    }
+
+    final productQuantity = buyQuotationProvider
+        .productsWithNewValues[productIndex]
+        .ProductEnterprises![quantityIndex]
         .Quantity;
 
     if (productQuantity != null) {
