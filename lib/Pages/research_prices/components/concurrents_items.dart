@@ -89,7 +89,9 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
                         TitleAndSubtitle.titleAndSubtitle(
                           subtitle: researchPricesProvider
                                   .selectedResearch!.Concurrents
-                                  .contains(concurrent)
+                                  .any((e) =>
+                                      e.ConcurrentCode ==
+                                      concurrent.ConcurrentCode)
                               ? "Associado à pesquisa"
                               : "Não associado à pesquisa",
                           subtitleColor: researchPricesProvider

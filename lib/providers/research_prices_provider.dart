@@ -368,9 +368,7 @@ class ResearchPricesProvider with ChangeNotifier {
 
     var jsonBody = json.encode({
       "CrossIdentity": UserData.crossIdentity,
-      "SearchValue": int.tryParse(searchConcurrentControllerText) != null
-          ? int.parse(searchConcurrentControllerText)
-          : searchConcurrentControllerText,
+      "SearchValue": searchConcurrentControllerText,
 
       "SearchTypeInt": int.tryParse(searchConcurrentControllerText) != null
           ? 1

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:xml2json/xml2json.dart';
 
@@ -67,6 +68,9 @@ class SoapRequest {
         headers: soapHeaders,
         body: envelope.replaceAll(RegExp(r'&'), '&amp;'),
       );
+
+      debugPrint(soapHeaders.toString());
+      debugPrint(envelope);
 
       if (response.statusCode == 200) {
         String result = response.body;

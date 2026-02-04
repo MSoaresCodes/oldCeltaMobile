@@ -47,6 +47,7 @@ class SaleRequestProductProcessCartModel {
               "AutomaticDiscountPercentageOrValue":
                   e.AutomaticDiscountPercentageOrValue ?? 0,
               "AutomaticDiscountValue": e.AutomaticDiscountValue ?? 0,
+              "Name": 'any',
             })
         .toList();
   }
