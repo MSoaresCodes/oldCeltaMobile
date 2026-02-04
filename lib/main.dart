@@ -1,21 +1,8 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:platform_plus/platform_plus.dart';
 
 import '../api/api.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await PlatformPlus.platform.init();
-  await FirebaseHelper.initFirebase();
-
-  if (!kIsWeb) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
-  }
   runApp(MyApp());
 }
 
